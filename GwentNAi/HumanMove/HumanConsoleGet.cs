@@ -1,4 +1,5 @@
 ﻿
+using GwentNAi.GameSource.AssistantClasses;
 using System.Text.RegularExpressions;
 
 namespace GwentNAi.HumanMove
@@ -8,20 +9,24 @@ namespace GwentNAi.HumanMove
         static readonly string IntPattern = @"\d+";
         public static string GetHumanAction(int[] maxActionId, bool canPass, bool canEnd)
         {
+            Console.ForegroundColor = HumanConsolePrint.currentColor;
+
             string action = string.Empty;
-            Console.WriteLine("Enter your action of choice (by writing one play action and \'n\' order actions or type \'pass\' to skip round");
-            Console.WriteLine("Example of valid action: \'p1 or o2 or l\'");
-            Console.WriteLine("");
+            Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
+            Console.Write("Enter your action of choice:");
             while (action == string.Empty)
             {
                 action = Console.ReadLine();
                 if (!IsActionValid(action, maxActionId, canPass, canEnd))
                 {
+                    Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
                     Console.WriteLine("This action is not valid, try again:");
                     action = string.Empty;
                 }
             }
 
+            Console.ForegroundColor = ConsoleColor.White;
+            ConsolePrint.ClearBottom();
             return action;
         }
 
@@ -67,7 +72,12 @@ namespace GwentNAi.HumanMove
         public static int[] GetPositionForCard(List<List<int>> playIndexes)
         {
             int row, pos;
+
+            Console.ForegroundColor = HumanConsolePrint.currentColor;
             string positionIndex = Console.ReadLine();
+            Console.ForegroundColor = ConsoleColor.White;
+
+
             string[] positionIndexes = positionIndex.Split('-');
 
             if (positionIndexes.Length != 2) return GetPositionForCard(playIndexes);
@@ -83,7 +93,7 @@ namespace GwentNAi.HumanMove
 
             if(row != 0 && row != 1) return GetPositionForCard(playIndexes);
             if (playIndexes[row].Count < pos + 1) return GetPositionForCard(playIndexes);
-
+            ConsolePrint.ClearBottom();
             return new int[] { row, pos };
         }
     }

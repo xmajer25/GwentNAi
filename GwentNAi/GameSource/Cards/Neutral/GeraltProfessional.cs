@@ -14,13 +14,13 @@ namespace GwentNAi.GameSource.Cards.Neutral
             type = "unit";
             faction = "neutral";
             name = "GeraltProfessional";
+            shortName = "Geralt:P";
             descriptors = new List<string>() { "witcher" };
             timeToOrder = 1;
         }
 
         void IOrder.Order(GameBoard board)
         {
-            Console.WriteLine("Geralt: Professional Order");
             timeToOrder--;
             pickEnemie(this, board);
         }

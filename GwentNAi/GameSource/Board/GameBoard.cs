@@ -19,6 +19,10 @@ namespace GwentNAi.GameSource.Board
 
         public ActionContainer CurrentPlayerActions { get; set; } = new();
 
+        public void MoveUpdate()
+        {
+            UpdatePoints();
+        }
         public void Update()
         {
             UpdateCards();
@@ -41,6 +45,7 @@ namespace GwentNAi.GameSource.Board
 
         private void UpdatePoints()
         {
+            PointSumP1 = PointSumP2 = 0;
             foreach (var row in Leader1.Board)
             {
                 foreach (var card in row)

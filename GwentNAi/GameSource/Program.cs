@@ -45,7 +45,7 @@ namespace GwentNAi.GameSource
             board.DrawBothHands(10);
 
 
-            /*while (board.Leader1.victories != 2 && board.Leader2.victories != 2)
+            while (board.Leader1.victories != 2 && board.Leader2.victories != 2)
             {
                 board.CurrentPlayerActions.GetAllActions(board.CurrentPlayerBoard, board.CurrentlyPlayingLeader.handDeck, board.CurrentlyPlayingLeader);
                 int moveOutcome = 0;
@@ -54,11 +54,12 @@ namespace GwentNAi.GameSource
                 {
                     moveOutcome = (board.CurrentlyPlayingLeader == board.Leader1 ? player1Move(board) : player2Move(board));
                     board.CurrentPlayerActions.GetAllActions(board.CurrentPlayerBoard, board.CurrentlyPlayingLeader.handDeck, board.CurrentlyPlayingLeader);
+                    board.MoveUpdate();
+                    ConsolePrint.UpdateBoard(board);
                 }
-                Console.WriteLine("\n\n-=-==-=-=-=-=-=-Move Ended-=-=-=-=-=-=-=-=-=-=\n\n");
 
                 board.Update();
-            }*/
+            }
             Console.ReadLine();
         }
 

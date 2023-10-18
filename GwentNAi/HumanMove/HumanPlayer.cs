@@ -11,6 +11,7 @@ namespace GwentNAi.HumanMove
 
             if (board.CurrentlyPlayingLeader.hasPassed) return -1;
 
+            HumanConsolePrint.swapColor(board);
             int[] maxActionId = HumanConsolePrint.ListActions(actionContainer);
             string action = HumanConsoleGet.GetHumanAction(maxActionId, actionContainer.canPass, actionContainer.canEnd);
             if (HumanStringToAction.Convert(action, board) == -1) return -1; 

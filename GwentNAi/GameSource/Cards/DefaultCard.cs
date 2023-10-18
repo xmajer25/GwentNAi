@@ -13,6 +13,7 @@ namespace GwentNAi.GameSource.Cards
         public string type { get; set; } = string.Empty;
         public string faction { get; set; } = string.Empty;
         public string name { get; set; } = string.Empty;
+        public string shortName { get; set; } = string.Empty;
         public List<string> descriptors { get; set; }  = new List<string>();
 
         public int timeToOrder { get; set; }

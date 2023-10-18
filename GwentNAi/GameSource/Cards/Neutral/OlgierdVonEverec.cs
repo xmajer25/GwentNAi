@@ -14,13 +14,13 @@ namespace GwentNAi.GameSource.Cards.Neutral
             type = "unit";
             faction = "neutral";
             name = "OlgrierdVonEverec";
+            shortName = "Olgrierd";
             descriptors = new List<string>() { "human", "cursed", "bandit" };
             timeToOrder = 1;
         }
 
         void IOrder.Order(GameBoard board)
         {
-            Console.WriteLine("Von Bizmark Order");
             Cooldown(this, 1);
            
         }
