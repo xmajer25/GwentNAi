@@ -31,7 +31,9 @@ namespace GwentNAi.HumanMove
 
                     HumanConsolePrint.ListPositionsForCard(board.CurrentPlayerBoard, board.CurrentPlayerActions.ImidiateActions);
                     cardPos = HumanConsoleGet.GetPositionForCard(board.CurrentPlayerActions.ImidiateActions);
+
                     board.CurrentPlayerActions.ImidiateActions.Clear();
+                    board.CurrentPlayerActions.PlayCardActions.Clear();
 
                     board.CurrentlyPlayingLeader.PlayCard(cardIndex, cardPos[0], cardPos[1]);
                     board.CurrentPlayerActions.PlayCardActions.Clear();

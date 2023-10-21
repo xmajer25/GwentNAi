@@ -93,7 +93,11 @@ namespace GwentNAi.HumanMove
                     if (playIndex == row.Last()) break;
                     Console.Write(playIndex + " - " + board[currentRow][playIndex].name + " - ");
                 }
-                Console.Write(row.Last());
+                if (row.Count != 0)
+                {
+                    Console.Write(row.Last());
+                    Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
+                }
                 currentRow++;
             }
 
@@ -107,12 +111,13 @@ namespace GwentNAi.HumanMove
             Console.SetCursorPosition(0, windowSeparator + 1);
             Console.Write("Pick target (row-column):");
             Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
+
             for (int i = 0; i < enemieIndexes.Count; i++)
             {
                 Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
                 Console.Write("Row " + i + ":");
                 Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
-                if (enemieIndexes[i].Count == 0) break;
+                if (enemieIndexes[i].Count == 0) continue;
 
                 for(int j = 0; j < enemieIndexes[i].Count; j++)
                 {

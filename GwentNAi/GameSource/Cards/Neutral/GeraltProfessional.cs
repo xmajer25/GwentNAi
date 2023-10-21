@@ -25,9 +25,6 @@ namespace GwentNAi.GameSource.Cards.Neutral
             pickEnemie(this, board);
         }
 
-        //gotta do the postExpansion shit thing function thinking of killing my self daily
-        //and than add that shit in the HUMAN MOVE thing so it all works nicely :)))
-        //and dont forget!! skibidi toilet is watching
         void IOrderExpandPickEnemie.pickEnemie(GameBoard board)
         {
             List<List<int>> enemieIndexes = new List<List<int>>(2) { new List<int>(10), new List<int>(10) };

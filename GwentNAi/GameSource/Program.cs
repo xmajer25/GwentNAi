@@ -11,9 +11,6 @@ using GwentNAi.MctsMove;
  * typeof(MyType).GetInterfaces().Contains(typeof(IMyInterface))
  * -------------------------------------------------------------
  *  add leader action
- *  figure out how the fuck are we gonna do the expansion
- *      iam thinking like, add new list to action container that will have to be resolved
- *  big yikes - there are units that can be placed in enemye row --- will have to do something about that (no idea what..)
  *  do a function in Program to determine round winner after 2 players have passed, than a function to determine overall winner
  *      iam also thinking like one loop for whole game, one for round and one for turn
  * -------------------------------------------------------------
@@ -43,24 +40,69 @@ namespace GwentNAi.GameSource
             DetermineStartingPlayer();
             board.ShufflerBothDecks();
             board.DrawBothHands(10);
+            ConsolePrint.UpdateBoard(board);
 
-
+            //game
             while (board.Leader1.victories != 2 && board.Leader2.victories != 2)
             {
-                board.CurrentPlayerActions.GetAllActions(board.CurrentPlayerBoard, board.CurrentlyPlayingLeader.handDeck, board.CurrentlyPlayingLeader);
-                int moveOutcome = 0;
-
-                while(moveOutcome == 0)
+                //round
+                while (board.Leader1.hasPassed == false || board.Leader2.hasPassed == false)
                 {
-                    moveOutcome = (board.CurrentlyPlayingLeader == board.Leader1 ? player1Move(board) : player2Move(board));
                     board.CurrentPlayerActions.GetAllActions(board.CurrentPlayerBoard, board.CurrentlyPlayingLeader.handDeck, board.CurrentlyPlayingLeader);
-                    board.MoveUpdate();
-                    ConsolePrint.UpdateBoard(board);
+                    int moveOutcome = 0;
+                    //move
+                    while (moveOutcome == 0)
+                    {
+                        moveOutcome = (board.CurrentlyPlayingLeader == board.Leader1 ? player1Move(board) : player2Move(board));
+                        board.CurrentPlayerActions.GetAllActions(board.CurrentPlayerBoard, board.CurrentlyPlayingLeader.handDeck, board.CurrentlyPlayingLeader);
+                        board.MoveUpdate();
+                        ConsolePrint.UpdateBoard(board);
+                    }
+                    board.Update();
                 }
-
-                board.Update();
+                DetermineRoundWinner();
+                board.ResetBoard();
+                board.DrawBothHands(3);
+                ConsolePrint.UpdateBoard(board);
             }
+            DetermineGameWinner();
             Console.ReadLine();
+        }
+
+        static private void DetermineGameWinner()
+        {
+            if(board.Leader1.victories == board.Leader2.victories)
+            {
+                Drawings.DrawTie();
+            }
+            else if(board.Leader1.victories >= board.Leader2.victories)
+            {
+                Drawings.DrawVictory(0);
+                Drawings.DrawDefeat(1);
+            }
+            else
+            {
+                Drawings.DrawDefeat(0);
+                Drawings.DrawVictory(1);
+            }
+        }
+
+        static private void DetermineRoundWinner()
+        {
+            if (board.PointSumP1 == board.PointSumP2)
+            {
+                board.Leader1.victories++;
+                board.Leader2.victories++;
+            }
+            else if (board.PointSumP1 > board.PointSumP2)
+            {
+                board.Leader1.victories++;
+            }
+            else
+            {
+                board.Leader2.victories++;
+            }
+            Drawings.DrawCrown(board);
         }
 
         static private void PlayMethodSetting(int player1Method, int player2Method)
@@ -78,13 +120,11 @@ namespace GwentNAi.GameSource
             DefaultLeader leader1 = StringToPlayerConvertor.Convert(Console.ReadLine());
             ConsolePrint.DrawLeader(0, leader1.leaderFaction);
             ConsolePrint.ClearBottom();
-            //DefaultLeader leader1 = StringToPlayerConvertor.Convert("bloodscent");
 
             ConsolePrint.AskForLeaderAbility(2);
             DefaultLeader leader2 = StringToPlayerConvertor.Convert(Console.ReadLine());
             ConsolePrint.DrawLeader(1, leader2.leaderFaction);
             ConsolePrint.ClearBottom();
-            //DefaultLeader leader2 = StringToPlayerConvertor.Convert("arachasswarm");
 
             return (leader1, leader2: leader2);
         }
@@ -94,12 +134,10 @@ namespace GwentNAi.GameSource
             ConsolePrint.AskForDeck(1);
             board.Leader1.startingDeck = StringToDeckConvertor.Convert(Console.ReadLine());
             ConsolePrint.ClearBottom();
-            //board.Leader1.startingDeck = StringToDeckConvertor.Convert("renfri");
 
             ConsolePrint.AskForDeck(2);
             board.Leader2.startingDeck = StringToDeckConvertor.Convert(Console.ReadLine());
             ConsolePrint.ClearBottom();
-            //board.Leader2.startingDeck = StringToDeckConvertor.Convert("renfri");
         }
 
         static private void DetermineStartingPlayer()

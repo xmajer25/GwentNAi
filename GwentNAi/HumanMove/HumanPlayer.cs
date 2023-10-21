@@ -10,6 +10,7 @@ namespace GwentNAi.HumanMove
             ActionContainer actionContainer = board.CurrentPlayerActions;
 
             if (board.CurrentlyPlayingLeader.hasPassed) return -1;
+            if (board.CurrentlyPlayingLeader.hasPlayedCard) board.CurrentPlayerActions.PlayCardActions.Clear();
 
             HumanConsolePrint.swapColor(board);
             int[] maxActionId = HumanConsolePrint.ListActions(actionContainer);

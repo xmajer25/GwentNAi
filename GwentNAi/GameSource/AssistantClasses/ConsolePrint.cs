@@ -17,6 +17,9 @@ namespace GwentNAi.GameSource.AssistantClasses
             Console.ForegroundColor = ConsoleColor.White;
             
             UpdatePoints(board.PointSumP1, board.PointSumP2);
+            UpdateGraveyard(board.Leader1.graveyardDeck.Cards.Count, board.Leader2.graveyardDeck.Cards.Count);
+            UpdateDeck(board.Leader1.startingDeck.Cards.Count, board.Leader2.startingDeck.Cards.Count);
+            UpdateHand(board.Leader1.handDeck.Cards.Count, board.Leader2.handDeck.Cards.Count);
 
             int rowIndex = 0; 
             int colIndex;
@@ -90,6 +93,78 @@ namespace GwentNAi.GameSource.AssistantClasses
             }
         }
 
+        private static void DrawGraveyardBorder()
+        {
+            for(int i = 0; i < 2; i++)
+            {
+                Console.SetCursorPosition(46, 0 + 33 * i);
+                Console.Write("Graveyard");
+                Console.SetCursorPosition(46, 1 + 33 * i);
+                Console.Write(" ╔╦╦╦╦╦╗");
+                Console.SetCursorPosition(46, 2 + 33 * i);
+                Console.Write(" ╠     ╣");
+                Console.SetCursorPosition(46, 3 + 33 * i);
+                Console.Write(" ╚╩╩╩╩╩╝");
+            }
+        }
+
+        private static void UpdateGraveyard(int p1GraveyardCount, int p2GraveyardCount)
+        {
+            Console.SetCursorPosition(50, 2);
+            Console.Write(p1GraveyardCount);
+
+            Console.SetCursorPosition(50, 35);
+            Console.Write(p2GraveyardCount);
+        }
+
+        private static void DrawDeckBorder()
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                Console.SetCursorPosition(146, 0 + 33 * i);
+                Console.Write(" Deck");
+                Console.SetCursorPosition(146, 1 + 33 * i);
+                Console.Write("╔╦╦╦╦╦╗");
+                Console.SetCursorPosition(146, 2 + 33 * i);
+                Console.Write("╠     ╣");
+                Console.SetCursorPosition(146, 3 + 33 * i);
+                Console.Write("╚╩╩╩╩╩╝");
+            }
+        }
+
+        private static void UpdateDeck(int p1DeckCount, int p2DeckCount)
+        {
+            Console.SetCursorPosition(149, 2);
+            Console.Write(p1DeckCount);
+
+            Console.SetCursorPosition(149, 35);
+            Console.Write(p2DeckCount);
+        }
+
+        private static void DrawHandBorder()
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                Console.SetCursorPosition(96, 0 + 33 * i);
+                Console.Write("     Hand");
+                Console.SetCursorPosition(96, 1 + 33 * i);
+                Console.Write("╔╦╦╦╦╦╦╦╦╦╦╦╦╦╗");
+                Console.SetCursorPosition(96, 2 + 33 * i);
+                Console.Write("╠             ╣");
+                Console.SetCursorPosition(96, 3 + 33 * i);
+                Console.Write("╚╩╩╩╩╩╩╩╩╩╩╩╩╩╝");
+            }
+        }
+
+        private static void UpdateHand(int p1HandCount, int p2HandCount)
+        {
+            Console.SetCursorPosition(103, 2);
+            Console.Write(p1HandCount);
+
+            Console.SetCursorPosition(103, 35);
+            Console.Write(p2HandCount);
+        }
+
         private static void UpdatePoints(int player1Points, int player2Points)
         {
             string p1StringPoints = player1Points.ToString();
@@ -105,6 +180,7 @@ namespace GwentNAi.GameSource.AssistantClasses
         {
             for (int i = 0; i < 2; i++)
             {
+                Console.ForegroundColor = (i == 0 ? ConsoleColor.DarkMagenta : ConsoleColor.DarkCyan);
                 Console.SetCursorPosition(windowWidth - 13, 11 + 12 * i);
                 Console.Write("╔════╗");
                 Console.SetCursorPosition(windowWidth - 13, 12 + 12 * i);
@@ -112,6 +188,7 @@ namespace GwentNAi.GameSource.AssistantClasses
                 Console.SetCursorPosition(windowWidth - 13, 13 + 12 * i);
                 Console.Write("╚════╝");
             }
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         public static void DrawLeader(int playerNum, string leaderFaction)
@@ -120,7 +197,7 @@ namespace GwentNAi.GameSource.AssistantClasses
             switch (leaderFaction)
             {
                 case "monsters":
-                    DrawMonster(playerNum);
+                    Drawings.DrawMonster(playerNum);
                     break;
             }
             Console.ForegroundColor = ConsoleColor.White;
@@ -131,45 +208,9 @@ namespace GwentNAi.GameSource.AssistantClasses
             DrawSeparator();
             DrawBoardBorders();
             DrawPointBoxes();
-        }
-
-
-        public static void DrawMonster(int playerNum)
-        {
-            Console.SetCursorPosition(1, 0 + 20 * playerNum);
-            Console.Write("   M O N S T E R S");
-            Console.SetCursorPosition(3, 1 + 20 * playerNum);
-            Console.Write("      |\\/\\/|");
-            Console.SetCursorPosition(3, 2 + 20 * playerNum);
-            Console.Write("      |====|");
-            Console.SetCursorPosition(3, 3 + 20 * playerNum);
-            Console.Write("      |    |");
-            Console.SetCursorPosition(3, 4 + 20 * playerNum);
-            Console.Write("  .-;`\\..../`;-.");
-            Console.SetCursorPosition(3, 5 + 20 * playerNum);
-            Console.Write(" /  | ___|___|  \\");
-            Console.SetCursorPosition(3, 6 + 20 * playerNum);
-            Console.Write("|   / __/|\\__\\   |");
-            Console.SetCursorPosition(3, 7 + 20 * playerNum);
-            Console.Write(";--'\\ __/|\\__/\\--;");
-            Console.SetCursorPosition(3, 8 + 20 * playerNum);
-            Console.Write("<__>, __/|\\__,<__>");
-            Console.SetCursorPosition(3, 9 + 20 * playerNum);
-            Console.Write("|  |/        \\|  |");
-            Console.SetCursorPosition(3, 10 + 20 * playerNum);
-            Console.Write("\\::/|========|\\::/");
-            Console.SetCursorPosition(3, 11 + 20 * playerNum);
-            Console.Write("|||\\|        |/|||");
-            Console.SetCursorPosition(3, 12 + 20 * playerNum);
-            Console.Write("''' |___/\\___| '''");
-            Console.SetCursorPosition(3, 13 + 20 * playerNum);
-            Console.Write("     \\_ || _/");
-            Console.SetCursorPosition(3, 14 + 20 * playerNum);
-            Console.Write("     <_ >< _>");
-            Console.SetCursorPosition(3, 15 + 20 * playerNum);
-            Console.Write("     |  ||  |");
-            Console.SetCursorPosition(3, 16 + 20 * playerNum);
-            Console.Write("     |  ||  |");
+            DrawDeckBorder();
+            DrawGraveyardBorder();
+            DrawHandBorder();
         }
 
         public static void Init()
@@ -199,9 +240,10 @@ namespace GwentNAi.GameSource.AssistantClasses
             Console.Write(new String(' ', windowWidth));
         }
 
+
         public static void ClearTop() 
         {
-            for(int i = 7; i < 18; i++)
+            for(int i = 6; i < 18; i++)
             {
                 Console.SetCursorPosition(26, i);
                 Console.WriteLine(new String(' ', windowWidth - 17 - 25));
@@ -217,6 +259,21 @@ namespace GwentNAi.GameSource.AssistantClasses
 
             Console.SetCursorPosition(windowWidth - 12, 24);
             Console.Write("    ");
+
+            Console.SetCursorPosition(149, 2);
+            Console.Write("   ");
+            Console.SetCursorPosition(149, 35);
+            Console.Write("   ");
+
+            Console.SetCursorPosition(103, 2);
+            Console.Write("   ");
+            Console.SetCursorPosition(103, 35);
+            Console.Write("   ");
+
+            Console.SetCursorPosition(50, 2);
+            Console.Write("   ");
+            Console.SetCursorPosition(50, 35);
+            Console.Write("   ");
         }
 
         public static void AskForLeaderAbility(int choosingPlayerNumber)
