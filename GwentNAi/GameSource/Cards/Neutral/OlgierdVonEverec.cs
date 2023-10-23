@@ -8,7 +8,8 @@ namespace GwentNAi.GameSource.Cards.Neutral
     {
         public OlgierVonEverec()
         {
-            pointValue = 8;
+            currentValue = 8;
+            maxValue = 8;
             provisionValue = 8;
             border = 1;
             type = "unit";
@@ -22,7 +23,8 @@ namespace GwentNAi.GameSource.Cards.Neutral
         void IOrder.Order(GameBoard board)
         {
             Cooldown(this, 1);
-           
+            board.CurrentlyPlayingLeader.UseAbility();
+            if (currentValue < maxValue) currentValue++;
         }
 
         void ICooldown.Cooldown(int cooldown)

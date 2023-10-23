@@ -7,7 +7,8 @@ namespace GwentNAi.GameSource.Cards
 {
     public class DefaultCard : IPlayCardExpand
     {
-        public int pointValue { get; set; }
+        public int currentValue { get; set; }
+        public int maxValue { get; set; }
         public int provisionValue { get; set; }
         public int border { get; set; }
         public string type { get; set; } = string.Empty;
@@ -64,6 +65,11 @@ namespace GwentNAi.GameSource.Cards
             }
 
             board.CurrentPlayerActions.ImidiateActions = possibleIndexes;
+        }
+
+        public void PostPlayCardOrder(GameBoard board, int row, int column)
+        {
+            throw new NotImplementedException();
         }
     }
 }

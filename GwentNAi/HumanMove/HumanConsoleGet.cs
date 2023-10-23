@@ -7,7 +7,7 @@ namespace GwentNAi.HumanMove
     public static class HumanConsoleGet
     {
         static readonly string IntPattern = @"\d+";
-        public static string GetHumanAction(int[] maxActionId, bool canPass, bool canEnd)
+        public static string GetHumanAction(int[] maxActionId, bool canPass, bool canEnd, bool hasLeaderAbility)
         {
             Console.ForegroundColor = HumanConsolePrint.currentColor;
 
@@ -17,7 +17,7 @@ namespace GwentNAi.HumanMove
             while (action == string.Empty)
             {
                 action = Console.ReadLine();
-                if (!IsActionValid(action, maxActionId, canPass, canEnd))
+                if (!IsActionValid(action, maxActionId, canPass, canEnd, hasLeaderAbility))
                 {
                     Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
                     Console.WriteLine("This action is not valid, try again:");
@@ -30,7 +30,7 @@ namespace GwentNAi.HumanMove
             return action;
         }
 
-        private static bool IsActionValid(string action, int[] maxActionId, bool canPass, bool canEnd)
+        private static bool IsActionValid(string action, int[] maxActionId, bool canPass, bool canEnd, bool hasLeaderAbility)
         {
             if(action == null) return false;
             if(action == string.Empty) return false;
@@ -61,6 +61,7 @@ namespace GwentNAi.HumanMove
                     if (!Char.IsDigit(action[1])) return false;
                     break;
                 case 'l':
+                    if(!hasLeaderAbility) return false;
                     if(action.Length != 1) return false;
                     break;
                 default:
@@ -95,6 +96,32 @@ namespace GwentNAi.HumanMove
             if (playIndexes[row].Count < pos + 1) return GetPositionForCard(playIndexes);
             ConsolePrint.ClearBottom();
             return new int[] { row, pos };
+        }
+
+        public static int GetIndex(List<int> indexes)
+        {
+            Console.ForegroundColor = HumanConsolePrint.currentColor;
+            string indexStr = Console.ReadLine();
+            Console.ForegroundColor = ConsoleColor.White;
+            if (indexStr == "end")
+            {
+                ConsolePrint.ClearBottom();
+                return -1;
+            }
+            int index;
+
+            try
+            {
+                index = Convert.ToInt32(indexStr);
+            }
+            catch
+            {
+                return GetIndex(indexes);
+            }
+
+            if(!indexes.Contains(index)) return GetIndex(indexes);
+            ConsolePrint.ClearBottom();
+            return index;
         }
     }
 }

@@ -8,7 +8,8 @@ namespace GwentNAi.GameSource.Cards.Neutral
     {
         public GeraltProfessional()
         {
-            pointValue = 3;
+            currentValue = 3;
+            maxValue = 3;
             provisionValue = 11;
             border = 1;
             type = "unit";
@@ -21,7 +22,6 @@ namespace GwentNAi.GameSource.Cards.Neutral
 
         void IOrder.Order(GameBoard board)
         {
-            timeToOrder--;
             pickEnemie(this, board);
         }
 
@@ -40,6 +40,7 @@ namespace GwentNAi.GameSource.Cards.Neutral
                     enemieIndexes[currentRow].Add(currentIndex);
                     currentIndex++;
                 }
+                currentIndex = 0;
                 currentRow++;
             }
 
@@ -49,8 +50,10 @@ namespace GwentNAi.GameSource.Cards.Neutral
         void IOrderExpandPickEnemie.postPickEnemieOrder(GameBoard board, int row, int index)
         {
             List<List<DefaultCard>> enemieBoard = (board.CurrentPlayerBoard == board.Leader1.Board ? board.Leader2.Board : board.Leader1.Board);
-            if (enemieBoard[row][index].pointValue % 3 == 0) enemieBoard[row].RemoveAt(index);
-            else enemieBoard[row][index].pointValue -= 3;
+            if (enemieBoard[row][index].currentValue % 3 == 0) enemieBoard[row][index].currentValue = 0;
+            else enemieBoard[row][index].currentValue -= 3;
+            timeToOrder--;
+            board.CurrentlyPlayingLeader.UseAbility();
         }
 
         void IUpdate.StartTurnUpdate()

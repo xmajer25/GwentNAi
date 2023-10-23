@@ -1,9 +1,11 @@
 ﻿using GwentNAi.GameSource.AssistantClasses;
 using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards;
+using GwentNAi.GameSource.Decks;
 using System;
 using System.Data;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace GwentNAi.HumanMove
 {
@@ -53,8 +55,11 @@ namespace GwentNAi.HumanMove
 
             Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
             Console.Write("Possible leader ability actions (l):");
-            Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
-            Console.Write("\t1.)" + currentPlayerActions.LeaderActions.CardName);
+            if(currentPlayerActions.LeaderActions != null)
+            {
+                Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
+                Console.Write("\t1.) Leader ability");
+            }
 
             if (currentPlayerActions.canPass)
             {
@@ -125,8 +130,25 @@ namespace GwentNAi.HumanMove
                 }
 
             }
-
+            Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
             Console.ForegroundColor= ConsoleColor.White;
+        }
+
+        public static void ListCards(List<int> cardIndexes, Deck hand, string msg)
+        {
+            Console.ForegroundColor = currentColor;
+            Console.SetCursorPosition(0, windowSeparator + 1);
+            Console.Write(msg);
+            Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
+
+            foreach (int index in cardIndexes)
+            {
+                Console.Write("\t" + index + ".)" + hand.Cards[index].name);
+                if(index == 5) Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
+            }
+            Console.Write("\tx.) end");
+            Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 }

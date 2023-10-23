@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GwentNAi.GameSource.Board;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,6 @@ namespace GwentNAi.GameSource.Player.Monsters
 {
     public class BloodScent : DefaultLeader
     {
-        static int charges = 3;
         public BloodScent() 
         {
             provisionValue = 15;
@@ -17,11 +17,11 @@ namespace GwentNAi.GameSource.Player.Monsters
             abilityCharges = 3;
             hasPassed = false;
         }
-        public override void Order()
+        public override void Order(GameBoard board)
         {
-            if (charges == 0) return;
-            charges--;
-            Console.WriteLine("Current charges: " + charges);
+            if (abilityCharges == 0) return;
+            abilityCharges--;
+            Console.WriteLine("Current charges: " + abilityCharges);
         }
 
         public override void Update()

@@ -1,5 +1,7 @@
 ﻿
+using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards;
+using GwentNAi.GameSource.Cards.IExpand;
 using GwentNAi.GameSource.Decks;
 
 namespace GwentNAi.GameSource.Player
@@ -25,7 +27,7 @@ namespace GwentNAi.GameSource.Player
         private static Random Shuffler = new();
 
 
-        public abstract void Order();
+        public abstract void Order(GameBoard board);
         public abstract void Update();
 
         public void ShuffleStartingDeck()
@@ -55,6 +57,16 @@ namespace GwentNAi.GameSource.Player
             }
         }
 
+        public void SwapCards(int index)
+        {
+            DefaultCard handCard = handDeck.Cards[index];
+            int swappedCardIndex = Shuffler.Next(0, startingDeck.Cards.Count);
+            DefaultCard deckCard = startingDeck.Cards[swappedCardIndex];
+
+            handDeck.Cards[index] = deckCard;
+            startingDeck.Cards[swappedCardIndex] = handCard;
+        }
+
         public void PlayCard(int CardInHandIndex, int RowIndex, int PosIndex)
         {
             hasPlayedCard = true;
@@ -75,6 +87,11 @@ namespace GwentNAi.GameSource.Player
         public void UseAbility()
         {
             hasUsedAbility = true;
+        }
+
+        public void PostPlayCardOrder(IPlayCardExpand obj , GameBoard board, int row, int column)
+        {
+            obj.PostPlayCardOrder(board, row, column);
         }
     }
 }

@@ -10,9 +10,7 @@ using GwentNAi.MctsMove;
  *-=-=-=-=-=-=-=-=-=-TODOOOOODTODODOD-=-=-=-=-=-=--=-=-=
  * typeof(MyType).GetInterfaces().Contains(typeof(IMyInterface))
  * -------------------------------------------------------------
- *  add leader action
- *  do a function in Program to determine round winner after 2 players have passed, than a function to determine overall winner
- *      iam also thinking like one loop for whole game, one for round and one for turn
+ *  swapping cards at turn start (thinking of adding it to action list)
  * -------------------------------------------------------------
  * skibidi toilet :))))
  * -=-=-=-=-=-=-=-=-=TURUTUTUTUUUUUU-=-=-=-=-=-=-=-=-=-=
@@ -27,6 +25,8 @@ namespace GwentNAi.GameSource
         private static GameBoard board = new();
         private static Func<GameBoard, int> player1Move = (GameBoard board) => 0;
         private static Func<GameBoard, int> player2Move = (GameBoard board) => 0;
+
+        private static int roundStart;
 
         static void Main(string[] args)
         {
@@ -45,9 +45,20 @@ namespace GwentNAi.GameSource
             //game
             while (board.Leader1.victories != 2 && board.Leader2.victories != 2)
             {
-                //round
+                roundStart = 2;
                 while (board.Leader1.hasPassed == false || board.Leader2.hasPassed == false)
                 {
+                    if(roundStart != 0)
+                    {
+                        board.SwapCards();
+                        roundStart--;
+                    }
+                    else
+                    {
+                        foreach(var row in board.CurrentPlayerActions.ImidiateActions) row.Clear();
+                       
+                    }
+
                     board.CurrentPlayerActions.GetAllActions(board.CurrentPlayerBoard, board.CurrentlyPlayingLeader.handDeck, board.CurrentlyPlayingLeader);
                     int moveOutcome = 0;
                     //move

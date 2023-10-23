@@ -11,7 +11,8 @@ namespace GwentNAi.GameSource.Cards.Neutral
     {
         public Renfri()
         {
-            pointValue = 5;
+            currentValue = 5;
+            maxValue = 5;
             provisionValue = 14;
             border = 1;
             type = "unit";

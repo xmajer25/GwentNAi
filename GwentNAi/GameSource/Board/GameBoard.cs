@@ -24,6 +24,7 @@ namespace GwentNAi.GameSource.Board
         {
             RemoveDestroyedCards();
             UpdatePoints();
+            if (CurrentlyPlayingLeader.abilityCharges <= 0) CurrentPlayerActions.LeaderActions = null;
         }
         public void Update()
         {
@@ -53,6 +54,16 @@ namespace GwentNAi.GameSource.Board
             Leader2.DrawCards(numberOfCards);
         }
 
+        public void SwapCards()
+        {
+            List<List<int>> swapOptions = new List<List<int>>(1) { new List<int>(10) };
+            for (int i = 0; i < CurrentlyPlayingLeader.handDeck.Cards.Count; i++)
+            {
+                swapOptions[0].Add(i);
+            }
+            CurrentPlayerActions.ImidiateActions = swapOptions;
+        }
+
         //When we get to resiliant cards...
         //Create list that will hold them
         //clear row and then make row equal to the list with resiliant cards
@@ -80,20 +91,22 @@ namespace GwentNAi.GameSource.Board
             int currentColumn = 0;
             List<int> cardsToRemoveIndexes = new List<int>();
 
-            foreach(var row in Leader1.Board)
+            foreach (var row in Leader1.Board)
             {
-                foreach(var card in row)
+                foreach (var card in row)
                 {
-                    if (card.pointValue <= 0) cardsToRemoveIndexes.Add(currentColumn);
+                    if (card.currentValue <= 0) cardsToRemoveIndexes.Add(currentColumn);
                     currentColumn++;
                 }
 
                 cardsToRemoveIndexes.Reverse();
-                foreach(int index in cardsToRemoveIndexes)
+                foreach (int index in cardsToRemoveIndexes)
                 {
+                    if (Leader1.Board[currentRow][index] is not IDoomed) Leader1.graveyardDeck.Cards.Add(Leader1.Board[currentRow][index]);
                     Leader1.Board[currentRow].RemoveAt(index);
                 }
                 cardsToRemoveIndexes.Clear();
+                currentColumn = 0;
                 currentRow++;
             }
 
@@ -104,16 +117,18 @@ namespace GwentNAi.GameSource.Board
             {
                 foreach (var card in row)
                 {
-                    if (card.pointValue <= 0) cardsToRemoveIndexes.Add(currentColumn);
+                    if (card.currentValue <= 0) cardsToRemoveIndexes.Add(currentColumn);
                     currentColumn++;
                 }
 
                 cardsToRemoveIndexes.Reverse();
                 foreach (int index in cardsToRemoveIndexes)
                 {
+                    if (Leader2.Board[currentRow][index] is not IDoomed) Leader2.graveyardDeck.Cards.Add(Leader1.Board[currentRow][index]);
                     Leader2.Board[currentRow].RemoveAt(index);
                 }
                 cardsToRemoveIndexes.Clear();
+                currentColumn = 0;
                 currentRow++;
             }
         }
@@ -125,7 +140,7 @@ namespace GwentNAi.GameSource.Board
             {
                 foreach (var card in row)
                 {
-                    PointSumP1 += card.pointValue;
+                    PointSumP1 += card.currentValue;
                 }
             }
 
@@ -133,7 +148,7 @@ namespace GwentNAi.GameSource.Board
             {
                 foreach (var card in row)
                 {
-                    PointSumP2 += card.pointValue;
+                    PointSumP2 += card.currentValue;
                 }
             }
         }

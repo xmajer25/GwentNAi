@@ -9,7 +9,7 @@ namespace GwentNAi.GameSource.Board
         public List<PossibleAction> OrderActions = new();
         public List<PossibleAction> PlayCardActions = new();
         public List<List<int>> ImidiateActions = new(); //these are filled by card expansion in cards
-        public PossibleAction LeaderActions = new();
+        public Action<GameBoard>? LeaderActions = null;
         public Action PassOrEndTurn = () => { };
 
         public bool canPass { get; set; }
@@ -20,7 +20,6 @@ namespace GwentNAi.GameSource.Board
         {
             OrderActions.Clear();
             PlayCardActions.Clear();
-            LeaderActions = new();
 
             GetOrderActions(CurrentPlayerBoard);
             GetPlayAction(CurrentPlayerHand);
@@ -75,10 +74,11 @@ namespace GwentNAi.GameSource.Board
         {
             if (Leader.abilityCharges != 0)
             {
-                //CurrentPlayerLeaderAction.CardName = Leader.leaderName;
-                //CurrentPlayerLeaderAction.CardAction = Leader.Order;
-                //CurrentPlayerLeaderAction.ActionName = "Leader Ability";
-                LeaderActions.CardName = Leader.leaderName;
+                LeaderActions = Leader.Order;
+            }
+            else
+            {
+                LeaderActions = null;
             }
         }
     }

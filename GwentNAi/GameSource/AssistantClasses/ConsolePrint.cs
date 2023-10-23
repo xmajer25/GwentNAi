@@ -56,7 +56,7 @@ namespace GwentNAi.GameSource.AssistantClasses
             Console.Write("┎────────┒");
 
             Console.SetCursorPosition(36 + (index * 15), 6 * playerRow + 1 + offSet);
-            Console.Write(card.pointValue);
+            Console.Write(card.currentValue);
 
             Console.SetCursorPosition(43 + (index * 15), 6 * playerRow + 1 + offSet);
             Console.Write("x");
