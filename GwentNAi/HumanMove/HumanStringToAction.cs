@@ -36,6 +36,8 @@ namespace GwentNAi.HumanMove
                     board.CurrentPlayerActions.ClearImidiateActions();
                     board.CurrentPlayerActions.PlayCardActions.Clear();
                     board.CurrentlyPlayingLeader.PlayCard(cardIndex, cardPos[0], cardPos[1], board);
+
+                    //deploy
                     while (board.CurrentPlayerActions.AreImidiateActionsFull())
                     {
                         if (actionCard is IDeployExpandPickEnemies)
@@ -44,6 +46,13 @@ namespace GwentNAi.HumanMove
                             cardPos = HumanConsoleGet.GetPositionForCard(board.CurrentPlayerActions.ImidiateActions[0]);
                             board.CurrentPlayerActions.ClearImidiateActions();
                             actionCard.postPickEnemieAbilitiy((IDeployExpandPickEnemies)actionCard, board, cardPos[0], cardPos[1]);
+                        }
+                        else if(actionCard is IDeployExpandPickCard)
+                        {
+                            HumanConsolePrint.ListCardsSimple(board.CurrentPlayerActions.ImidiateActions[0][0]);
+                            int index = HumanConsoleGet.GetIndex(board.CurrentPlayerActions.ImidiateActions[0][0]);
+                            board.CurrentPlayerActions.ClearImidiateActions();
+                            actionCard.postPickCardAbility((IDeployExpandPickCard)actionCard, board, index);
                         }
                     }
 

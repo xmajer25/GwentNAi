@@ -102,5 +102,10 @@ namespace GwentNAi.GameSource.Cards
         {
             obj.postPickEnemieAbilitiy(board, row, column);
         }
+
+        public void postPickCardAbility(IDeployExpandPickCard obj, GameBoard board, int index)
+        {
+            obj.postPickCardAbility(board, index);
+        }
     }
 }

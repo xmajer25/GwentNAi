@@ -72,12 +72,12 @@ namespace GwentNAi.GameSource.Player
         {
             hasPlayedCard = true;
             DefaultCard card = handDeck.Cards[CardInHandIndex];
-            if (card is IDeploy)
-            {
-                card.Deploy((IDeploy) card, board);
-            }
             Board[RowIndex].Insert(PosIndex, card);
             handDeck.Cards.RemoveAt(CardInHandIndex);
+            if (card is IDeploy)
+            {
+                card.Deploy((IDeploy)card, board);
+            }
         }
 
         public void Pass()

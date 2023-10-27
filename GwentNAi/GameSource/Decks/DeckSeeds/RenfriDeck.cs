@@ -12,8 +12,8 @@ namespace GwentNAi.GameSource.Decks.DeckSeeds
                 new Protofleder(), new Protofleder(), new Protofleder(), new Protofleder(), new Protofleder(),
                 new Protofleder(), new Protofleder(), new GeraltProfessional(), new GeraltProfessional(), new GeraltProfessional(),
                 new GeraltProfessional(), new GeraltProfessional(), new GeraltProfessional(), new OlgierVonEverec(), new OlgierVonEverec(),
-                new Katakan(), new Katakan(), new Katakan(), new Katakan(), new Katakan(),
-                new Katakan(), new Katakan(), new Katakan(), new Katakan(), new Katakan()
+                new Ozzrel(), new Ozzrel(), new Ozzrel(), new Ozzrel(), new Ozzrel(),
+                new Ozzrel(), new Ozzrel(), new Ozzrel(), new Ozzrel(), new Ozzrel()
             };
             Name = "Renfri";
         }

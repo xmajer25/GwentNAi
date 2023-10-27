@@ -180,5 +180,20 @@ namespace GwentNAi.HumanMove
             Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
             Console.ForegroundColor = ConsoleColor.White;
         }
+        public static void ListCardsSimple(List<int> cardIndexes)
+        {
+            Console.ForegroundColor = currentColor;
+            Console.SetCursorPosition(0, windowSeparator + 1);
+            Console.Write("Pick card :))");
+            Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
+
+            foreach (int index in cardIndexes)
+            {
+                Console.Write("\t" + index + ".)");
+                if (index == 5) Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
+            }
+            Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
     }
 }
