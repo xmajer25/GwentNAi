@@ -27,18 +27,18 @@ namespace GwentNAi.HumanMove
             int numberOfCardsSwapped = 0;
 
 
-            if (actionContainer.ImidiateActions[0].Count > 0)
+            if (actionContainer.AreImidiateActionsFull())
             {
                 HumanConsolePrint.swapColor(board);
                 while(numberOfCardsSwapped < 3)
                 {
-                    HumanConsolePrint.ListCards(actionContainer.ImidiateActions[0], board.CurrentlyPlayingLeader.handDeck, "Swap cards in hand");
-                    cardSwapped = HumanConsoleGet.GetIndex(actionContainer.ImidiateActions[0]);
+                    HumanConsolePrint.ListCards(actionContainer.ImidiateActions[0][0], board.CurrentlyPlayingLeader.handDeck, "Swap cards in hand");
+                    cardSwapped = HumanConsoleGet.GetIndex(actionContainer.ImidiateActions[0][0]);
                     if (cardSwapped == -1) return - 1;
                     numberOfCardsSwapped++;
                     board.CurrentlyPlayingLeader.SwapCards(cardSwapped);
                 }
-                actionContainer.ImidiateActions[0].Clear();
+                board.CurrentPlayerActions.ClearImidiateActions();
                 return -1;
             }
             return 0;

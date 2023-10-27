@@ -8,13 +8,35 @@ namespace GwentNAi.GameSource.Board
     {
         public List<PossibleAction> OrderActions = new();
         public List<PossibleAction> PlayCardActions = new();
-        public List<List<int>> ImidiateActions = new(); //these are filled by card expansion in cards
+        public List<List<List<int>>> ImidiateActions { get; set; } = new List<List<List<int>>>(2) {new List<List<int>>(2) { new List<int>(10), new List<int>(10) },
+                                                                                     new List<List<int>>(2) { new List<int>(10), new List<int>(10) } };
         public Action<GameBoard>? LeaderActions = null;
         public Action PassOrEndTurn = () => { };
 
         public bool canPass { get; set; }
         public bool canEnd { get; set; }
         public bool canLeaderAbility { get; set; }
+
+        public void ClearImidiateActions()
+        {
+            foreach(var player in ImidiateActions)
+            {
+                foreach(var row in player)
+                {
+                    row.Clear();
+                }
+            }
+        }
+
+        public bool AreImidiateActionsFull()
+        {
+            if (ImidiateActions[0][0].Count > 0) return true;
+            if (ImidiateActions[0][1].Count > 0) return true;
+            if (ImidiateActions[1][0].Count > 0) return true;
+            if (ImidiateActions[1][1].Count > 0) return true;
+            return false;
+        }
+
 
         public void GetAllActions(List<List<DefaultCard>> CurrentPlayerBoard, Deck CurrentPlayerHand, DefaultLeader Leader)
         {

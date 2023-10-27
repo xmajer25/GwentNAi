@@ -7,20 +7,20 @@ using System.Threading.Tasks;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
-    public class Drone :DefaultCard, IDoomed
+    public class Ekimmara : DefaultCard, IDoomed
     {
-        public Drone() 
+        public Ekimmara()
         {
-            currentValue = 1;
-            maxValue = 1;
+            currentValue = 3;
+            maxValue = 3;
             provisionValue = 0;
             border = 0;
             type = "unit";
             faction = "monster";
-            name = "Drone";
-            shortName = "Drone";
-            descriptors = new List<string>() { "Insectoid", "Token" };
-            timeToOrder = -1;
+            name = "Ekimmara";
+            shortName = "Ekimmara";
+            descriptors = new List<string>() { "Vampire", "Token"};
+            timeToOrder = 0;
             bleeding = 0;
         }
     }

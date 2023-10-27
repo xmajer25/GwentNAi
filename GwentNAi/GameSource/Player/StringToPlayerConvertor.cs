@@ -13,11 +13,18 @@ namespace GwentNAi.GameSource.Player
                 case "ArachasSwarm":
                 case "arachasswarm":
                 case "Arachasswarm":
+                case "1":
                     return new ArachasSwarm();
                 case "BloodScent":
                 case "bloodscent":
                 case "Bloodscent":
+                case "2":
                     return new BloodScent();
+                case "ForceOfNature":
+                case "Forceofnature":
+                case "forceofnature":
+                case "3":
+                    return new ForceOfNature();
                 default:
                     throw new CustomException("Error: Unknown Player Name");
             }

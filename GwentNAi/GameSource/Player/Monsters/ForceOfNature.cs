@@ -1,24 +1,23 @@
 ﻿using GwentNAi.GameSource.Board;
-using GwentNAi.GameSource.Cards;
-using GwentNAi.GameSource.Cards.IExpand;
 using GwentNAi.GameSource.Cards.Monsters;
+using GwentNAi.GameSource.Cards;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using GwentNAi.GameSource.Cards.IExpand;
 
 namespace GwentNAi.GameSource.Player.Monsters
 {
-    public class ArachasSwarm : DefaultLeader, IPlayCardExpand
+    public class ForceOfNature : DefaultLeader, IPlayCardExpand
     {
-        public ArachasSwarm() 
+        public ForceOfNature()
         {
             provisionValue = 15;
-            leaderName = "ArachasSwarm";
+            leaderName = "ForceOfNature";
             leaderFaction = "monsters";
-            abilityCharges = 5;
+            abilityCharges = 1;
             hasPassed = false;
         }
 
@@ -53,7 +52,7 @@ namespace GwentNAi.GameSource.Player.Monsters
 
         public void PostPlayCardOrder(GameBoard board, int row, int column)
         {
-            DefaultCard playedCard = new Drone();
+            DefaultCard playedCard = new WoodlandSpirit();
             board.CurrentlyPlayingLeader.Board[row].Insert(column, playedCard);
             abilityCharges--;
         }

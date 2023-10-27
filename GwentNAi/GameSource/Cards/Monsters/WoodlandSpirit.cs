@@ -2,24 +2,26 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
-    public class Drone :DefaultCard, IDoomed
+    public class WoodlandSpirit : DefaultCard, IDoomed
     {
-        public Drone() 
+        public WoodlandSpirit()
         {
-            currentValue = 1;
-            maxValue = 1;
+            currentValue = 9;
+            maxValue = 9;
             provisionValue = 0;
-            border = 0;
+            border = 1;
             type = "unit";
             faction = "monster";
-            name = "Drone";
-            shortName = "Drone";
-            descriptors = new List<string>() { "Insectoid", "Token" };
+            name = "WoodlandSpirit";
+            shortName = "Woodland";
+            descriptors = new List<string>() { "Relict", "Token" };
             timeToOrder = -1;
             bleeding = 0;
         }

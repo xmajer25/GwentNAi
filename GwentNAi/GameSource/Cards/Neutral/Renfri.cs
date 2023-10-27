@@ -21,6 +21,7 @@ namespace GwentNAi.GameSource.Cards.Neutral
             shortName = "Renfri";
             descriptors = new List<string>(){ "human", "cursed", "bandit" };
             timeToOrder = 0;
+            bleeding = 0;
         }
 
         public static void Deploy(Deck deck)

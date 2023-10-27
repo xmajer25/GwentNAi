@@ -5,17 +5,18 @@ using GwentNAi.GameSource.Cards.IExpand;
 
 namespace GwentNAi.GameSource.Cards
 {
-    public class DefaultCard : IPlayCardExpand
+    public class DefaultCard : IPlaySelfExpand
     {
         public int currentValue { get; set; }
         public int maxValue { get; set; }
         public int provisionValue { get; set; }
         public int border { get; set; }
+        public int bleeding { get; set; }
         public string type { get; set; } = string.Empty;
         public string faction { get; set; } = string.Empty;
         public string name { get; set; } = string.Empty;
         public string shortName { get; set; } = string.Empty;
-        public List<string> descriptors { get; set; }  = new List<string>();
+        public List<string> descriptors { get; set; } = new List<string>();
 
         public int timeToOrder { get; set; }
 
@@ -44,7 +45,17 @@ namespace GwentNAi.GameSource.Cards
             obj.postPickEnemieOrder(board, row, index);
         }
 
-        public virtual void PlayCardExpand(GameBoard board)
+        public void pickAll(IOrderExpandPickAll obj, GameBoard board)
+        {
+            obj.pickAll(board);
+        }
+
+        public void postPickAllOrder(IOrderExpandPickAll obj, GameBoard board, int player, int row, int index)
+        {
+            obj.postPickAllOrder(board, player, row, index);
+        }
+
+        public virtual void PlaySelfExpand(GameBoard board)
         {
             List<List<DefaultCard>> CPboard = board.CurrentlyPlayingLeader.Board;
             List<List<int>> possibleIndexes = new List<List<int>>(2) { new List<int>(10), new List<int>(10) };
@@ -64,12 +75,32 @@ namespace GwentNAi.GameSource.Cards
                 currentCulumn = 0;
             }
 
-            board.CurrentPlayerActions.ImidiateActions = possibleIndexes;
+            board.CurrentPlayerActions.ImidiateActions[0] = possibleIndexes;
+        }
+
+        public void PostPlayCardOrder(IPlayCardExpand obj, GameBoard board, int row, int column)
+        {
+            obj.PostPlayCardOrder(board, row, column);
         }
 
         public void PostPlayCardOrder(GameBoard board, int row, int column)
         {
             throw new NotImplementedException();
+        }
+
+        public void RespondToBleeding(IBleedingInteraction obj)
+        {
+            obj.RespondToBleeding();
+        }
+
+        public void Deploy(IDeploy obj, GameBoard board)
+        {
+            obj.Deploy(board);
+        }
+
+        public void postPickEnemieAbilitiy(IDeployExpandPickEnemies obj, GameBoard board, int row, int column)
+        {
+            obj.postPickEnemieAbilitiy(board, row, column);
         }
     }
 }

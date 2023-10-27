@@ -70,6 +70,35 @@ namespace GwentNAi.HumanMove
             return true;
         }
 
+        public static int[] GetPositionFromWholeBoard(List<List<List<int>>> board)
+        {
+            int player, row, pos;
+
+            Console.ForegroundColor = HumanConsolePrint.currentColor;
+            string positionIndex = Console.ReadLine();
+            Console.ForegroundColor = ConsoleColor.White;
+
+            string[] positionIndexes = positionIndex.Split('-');
+            if (positionIndexes.Length != 3) return GetPositionFromWholeBoard(board);
+            try
+            {
+                player = Convert.ToInt32(positionIndexes[0]);
+                row = Convert.ToInt32(positionIndexes[1]);
+                pos = Convert.ToInt32(positionIndexes[2]);
+            }
+            catch
+            {
+                return GetPositionFromWholeBoard(board);
+            }
+
+            if(player != 0 && player != 1) return GetPositionFromWholeBoard(board);
+            if (row != 0 && row != 1) return GetPositionFromWholeBoard(board);
+            if (!board[player][row].Contains(pos)) return GetPositionFromWholeBoard(board);
+            ConsolePrint.ClearBottom();
+
+            return new int[] {player, row, pos };
+        }
+
         public static int[] GetPositionForCard(List<List<int>> playIndexes)
         {
             int row, pos;

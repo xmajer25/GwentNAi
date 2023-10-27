@@ -18,6 +18,7 @@ namespace GwentNAi.GameSource.Cards.Neutral
             shortName = "Geralt:P";
             descriptors = new List<string>() { "witcher" };
             timeToOrder = 1;
+            bleeding = 0;
         }
 
         void IOrder.Order(GameBoard board)
@@ -44,7 +45,7 @@ namespace GwentNAi.GameSource.Cards.Neutral
                 currentRow++;
             }
 
-            board.CurrentPlayerActions.ImidiateActions = enemieIndexes;
+            board.CurrentPlayerActions.ImidiateActions[0] = enemieIndexes;
         }
 
         void IOrderExpandPickEnemie.postPickEnemieOrder(GameBoard board, int row, int index)

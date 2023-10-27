@@ -58,6 +58,12 @@ namespace GwentNAi.GameSource.AssistantClasses
             Console.SetCursorPosition(36 + (index * 15), 6 * playerRow + 1 + offSet);
             Console.Write(card.currentValue);
 
+            if(card.bleeding > 0)
+            {
+                Console.SetCursorPosition(36 + (index * 15), 7 * playerRow + 1 + offSet);
+                Console.Write("(-" + card.bleeding + ")");
+            }
+
             Console.SetCursorPosition(43 + (index * 15), 6 * playerRow + 1 + offSet);
             Console.Write("x");
 
@@ -280,7 +286,7 @@ namespace GwentNAi.GameSource.AssistantClasses
         {
             Console.SetCursorPosition(0, windowSeparator + 1);
             Console.WriteLine("Select Leader for Player #" + choosingPlayerNumber + ". (by typing one of the options listed)");
-            Console.WriteLine("1.) ArachasSwarm\t2.) BloodScent");
+            Console.WriteLine("1.) ArachasSwarm\t2.) BloodScent\t3.)ForceOfNature");
         }
 
         public static void AskForDeck(int choosingPlayerNumber)

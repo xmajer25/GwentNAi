@@ -1,6 +1,7 @@
 ﻿
 using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards;
+using GwentNAi.GameSource.Cards.IDefault;
 using GwentNAi.GameSource.Cards.IExpand;
 using GwentNAi.GameSource.Decks;
 
@@ -67,10 +68,15 @@ namespace GwentNAi.GameSource.Player
             startingDeck.Cards[swappedCardIndex] = handCard;
         }
 
-        public void PlayCard(int CardInHandIndex, int RowIndex, int PosIndex)
+        public void PlayCard(int CardInHandIndex, int RowIndex, int PosIndex, GameBoard board)
         {
             hasPlayedCard = true;
-            Board[RowIndex].Insert(PosIndex, handDeck.Cards[CardInHandIndex]);
+            DefaultCard card = handDeck.Cards[CardInHandIndex];
+            if (card is IDeploy)
+            {
+                card.Deploy((IDeploy) card, board);
+            }
+            Board[RowIndex].Insert(PosIndex, card);
             handDeck.Cards.RemoveAt(CardInHandIndex);
         }
 

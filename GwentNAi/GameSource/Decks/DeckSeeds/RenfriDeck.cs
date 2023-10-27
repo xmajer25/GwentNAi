@@ -1,4 +1,5 @@
-﻿using GwentNAi.GameSource.Cards.Neutral;
+﻿using GwentNAi.GameSource.Cards.Monsters;
+using GwentNAi.GameSource.Cards.Neutral;
 
 namespace GwentNAi.GameSource.Decks.DeckSeeds
 {
@@ -8,11 +9,11 @@ namespace GwentNAi.GameSource.Decks.DeckSeeds
         {
             Cards = new()
             {
-                new Renfri(), new Renfri(), new Renfri(), new Renfri(), new Renfri(),
-                new Renfri(), new Renfri(), new GeraltProfessional(), new GeraltProfessional(), new GeraltProfessional(),
+                new Protofleder(), new Protofleder(), new Protofleder(), new Protofleder(), new Protofleder(),
+                new Protofleder(), new Protofleder(), new GeraltProfessional(), new GeraltProfessional(), new GeraltProfessional(),
                 new GeraltProfessional(), new GeraltProfessional(), new GeraltProfessional(), new OlgierVonEverec(), new OlgierVonEverec(),
-                new OlgierVonEverec(), new OlgierVonEverec(), new OlgierVonEverec(), new OlgierVonEverec(), new OlgierVonEverec(),
-                new OlgierVonEverec(), new OlgierVonEverec(), new OlgierVonEverec(), new OlgierVonEverec(), new OlgierVonEverec()
+                new Katakan(), new Katakan(), new Katakan(), new Katakan(), new Katakan(),
+                new Katakan(), new Katakan(), new Katakan(), new Katakan(), new Katakan()
             };
             Name = "Renfri";
         }

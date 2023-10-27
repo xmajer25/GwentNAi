@@ -18,6 +18,7 @@ namespace GwentNAi.GameSource.Cards.Neutral
             shortName = "Olgrierd";
             descriptors = new List<string>() { "human", "cursed", "bandit" };
             timeToOrder = 1;
+            bleeding = 0;
         }
 
         void IOrder.Order(GameBoard board)

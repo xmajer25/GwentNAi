@@ -26,14 +26,36 @@ namespace GwentNAi.GameSource.Board
             UpdatePoints();
             if (CurrentlyPlayingLeader.abilityCharges <= 0) CurrentPlayerActions.LeaderActions = null;
         }
-        public void Update()
+
+        public void TurnUpdate()
         {
-            UpdateCards();
+            EndTurnCardsUpdate();
+            RemoveDestroyedCards();
             UpdatePoints();
             SwapPlayers();
             UpdateCPCards();
         }
 
+        public void EndTurnCardsUpdate()
+        {
+
+
+            foreach (var row in Leader1.Board)
+            {
+                foreach (var card in row)
+                {
+                    if(card.bleeding > 0) EvaluateBleeding(card);
+                }
+            }
+
+            foreach (var row in Leader2.Board)
+            {
+                foreach (var card in row)
+                {
+                    if (card.bleeding > 0) EvaluateBleeding(card);
+                }
+            }
+        }
         public void ResetBoard()
         {
             Leader1.hasPassed = false;
@@ -56,12 +78,12 @@ namespace GwentNAi.GameSource.Board
 
         public void SwapCards()
         {
-            List<List<int>> swapOptions = new List<List<int>>(1) { new List<int>(10) };
+            List<List<int>> swapOptions = new List<List<int>>(2) { new List<int>(10), new List<int>(0)};
             for (int i = 0; i < CurrentlyPlayingLeader.handDeck.Cards.Count; i++)
             {
                 swapOptions[0].Add(i);
             }
-            CurrentPlayerActions.ImidiateActions = swapOptions;
+            CurrentPlayerActions.ImidiateActions[0] = swapOptions;
         }
 
         //When we get to resiliant cards...
@@ -132,6 +154,32 @@ namespace GwentNAi.GameSource.Board
                 currentRow++;
             }
         }
+        
+        public void EvaluateBleeding(DefaultCard bleedingCard)
+        {
+            bleedingCard.bleeding--;
+            bleedingCard.currentValue--;
+            foreach(var row in Leader1.Board)
+            {
+                foreach(var card in row)
+                {
+                    if(card is IBleedingInteraction)
+                    {
+                        card.RespondToBleeding((IBleedingInteraction)(card));
+                    }
+                }
+            }
+            foreach (var row in Leader2.Board)
+            {
+                foreach (var card in row)
+                {
+                    if (card is IBleedingInteraction)
+                    {
+                        card.RespondToBleeding((IBleedingInteraction)(card));
+                    }
+                }
+            }
+        }
 
         private void UpdatePoints()
         {
@@ -149,25 +197,6 @@ namespace GwentNAi.GameSource.Board
                 foreach (var card in row)
                 {
                     PointSumP2 += card.currentValue;
-                }
-            }
-        }
-
-        private void UpdateCards()
-        {
-            foreach (var row in Leader1.Board)
-            {
-                foreach (var card in row)
-                {
-                    //card.Update();
-                }
-            }
-
-            foreach (var row in Leader2.Board)
-            {
-                foreach (var card in row)
-                {
-                    //card.Update();
                 }
             }
         }

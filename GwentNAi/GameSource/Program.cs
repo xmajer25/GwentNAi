@@ -6,15 +6,7 @@ using GwentNAi.GameSource.Player;
 using GwentNAi.HumanMove;
 using GwentNAi.MctsMove;
 
-/***
- *-=-=-=-=-=-=-=-=-=-TODOOOOODTODODOD-=-=-=-=-=-=--=-=-=
- * typeof(MyType).GetInterfaces().Contains(typeof(IMyInterface))
- * -------------------------------------------------------------
- *  swapping cards at turn start (thinking of adding it to action list)
- * -------------------------------------------------------------
- * skibidi toilet :))))
- * -=-=-=-=-=-=-=-=-=TURUTUTUTUUUUUU-=-=-=-=-=-=-=-=-=-=
- */
+
 namespace GwentNAi.GameSource
 {
     public class Program
@@ -55,7 +47,7 @@ namespace GwentNAi.GameSource
                     }
                     else
                     {
-                        foreach(var row in board.CurrentPlayerActions.ImidiateActions) row.Clear();
+                        board.CurrentPlayerActions.ClearImidiateActions();
                        
                     }
 
@@ -69,7 +61,8 @@ namespace GwentNAi.GameSource
                         board.MoveUpdate();
                         ConsolePrint.UpdateBoard(board);
                     }
-                    board.Update();
+                    board.TurnUpdate();
+                    ConsolePrint.UpdateBoard(board);
                 }
                 DetermineRoundWinner();
                 board.ResetBoard();

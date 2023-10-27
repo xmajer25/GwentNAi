@@ -134,6 +134,36 @@ namespace GwentNAi.HumanMove
             Console.ForegroundColor= ConsoleColor.White;
         }
 
+        public static void ListAllExpand(List<List<List<int>>> cardIndexes)
+        {
+            Console.ForegroundColor = currentColor;
+
+            Console.SetCursorPosition(0, windowSeparator + 1);
+            Console.Write("Pick target (player-row-column):");
+            Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
+            for (int i = 0; i < cardIndexes.Count; i++)
+            {
+                Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
+                Console.Write("Player " + i + ":");
+                if (cardIndexes[i].Count == 0) continue;
+
+                for (int j = 0; j < cardIndexes[i].Count; j++)
+                {
+                    Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
+                    Console.Write("\tRow" + j + ":");
+                    Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
+                    Console.Write("\t");
+                    for (int k = 0; k < cardIndexes[i][j].Count; k++)
+                    {
+                        Console.Write("\t" + cardIndexes[i][j][k]);
+                    }
+                }
+
+            }
+            Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+
         public static void ListCards(List<int> cardIndexes, Deck hand, string msg)
         {
             Console.ForegroundColor = currentColor;
