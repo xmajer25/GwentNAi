@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="GameSource\Cards\Syndicate\" />
     <Folder Include="GameSource\Cards\Skellige\" />
     <Folder Include="GameSource\Cards\Scoia%27tael\" />
     <Folder Include="GameSource\Cards\NorthernRealms\" />

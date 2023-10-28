@@ -1,6 +1,8 @@
 ﻿using GwentNAi.GameSource.Cards;
+using GwentNAi.GameSource.Cards.IDefault;
 using GwentNAi.GameSource.Decks;
 using GwentNAi.GameSource.Player;
+using System.Reflection;
 
 namespace GwentNAi.GameSource.Board
 {
@@ -78,6 +80,16 @@ namespace GwentNAi.GameSource.Board
                 {
                     if (card is IOrder && card.timeToOrder == 0)
                     {
+                        if(card is ICharge)
+                        {
+                            Type type = card.GetType();
+                            FieldInfo chargesField = type.GetField("charge", BindingFlags.Instance | BindingFlags.Public);
+                            if(chargesField != null)
+                            {
+                                int charges = (int)chargesField.GetValue(card);
+                                if (charges <= 0) continue;
+                            }
+                        }
                         OrderActions.Add(new PossibleAction() { ActionCard = card, CardName = card.name });
                     }
                 }

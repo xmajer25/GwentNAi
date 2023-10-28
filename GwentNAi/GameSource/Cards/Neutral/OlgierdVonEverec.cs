@@ -16,7 +16,7 @@ namespace GwentNAi.GameSource.Cards.Neutral
             faction = "neutral";
             name = "OlgrierdVonEverec";
             shortName = "Olgrierd";
-            descriptors = new List<string>() { "human", "cursed", "bandit" };
+            descriptors = new List<string>() { "Human", "Cursed", "Bandit" };
             timeToOrder = 1;
             bleeding = 0;
         }

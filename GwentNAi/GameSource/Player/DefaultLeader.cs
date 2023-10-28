@@ -72,11 +72,42 @@ namespace GwentNAi.GameSource.Player
         {
             hasPlayedCard = true;
             DefaultCard card = handDeck.Cards[CardInHandIndex];
-            Board[RowIndex].Insert(PosIndex, card);
-            handDeck.Cards.RemoveAt(CardInHandIndex);
             if (card is IDeploy)
             {
                 card.Deploy((IDeploy)card, board);
+            }
+            if (card.descriptors.Contains("Crone"))
+            {
+                RespondToCrone(board, card);
+            }
+            Board[RowIndex].Insert(PosIndex, card);
+            handDeck.Cards.RemoveAt(CardInHandIndex);
+        }
+
+        private void RespondToCrone(GameBoard board, DefaultCard currentlyPlayedCard)
+        {
+            foreach(var row in board.CurrentlyPlayingLeader.Board)
+            {
+                foreach(var card in row)
+                {
+                    if (card == currentlyPlayedCard) continue;
+                    if (card is ICroneInteraction) card.RespondToCrone((ICroneInteraction)card);
+                }
+            }
+            foreach (var card in board.CurrentlyPlayingLeader.graveyardDeck.Cards)
+            {
+                if (card == currentlyPlayedCard) continue;
+                if (card is ICroneInteraction) card.RespondToCrone((ICroneInteraction)card);
+            }
+            foreach (var card in board.CurrentlyPlayingLeader.handDeck.Cards)
+            {
+                if (card == currentlyPlayedCard) continue;
+                if (card is ICroneInteraction) card.RespondToCrone((ICroneInteraction)card);
+            }
+            foreach (var card in board.CurrentlyPlayingLeader.startingDeck.Cards)
+            {
+                if (card == currentlyPlayedCard) continue;
+                if (card is ICroneInteraction) card.RespondToCrone((ICroneInteraction)card);
             }
         }
 

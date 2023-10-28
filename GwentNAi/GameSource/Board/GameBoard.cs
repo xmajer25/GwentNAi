@@ -126,7 +126,11 @@ namespace GwentNAi.GameSource.Board
                 {
                     Type cardType = Leader1.Board[currentRow][index].GetType();
                     DefaultCard graveyardInstance = (DefaultCard)Activator.CreateInstance(cardType);
-                    if (Leader1.Board[currentRow][index] is not IDoomed) Leader1.graveyardDeck.Cards.Add(graveyardInstance);
+
+                    if (Leader1.Board[currentRow][index] is not IDoomed) 
+                        Leader1.graveyardDeck.Cards.Add(graveyardInstance);
+                    if (Leader1.Board[currentRow][index] is IDeathwish)
+                        Leader1.Board[currentRow][index].DeathwishAbility((IDeathwish)Leader1.Board[currentRow][index], this);
                     Leader1.Board[currentRow].RemoveAt(index);
                 }
                 cardsToRemoveIndexes.Clear();
@@ -148,9 +152,14 @@ namespace GwentNAi.GameSource.Board
                 cardsToRemoveIndexes.Reverse();
                 foreach (int index in cardsToRemoveIndexes)
                 {
-                    Type cardType = Leader1.Board[currentRow][index].GetType();
+                    Type cardType = Leader2.Board[currentRow][index].GetType();
                     DefaultCard graveyardInstance = (DefaultCard)Activator.CreateInstance(cardType);
-                    if (Leader2.Board[currentRow][index] is not IDoomed) Leader2.graveyardDeck.Cards.Add(graveyardInstance);
+
+                    if (Leader2.Board[currentRow][index] is not IDoomed) 
+                        Leader2.graveyardDeck.Cards.Add(graveyardInstance);
+                    if (Leader2.Board[currentRow][index] is IDeathwish) 
+                        Leader2.Board[currentRow][index].DeathwishAbility((IDeathwish)Leader2.Board[currentRow][index], this);
+
                     Leader2.Board[currentRow].RemoveAt(index);
                 }
                 cardsToRemoveIndexes.Clear();

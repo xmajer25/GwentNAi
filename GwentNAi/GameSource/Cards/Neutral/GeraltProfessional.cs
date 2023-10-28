@@ -16,7 +16,7 @@ namespace GwentNAi.GameSource.Cards.Neutral
             faction = "neutral";
             name = "GeraltProfessional";
             shortName = "Geralt:P";
-            descriptors = new List<string>() { "witcher" };
+            descriptors = new List<string>() { "Witcher" };
             timeToOrder = 1;
             bleeding = 0;
         }

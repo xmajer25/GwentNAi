@@ -107,5 +107,19 @@ namespace GwentNAi.GameSource.Cards
         {
             obj.postPickCardAbility(board, index);
         }
+
+        public void DeathwishAbility(IDeathwish obj, GameBoard board)
+        {
+            obj.DeathwishAbility(board);
+        }
+
+        public void RespondToCrone(ICroneInteraction obj)
+        {
+            obj.RespondToCrone();
+        }
+        public void PostPickAllyOrder(IOrderExpandPickAlly obj, GameBoard board, int row, int index)
+        {
+            obj.PostPickAllyOrder(board, row, index);
+        }
     }
 }

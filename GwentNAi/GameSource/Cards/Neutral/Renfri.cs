@@ -19,7 +19,7 @@ namespace GwentNAi.GameSource.Cards.Neutral
             faction = "neutral";
             name = "Renfri";
             shortName = "Renfri";
-            descriptors = new List<string>(){ "human", "cursed", "bandit" };
+            descriptors = new List<string>(){ "Human", "Cursed", "Bandit" };
             timeToOrder = 0;
             bleeding = 0;
         }
