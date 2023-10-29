@@ -4,15 +4,17 @@ using GwentNAi.GameSource.Cards.IExpand;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
-    public class Brewess : DefaultCard, ICroneInteraction, IOrder, IOrderExpandPickAlly, ICharge
+    public class Weavess : DefaultCard, IDeploy, IDeployExpandPickAlly, ICroneInteraction
     {
-        public int charge = 1;
-        public Brewess()
+        int boost = 2;
+        public Weavess()
         {
             currentValue = 6;
             maxValue = 6;
@@ -21,25 +23,26 @@ namespace GwentNAi.GameSource.Cards.Monsters
             border = 1;
             type = "unit";
             faction = "monster";
-            name = "Brewess";
-            shortName = "Brewess";
+            name = "Weavess";
+            shortName = "Weavess";
             descriptors = new List<string>() { "Relict", "Crone" };
-            timeToOrder = 0;
+            timeToOrder = -1;
             bleeding = 0;
         }
 
-        public void Order(GameBoard board)
+        public void Deploy(GameBoard board)
         {
             List<List<int>> allyIndexes = new List<List<int>>(2) { new List<int>(10), new List<int>(10) };
-            List<List<DefaultCard>> currentBoard = board.CurrentPlayerBoard;
+            List<List<DefaultCard>> allyBoard;
+            allyBoard = board.CurrentPlayerBoard;
             int currentRow = 0;
             int currentIndex = 0;
 
-            foreach (var row in currentBoard)
+            foreach (var row in allyBoard)
             {
                 foreach (var card in row)
                 {
-                    if(card == this)
+                    if (card == this)
                     {
                         currentIndex++;
                         continue;
@@ -54,18 +57,16 @@ namespace GwentNAi.GameSource.Cards.Monsters
             board.CurrentPlayerActions.ImidiateActions[0] = allyIndexes;
         }
 
-        public void PostPickAllyOrder(GameBoard board, int row, int index)
+        public void PostPickAllyAbilitiy(GameBoard board, int row, int index)
         {
-            DefaultCard consumedCard = board.CurrentPlayerBoard[row][index];
-            currentValue += consumedCard.currentValue;
-            maxValue += consumedCard.currentValue;
-            consumedCard.currentValue = 0;
-            charge--;
+            DefaultCard boostedCard = board.CurrentPlayerBoard[row][index];
+            boostedCard.currentValue += boost;
+            boostedCard.maxValue += boost;
         }
 
         public void RespondToCrone()
         {
-            charge++;
+            boost += 2;
         }
     }
 }

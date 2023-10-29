@@ -10,8 +10,8 @@ namespace GwentNAi.GameSource.Decks.DeckSeeds
         {
             Cards = new()
             {
-                new Whispess(), new Whispess(), new Whispess(), new Whispess(), new Whispess(),
-                new Whispess(), new Whispess(), new GeraltProfessional(), new GeraltProfessional(), new GeraltProfessional(),
+                new Weavess(), new Weavess(), new Weavess(), new Weavess(), new Weavess(),
+                new Weavess(), new Weavess(), new Weavess(), new GeraltProfessional(), new GeraltProfessional(),
                 new GeraltProfessional(), new Brewess(), new GeraltProfessional(), new OlgierVonEverec(), new OlgierVonEverec(),
                 new Brewess(), new Brewess(), new Brewess(), new Brewess(), new Brewess(),
                 new Brewess(), new Whispess(), new Whispess(), new Whispess(), new PugoBoomBreaker()

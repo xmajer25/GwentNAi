@@ -15,6 +15,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
         {
             currentValue = 5;
             maxValue = 5;
+            shield = 0;
             provisionValue = 9;
             border = 1;
             type = "unit";

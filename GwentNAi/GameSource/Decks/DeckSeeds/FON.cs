@@ -19,7 +19,7 @@ namespace GwentNAi.GameSource.Decks.DeckSeeds
             Cards = new()
             {
                 new AddaStriga(), new Katakan(), new Protofleder(), new Ozzrel(), new Golyat(),
-                new PugoBoomBreaker()
+                new PugoBoomBreaker(), new Whispess(), new Brewess(), new Weavess()
             };
             Name = "Force Of Nature";
         }

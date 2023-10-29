@@ -9,6 +9,7 @@ namespace GwentNAi.GameSource.Cards
     {
         public int currentValue { get; set; }
         public int maxValue { get; set; }
+        public int shield { get; set; }
         public int provisionValue { get; set; }
         public int border { get; set; }
         public int bleeding { get; set; }
@@ -120,6 +121,11 @@ namespace GwentNAi.GameSource.Cards
         public void PostPickAllyOrder(IOrderExpandPickAlly obj, GameBoard board, int row, int index)
         {
             obj.PostPickAllyOrder(board, row, index);
+        }
+
+        public void PostPickAllyAbilitiy(IDeployExpandPickAlly obj, GameBoard board, int row, int index)
+        {
+            obj.PostPickAllyAbilitiy(board, row, index);
         }
     }
 }

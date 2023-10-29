@@ -14,11 +14,12 @@ namespace GwentNAi.GameSource.Cards.Monsters
     public class Ozzrel : DefaultCard, IDeploy, IDeployExpandPickCard
     {
         private bool isMelee;
-        List<DefaultCard> graveYard = new List<DefaultCard>(25);
+        private List<DefaultCard> graveYard = new List<DefaultCard>(25);
         public Ozzrel()
         {
             currentValue = 1;
             maxValue = 1;
+            shield = 0;
             provisionValue = 8;
             border = 1;
             type = "unit";
@@ -37,7 +38,6 @@ namespace GwentNAi.GameSource.Cards.Monsters
             isMelee = (meleeRow == currentRow);
             List<int> graveYardIndexes = new List<int>();
             int cardIndex = 0;
-            int imidiateActionRow = 0;
 
             if (isMelee)
             {

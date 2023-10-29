@@ -72,6 +72,8 @@ namespace GwentNAi.GameSource.Player
         {
             hasPlayedCard = true;
             DefaultCard card = handDeck.Cards[CardInHandIndex];
+            Board[RowIndex].Insert(PosIndex, card);
+            handDeck.Cards.RemoveAt(CardInHandIndex);
             if (card is IDeploy)
             {
                 card.Deploy((IDeploy)card, board);
@@ -80,8 +82,6 @@ namespace GwentNAi.GameSource.Player
             {
                 RespondToCrone(board, card);
             }
-            Board[RowIndex].Insert(PosIndex, card);
-            handDeck.Cards.RemoveAt(CardInHandIndex);
         }
 
         private void RespondToCrone(GameBoard board, DefaultCard currentlyPlayedCard)

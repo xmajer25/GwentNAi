@@ -47,6 +47,13 @@ namespace GwentNAi.HumanMove
                             board.CurrentPlayerActions.ClearImidiateActions();
                             actionCard.postPickEnemieAbilitiy((IDeployExpandPickEnemies)actionCard, board, cardPos[0], cardPos[1]);
                         }
+                        else if(actionCard is IDeployExpandPickAlly)
+                        {
+                            HumanConsolePrint.ListEnemieExpand(board.CurrentPlayerActions.ImidiateActions[0]);
+                            cardPos = HumanConsoleGet.GetPositionForCard(board.CurrentPlayerActions.ImidiateActions[0]);
+                            board.CurrentPlayerActions.ClearImidiateActions();
+                            actionCard.PostPickAllyAbilitiy((IDeployExpandPickAlly)actionCard, board, cardPos[0], cardPos[1]);
+                        }
                         else if(actionCard is IDeployExpandPickCard)
                         {
                             HumanConsolePrint.ListCardsSimple(board.CurrentPlayerActions.ImidiateActions[0][0]);

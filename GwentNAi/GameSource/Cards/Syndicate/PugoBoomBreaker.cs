@@ -16,6 +16,7 @@ namespace GwentNAi.GameSource.Cards.Syndicate
         {
             currentValue = 11;
             maxValue = 11;
+            shield = 0;
             provisionValue = 7;
             border = 1;
             type = "unit";

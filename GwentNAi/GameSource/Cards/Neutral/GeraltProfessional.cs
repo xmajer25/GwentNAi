@@ -10,6 +10,7 @@ namespace GwentNAi.GameSource.Cards.Neutral
         {
             currentValue = 3;
             maxValue = 3;
+            shield = 0;
             provisionValue = 11;
             border = 1;
             type = "unit";
