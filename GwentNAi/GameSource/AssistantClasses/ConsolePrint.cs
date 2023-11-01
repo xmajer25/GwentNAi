@@ -1,5 +1,8 @@
 ﻿using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards;
+using GwentNAi.GameSource.Cards.IDefault;
+using System.Reflection;
+using System;
 using System.Text;
 
 namespace GwentNAi.GameSource.AssistantClasses
@@ -60,12 +63,14 @@ namespace GwentNAi.GameSource.AssistantClasses
 
             if(card.bleeding > 0)
             {
-                Console.SetCursorPosition(36 + (index * 15), 7 * playerRow + 1 + offSet);
+                Console.SetCursorPosition(36 + (index * 15), 6 * playerRow + 1 + offSet + 1);
                 Console.Write("(-" + card.bleeding + ")");
             }
-
-            Console.SetCursorPosition(43 + (index * 15), 6 * playerRow + 1 + offSet);
-            Console.Write("x");
+            if(card.shield > 0)
+            {
+                Console.SetCursorPosition(43 + (index * 15), 6 * playerRow + 1 + offSet);
+                Console.Write(card.shield);
+            }
 
             Console.SetCursorPosition(36 + (index * 15), 6 * playerRow + 3 + offSet);
             Console.Write(card.shortName);
@@ -76,6 +81,14 @@ namespace GwentNAi.GameSource.AssistantClasses
                 Console.Write("┃");
                 Console.SetCursorPosition(44 + (index * 15), (6 * playerRow) + j + offSet);
                 Console.Write("┃");
+            }
+
+            if (card is ITimer)
+            {
+                Type type = card.GetType();
+                FieldInfo chargesField = type.GetField("timer", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                Console.SetCursorPosition(38 + (index * 15), (6 * playerRow) + 4 + offSet);
+                Console.Write((int)chargesField.GetValue(card));
             }
             Console.SetCursorPosition(35 + (index * 15), 6 * playerRow + 5 + offSet);
             Console.Write("┖────────┚");

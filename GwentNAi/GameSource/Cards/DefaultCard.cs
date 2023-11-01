@@ -7,7 +7,7 @@ namespace GwentNAi.GameSource.Cards
 {
     public class DefaultCard : IPlaySelfExpand
     {
-        public int currentValue { get; set; }
+        public virtual int currentValue { get; set; }
         public int maxValue { get; set; }
         public int shield { get; set; }
         public int provisionValue { get; set; }
@@ -20,41 +20,6 @@ namespace GwentNAi.GameSource.Cards
         public List<string> descriptors { get; set; } = new List<string>();
 
         public int timeToOrder { get; set; }
-
-        public void Order(IOrder obj, GameBoard board)
-        {
-            obj.Order(board);
-        }
-
-        public void Cooldown(ICooldown obj, int cooldown)
-        {
-            obj.Cooldown(cooldown);
-        }
-
-        public void StartTurnUpdate(IUpdate obj)
-        {
-            obj.StartTurnUpdate();
-        }
-
-        public void pickEnemie(IOrderExpandPickEnemie obj, GameBoard board)
-        {
-            obj.pickEnemie(board);
-        }
-
-        public void postPickEnemieOrder(IOrderExpandPickEnemie obj, GameBoard board, int row, int index)
-        {
-            obj.postPickEnemieOrder(board, row, index);
-        }
-
-        public void pickAll(IOrderExpandPickAll obj, GameBoard board)
-        {
-            obj.pickAll(board);
-        }
-
-        public void postPickAllOrder(IOrderExpandPickAll obj, GameBoard board, int player, int row, int index)
-        {
-            obj.postPickAllOrder(board, player, row, index);
-        }
 
         public virtual void PlaySelfExpand(GameBoard board)
         {
@@ -77,6 +42,14 @@ namespace GwentNAi.GameSource.Cards
             }
 
             board.CurrentPlayerActions.ImidiateActions[0] = possibleIndexes;
+        }
+
+        public virtual void TakeDemage(int damage, GameBoard board)
+        {
+            int _excessDamage = shield - damage;
+            shield -= damage;
+            if(shield < 0) shield = 0;
+            currentValue -= _excessDamage;
         }
 
         public void PostPlayCardOrder(IPlayCardExpand obj, GameBoard board, int row, int column)
@@ -126,6 +99,46 @@ namespace GwentNAi.GameSource.Cards
         public void PostPickAllyAbilitiy(IDeployExpandPickAlly obj, GameBoard board, int row, int index)
         {
             obj.PostPickAllyAbilitiy(board, row, index);
+        }
+
+        public void Timer(ITimer obj, GameBoard board)
+        {
+            obj.Timer(board);
+        }
+
+        public void Order(IOrder obj, GameBoard board)
+        {
+            obj.Order(board);
+        }
+
+        public void Cooldown(ICooldown obj, int cooldown)
+        {
+            obj.Cooldown(cooldown);
+        }
+
+        public void StartTurnUpdate(IUpdate obj)
+        {
+            obj.StartTurnUpdate();
+        }
+
+        public void pickEnemie(IOrderExpandPickEnemie obj, GameBoard board)
+        {
+            obj.pickEnemie(board);
+        }
+
+        public void postPickEnemieOrder(IOrderExpandPickEnemie obj, GameBoard board, int row, int index)
+        {
+            obj.postPickEnemieOrder(board, row, index);
+        }
+
+        public void pickAll(IOrderExpandPickAll obj, GameBoard board)
+        {
+            obj.pickAll(board);
+        }
+
+        public void postPickAllOrder(IOrderExpandPickAll obj, GameBoard board, int player, int row, int index)
+        {
+            obj.postPickAllOrder(board, player, row, index);
         }
     }
 }

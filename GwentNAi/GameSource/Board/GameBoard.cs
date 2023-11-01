@@ -42,17 +42,19 @@ namespace GwentNAi.GameSource.Board
 
             foreach (var row in Leader1.Board)
             {
-                foreach (var card in row)
+                foreach (var card in row.ToList())
                 {
                     if(card.bleeding > 0) EvaluateBleeding(card);
+                    if (card is ITimer && Leader1 == CurrentlyPlayingLeader) card.Timer((ITimer)card, this);
                 }
             }
 
             foreach (var row in Leader2.Board)
             {
-                foreach (var card in row)
+                foreach (var card in row.ToList())
                 {
                     if (card.bleeding > 0) EvaluateBleeding(card);
+                    if (card is ITimer && Leader2 == CurrentlyPlayingLeader) card.Timer((ITimer)card, this);
                 }
             }
         }
@@ -171,7 +173,7 @@ namespace GwentNAi.GameSource.Board
         public void EvaluateBleeding(DefaultCard bleedingCard)
         {
             bleedingCard.bleeding--;
-            bleedingCard.currentValue--;
+            bleedingCard.TakeDemage(1, this);
             foreach(var row in Leader1.Board)
             {
                 foreach(var card in row)

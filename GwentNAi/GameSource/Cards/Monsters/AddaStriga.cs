@@ -85,7 +85,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
             currentValue += consumedCard.currentValue * multiplier;
             maxValue += consumedCard.currentValue * multiplier;
-            consumedCard.currentValue = 0;
+            consumedCard.TakeDemage(consumedCard.currentValue, board);
             timeToOrder--;
             board.CurrentlyPlayingLeader.UseAbility();
         }

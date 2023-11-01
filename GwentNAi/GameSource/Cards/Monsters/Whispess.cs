@@ -55,7 +55,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
         public void postPickEnemieAbilitiy(GameBoard board, int row, int index)
         {
             List<List<DefaultCard>> enemieBoard = (board.CurrentPlayerBoard == board.Leader1.Board ? board.Leader2.Board : board.Leader1.Board);
-            enemieBoard[row][index].currentValue -= abilityDemage;
+            enemieBoard[row][index].TakeDemage(abilityDemage, board);
         }
 
         public void RespondToCrone()

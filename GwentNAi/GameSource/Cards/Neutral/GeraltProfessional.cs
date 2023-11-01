@@ -52,8 +52,8 @@ namespace GwentNAi.GameSource.Cards.Neutral
         void IOrderExpandPickEnemie.postPickEnemieOrder(GameBoard board, int row, int index)
         {
             List<List<DefaultCard>> enemieBoard = (board.CurrentPlayerBoard == board.Leader1.Board ? board.Leader2.Board : board.Leader1.Board);
-            if (enemieBoard[row][index].currentValue % 3 == 0) enemieBoard[row][index].currentValue = 0;
-            else enemieBoard[row][index].currentValue -= 3;
+            if (enemieBoard[row][index].currentValue % 3 == 0) enemieBoard[row][index].TakeDemage(enemieBoard[row][index].currentValue, board);
+            else enemieBoard[row][index].TakeDemage(3, board);
             timeToOrder--;
             board.CurrentlyPlayingLeader.UseAbility();
         }

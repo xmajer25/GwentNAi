@@ -59,7 +59,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
             DefaultCard consumedCard = board.CurrentPlayerBoard[row][index];
             currentValue += consumedCard.currentValue;
             maxValue += consumedCard.currentValue;
-            consumedCard.currentValue = 0;
+            consumedCard.TakeDemage(consumedCard.currentValue, board);
             charge--;
         }
 

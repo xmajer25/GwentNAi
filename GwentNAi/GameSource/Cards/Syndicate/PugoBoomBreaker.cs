@@ -45,7 +45,7 @@ namespace GwentNAi.GameSource.Cards.Syndicate
             }
 
             int randomColumnIndex = random.Next(0, currentBoard[randomRowIndex].Count);
-            currentBoard[randomRowIndex][randomColumnIndex].currentValue -= 3;
+            currentBoard[randomRowIndex][randomColumnIndex].TakeDemage(3, board);
         }
     }
 }

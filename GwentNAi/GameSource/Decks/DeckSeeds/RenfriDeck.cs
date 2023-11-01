@@ -10,11 +10,11 @@ namespace GwentNAi.GameSource.Decks.DeckSeeds
         {
             Cards = new()
             {
-                new Weavess(), new Weavess(), new Weavess(), new Weavess(), new Weavess(),
-                new Weavess(), new Weavess(), new Weavess(), new GeraltProfessional(), new GeraltProfessional(),
-                new GeraltProfessional(), new Brewess(), new GeraltProfessional(), new OlgierVonEverec(), new OlgierVonEverec(),
-                new Brewess(), new Brewess(), new Brewess(), new Brewess(), new Brewess(),
-                new Brewess(), new Whispess(), new Whispess(), new Whispess(), new PugoBoomBreaker()
+                new OldSpeartipAsleep(), new OldSpeartipAsleep(), new OldSpeartipAsleep(), new OldSpeartipAsleep(), new OldSpeartipAsleep(),
+                new OldSpeartipAsleep(), new OldSpeartipAsleep(), new OldSpeartipAsleep(), new GeraltProfessional(), new GeraltProfessional(),
+                new GeraltProfessional(), new Brewess(), new Protofleder(), new Protofleder(), new Protofleder(),
+                new Protofleder(), new Protofleder(), new Protofleder(), new Protofleder(), new Protofleder(),
+                new Protofleder(), new Protofleder(), new Protofleder(), new Protofleder(), new Protofleder()
             };
             Name = "Renfri";
         }
