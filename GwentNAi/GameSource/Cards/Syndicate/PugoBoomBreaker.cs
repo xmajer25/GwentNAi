@@ -33,7 +33,7 @@ namespace GwentNAi.GameSource.Cards.Syndicate
             List<List<DefaultCard>> currentBoard = board.CurrentlyPlayingLeader.Board;
             if (currentBoard[0].Count == 0 && currentBoard[1].Count == 0)
             {
-                currentValue -= 5;
+                TakeDemage(5, false, board);
                 return;
             }
 
@@ -45,7 +45,7 @@ namespace GwentNAi.GameSource.Cards.Syndicate
             }
 
             int randomColumnIndex = random.Next(0, currentBoard[randomRowIndex].Count);
-            currentBoard[randomRowIndex][randomColumnIndex].TakeDemage(3, board);
+            currentBoard[randomRowIndex][randomColumnIndex].TakeDemage(3, false, board);
         }
     }
 }

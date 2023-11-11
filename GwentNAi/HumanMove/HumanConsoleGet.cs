@@ -122,6 +122,7 @@ namespace GwentNAi.HumanMove
             }
 
             if(row != 0 && row != 1) return GetPositionForCard(playIndexes);
+            if (playIndexes[row].Count == 0) return GetPositionForCard(playIndexes);
             if (playIndexes[row].Max() < pos) return GetPositionForCard(playIndexes);
             ConsolePrint.ClearBottom();
             return new int[] { row, pos };

@@ -46,6 +46,7 @@ namespace GwentNAi.GameSource.Board
                 {
                     if(card.bleeding > 0) EvaluateBleeding(card);
                     if (card is ITimer && Leader1 == CurrentlyPlayingLeader) card.Timer((ITimer)card, this);
+                    if (card is IEndTurnUpdate UpdateCard && Leader1 == CurrentlyPlayingLeader) UpdateCard.EndTurnUpdate(this);
                 }
             }
 
@@ -55,6 +56,7 @@ namespace GwentNAi.GameSource.Board
                 {
                     if (card.bleeding > 0) EvaluateBleeding(card);
                     if (card is ITimer && Leader2 == CurrentlyPlayingLeader) card.Timer((ITimer)card, this);
+                    if (card is IEndTurnUpdate UpdateCard && Leader2 == CurrentlyPlayingLeader) UpdateCard.EndTurnUpdate(this);
                 }
             }
         }
@@ -173,7 +175,7 @@ namespace GwentNAi.GameSource.Board
         public void EvaluateBleeding(DefaultCard bleedingCard)
         {
             bleedingCard.bleeding--;
-            bleedingCard.TakeDemage(1, this);
+            bleedingCard.TakeDemage(1, false, this);
             foreach(var row in Leader1.Board)
             {
                 foreach(var card in row)

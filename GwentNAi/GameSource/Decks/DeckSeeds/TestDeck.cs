@@ -4,19 +4,19 @@ using GwentNAi.GameSource.Cards.Syndicate;
 
 namespace GwentNAi.GameSource.Decks.DeckSeeds
 {
-    public class RenfriDeck : Deck
+    public class TestDeck : Deck
     {
-        public RenfriDeck()
+        public TestDeck()
         {
             Cards = new()
             {
                 new OldSpeartipAsleep(), new OldSpeartipAsleep(), new OldSpeartipAsleep(), new OldSpeartipAsleep(), new OldSpeartipAsleep(),
                 new OldSpeartipAsleep(), new OldSpeartipAsleep(), new OldSpeartipAsleep(), new GeraltProfessional(), new GeraltProfessional(),
-                new GeraltProfessional(), new Brewess(), new Protofleder(), new Protofleder(), new Protofleder(),
-                new Protofleder(), new Protofleder(), new Protofleder(), new Protofleder(), new Protofleder(),
-                new Protofleder(), new Protofleder(), new Protofleder(), new Protofleder(), new Protofleder()
+                new GeraltProfessional(), new Brewess(), new Nekker(), new Nekker(), new Nekker(),
+                new Nekker(), new Nekker(), new Nekker(), new Nekker(), new Nekker(),
+                new Nekker(), new Nekker(), new Nekker(), new Nekker(), new Nekker()
             };
-            Name = "Renfri";
+            Name = "Test Deck";
         }
     }
 }

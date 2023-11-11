@@ -44,12 +44,17 @@ namespace GwentNAi.GameSource.Cards
             board.CurrentPlayerActions.ImidiateActions[0] = possibleIndexes;
         }
 
-        public virtual void TakeDemage(int damage, GameBoard board)
+        public virtual void TakeDemage(int damage, bool lethal, GameBoard board)
         {
-            int _excessDamage = shield - damage;
+            if (lethal)
+            {
+                currentValue = 0;
+                return;
+            }
+            int _excessDamage = damage - shield;
             shield -= damage;
             if(shield < 0) shield = 0;
-            currentValue -= _excessDamage;
+            if(_excessDamage > 0) currentValue -= _excessDamage;
         }
 
         public void PostPlayCardOrder(IPlayCardExpand obj, GameBoard board, int row, int column)

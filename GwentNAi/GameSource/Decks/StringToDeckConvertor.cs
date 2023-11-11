@@ -9,10 +9,14 @@ namespace GwentNAi.GameSource.Decks
         {
             switch (Deck)
             {
-                case "Renfri":
-                case "renfri":
+                case "TestDeck":
+                case "testdeck":
                 case "1":
-                    return new RenfriDeck();
+                    return new TestDeck();
+                case "MonsterDeck1":
+                case "monsterdeck1":
+                case "2":
+                    return new MonsterDeck1();
                 default:
                     throw new CustomException("Error: Unknown Deck Name");
 

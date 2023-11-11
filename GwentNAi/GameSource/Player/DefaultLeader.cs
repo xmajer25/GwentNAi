@@ -78,36 +78,35 @@ namespace GwentNAi.GameSource.Player
             {
                 card.Deploy((IDeploy)card, board);
             }
-            if (card.descriptors.Contains("Crone"))
-            {
-                RespondToCrone(board, card);
-            }
+                
+            RespondToDeployedCard(board, card);
         }
 
-        private void RespondToCrone(GameBoard board, DefaultCard currentlyPlayedCard)
+        private void RespondToDeployedCard(GameBoard board, DefaultCard currentlyPlayedCard)
         {
             foreach(var row in board.CurrentlyPlayingLeader.Board)
             {
                 foreach(var card in row)
                 {
                     if (card == currentlyPlayedCard) continue;
-                    if (card is ICroneInteraction) card.RespondToCrone((ICroneInteraction)card);
+                    if (card is ICroneInteraction CroneInteractionCard && currentlyPlayedCard.descriptors.Contains("Crone")) CroneInteractionCard.RespondToCrone();
+                    if (card is IThrive ThriveCard) ThriveCard.Thrive(currentlyPlayedCard.currentValue);
                 }
             }
             foreach (var card in board.CurrentlyPlayingLeader.graveyardDeck.Cards)
             {
                 if (card == currentlyPlayedCard) continue;
-                if (card is ICroneInteraction) card.RespondToCrone((ICroneInteraction)card);
+                if (card is ICroneInteraction CroneInteractionCard && currentlyPlayedCard.descriptors.Contains("Crone")) CroneInteractionCard.RespondToCrone();
             }
             foreach (var card in board.CurrentlyPlayingLeader.handDeck.Cards)
             {
                 if (card == currentlyPlayedCard) continue;
-                if (card is ICroneInteraction) card.RespondToCrone((ICroneInteraction)card);
+                if (card is ICroneInteraction CroneInteractionCard && currentlyPlayedCard.descriptors.Contains("Crone")) CroneInteractionCard.RespondToCrone();
             }
             foreach (var card in board.CurrentlyPlayingLeader.startingDeck.Cards)
             {
                 if (card == currentlyPlayedCard) continue;
-                if (card is ICroneInteraction) card.RespondToCrone((ICroneInteraction)card);
+                if (card is ICroneInteraction CroneInteractionCard && currentlyPlayedCard.descriptors.Contains("Crone")) CroneInteractionCard.RespondToCrone();
             }
         }
 

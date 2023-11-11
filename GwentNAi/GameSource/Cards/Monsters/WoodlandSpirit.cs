@@ -17,7 +17,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
             maxValue = 9;
             shield = 0;
             provisionValue = 0;
-            border = 1;
+            border = 0;
             type = "unit";
             faction = "monster";
             name = "WoodlandSpirit";

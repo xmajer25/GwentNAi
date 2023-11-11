@@ -30,7 +30,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
             bleeding = 0;
         }
 
-        public override void TakeDemage(int damage, GameBoard board)
+        public override void TakeDemage(int damage, bool lethal, GameBoard board)
         {
             int _excessDamage = shield - damage;
             shield -= damage;
@@ -54,7 +54,10 @@ namespace GwentNAi.GameSource.Cards.Monsters
                 {
                     if (board.Leader1.Board[i][j] == this)
                     {
-                        board.Leader1.Board[i][j] = new OldSpeartip();
+                        OldSpeartip transformedCard = GetOldSpeartip(board.Leader2.startingDeck.Cards);
+                        if (transformedCard == null) return;
+
+                        board.Leader1.Board[i][j] = transformedCard;
                         if (byTimer)
                         {
                             board.Leader1.Board[i][j].currentValue += 6;
@@ -70,7 +73,10 @@ namespace GwentNAi.GameSource.Cards.Monsters
                 {
                     if (board.Leader2.Board[i][j] == this)
                     {
-                        board.Leader2.Board[i][j] = new OldSpeartip();
+                        OldSpeartip transformedCard = GetOldSpeartip(board.Leader2.startingDeck.Cards);
+                        if (transformedCard == null) return; 
+
+                        board.Leader2.Board[i][j] = transformedCard;
                         if (byTimer)
                         {
                             board.Leader2.Board[i][j].currentValue += 6;
@@ -80,6 +86,19 @@ namespace GwentNAi.GameSource.Cards.Monsters
                     }
                 }
             }
+        }
+
+        private OldSpeartip GetOldSpeartip(List<DefaultCard> Deck)
+        {
+            foreach(var card in Deck)
+            {
+                if(card.GetType() == typeof(OldSpeartip))
+                {
+                    Deck.Remove(card);
+                    return new OldSpeartip();
+                }
+            }
+            return null;
         }
     }
 }

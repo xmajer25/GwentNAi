@@ -306,7 +306,7 @@ namespace GwentNAi.GameSource.AssistantClasses
         {
             Console.SetCursorPosition(0, windowSeparator + 1);
             Console.WriteLine("Select Deck for Player #" + choosingPlayerNumber);
-            Console.WriteLine("1.) Renfri");
+            Console.WriteLine("1.) TestDeck\t2.)MonsterDeck1");
         }
 
         public static int GetCursorY()

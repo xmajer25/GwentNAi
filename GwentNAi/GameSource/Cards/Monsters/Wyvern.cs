@@ -4,28 +4,25 @@ using GwentNAi.GameSource.Cards.IExpand;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
-    public class Whispess : DefaultCard, IDeploy, IDeployExpandPickEnemies, ICroneInteraction
+    public class Wyvern : DefaultCard, IDeploy, IDeployExpandPickEnemies, IThrive
     {
-        private int abilityDemage { get; set; } = 2;
-        public Whispess()
+        public Wyvern()
         {
-            currentValue = 6;
-            maxValue = 6;
+            currentValue = 3;
+            maxValue = 3;
             shield = 0;
-            provisionValue = 7;
-            border = 1;
+            provisionValue = 5;
+            border = 0;
             type = "unit";
             faction = "monster";
-            name = "Whispess";
-            shortName = "Whispess";
-            descriptors = new List<string>() { "Relict", "Crone" };
+            name = "Wyvern";
+            shortName = "Wyvern";
+            descriptors = new List<string>() { "Beast" };
             timeToOrder = -1;
             bleeding = 0;
         }
@@ -55,12 +52,17 @@ namespace GwentNAi.GameSource.Cards.Monsters
         public void postPickEnemieAbilitiy(GameBoard board, int row, int index)
         {
             List<List<DefaultCard>> enemieBoard = (board.CurrentPlayerBoard == board.Leader1.Board ? board.Leader2.Board : board.Leader1.Board);
-            enemieBoard[row][index].TakeDemage(abilityDemage, false, board);
+            enemieBoard[row][index].TakeDemage(2, false, board);
         }
 
-        public void RespondToCrone()
+        public void Thrive(int playedUnitValue)
         {
-            abilityDemage += 2;
+            if(playedUnitValue > currentValue)
+            {
+                currentValue++;
+                if (currentValue > maxValue) maxValue++;
+
+            }
         }
     }
 }
