@@ -45,11 +45,6 @@ namespace GwentNAi.GameSource
                         board.SwapCards();
                         roundStart--;
                     }
-                    else
-                    {
-                        board.CurrentPlayerActions.ClearImidiateActions();
-                       
-                    }
 
                     board.CurrentPlayerActions.GetAllActions(board.CurrentPlayerBoard, board.CurrentlyPlayingLeader.handDeck, board.CurrentlyPlayingLeader);
                     int moveOutcome = 0;

@@ -14,6 +14,7 @@ namespace GwentNAi.GameSource.Board
                                                                                      new List<List<int>>(2) { new List<int>(10), new List<int>(10) } };
         public Action<GameBoard>? LeaderActions = null;
         public Action PassOrEndTurn = () => { };
+        public SwapCards SwapCards = new();
 
         public bool canPass { get; set; }
         public bool canEnd { get; set; }

@@ -3,10 +3,11 @@ using GwentNAi.GameSource.Cards.IDefault;
 using GwentNAi.GameSource.Player;
 using System.Data;
 using System.Reflection;
+using System.Transactions;
 
 namespace GwentNAi.GameSource.Board
 {
-    public class GameBoard
+    public class GameBoard : ICloneable
     {
         public DefaultLeader? Leader1 { get; set; }
         public DefaultLeader? Leader2 { get; set; }
@@ -19,6 +20,22 @@ namespace GwentNAi.GameSource.Board
         public List<List<DefaultCard>>? CurrentPlayerBoard { get; set; }
 
         public ActionContainer CurrentPlayerActions { get; set; } = new();
+
+        public object Clone()
+        {
+            GameBoard clonedBoard = new()
+            {
+                Leader1 = Leader1,
+                Leader2 = Leader2,
+                PointSumP1 = PointSumP1,
+                PointSumP2 = PointSumP2,
+                CurrentlyPlayingLeader = CurrentlyPlayingLeader,
+                CurrentPlayerBoard = CurrentPlayerBoard,
+                CurrentPlayerActions = CurrentPlayerActions
+            };
+
+            return clonedBoard;
+        }
 
         public void MoveUpdate()
         {
@@ -82,12 +99,10 @@ namespace GwentNAi.GameSource.Board
 
         public void SwapCards()
         {
-            List<List<int>> swapOptions = new List<List<int>>(2) { new List<int>(10), new List<int>(0)};
             for (int i = 0; i < CurrentlyPlayingLeader.handDeck.Cards.Count; i++)
             {
-                swapOptions[0].Add(i);
+                CurrentPlayerActions.SwapCards.Indexes.Add(i);
             }
-            CurrentPlayerActions.ImidiateActions[0] = swapOptions;
         }
 
         //When we get to resiliant cards...
@@ -244,5 +259,7 @@ namespace GwentNAi.GameSource.Board
             CurrentlyPlayingLeader.hasPlayedCard = false;
             CurrentlyPlayingLeader.hasUsedAbility = false;
         }
+
+        
     }
 }
