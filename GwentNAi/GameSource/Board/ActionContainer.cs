@@ -2,11 +2,12 @@
 using GwentNAi.GameSource.Cards.IDefault;
 using GwentNAi.GameSource.Decks;
 using GwentNAi.GameSource.Player;
+using GwentNAi.MctsMove.Enums;
 using System.Reflection;
 
 namespace GwentNAi.GameSource.Board
 {
-    public class ActionContainer
+    public class ActionContainer : ICloneable
     {
         public List<PossibleAction> OrderActions = new();
         public List<PossibleAction> PlayCardActions = new();
@@ -19,6 +20,24 @@ namespace GwentNAi.GameSource.Board
         public bool canPass { get; set; }
         public bool canEnd { get; set; }
         public bool canLeaderAbility { get; set; }
+
+        public object Clone()
+        {
+            ActionContainer clonedActionContainer = new ActionContainer()
+            {
+                OrderActions = OrderActions.Select(action => (PossibleAction)action.Clone()).ToList(),
+                PlayCardActions = PlayCardActions.Select(action => (PossibleAction)action.Clone()).ToList(),
+                ImidiateActions = ImidiateActions.Select(midList => midList.Select(innerList => innerList.ToList()).ToList()).ToList(),
+                LeaderActions = LeaderActions,
+                PassOrEndTurn = PassOrEndTurn,
+                SwapCards = (SwapCards)SwapCards.Clone(),
+                canPass = canPass,
+                canEnd = canEnd,
+                canLeaderAbility = canLeaderAbility
+            };
+
+            return clonedActionContainer;
+        }
 
         public void ClearImidiateActions()
         {
@@ -47,7 +66,7 @@ namespace GwentNAi.GameSource.Board
             PlayCardActions.Clear();
 
             GetOrderActions(CurrentPlayerBoard);
-            GetPlayAction(CurrentPlayerHand);
+            if(!Leader.hasPlayedCard) GetPlayAction(CurrentPlayerHand);
             GetLeaderAction(Leader);
             GetPassOrEndTurn(Leader);
         }
@@ -108,13 +127,9 @@ namespace GwentNAi.GameSource.Board
         public void GetLeaderAction(DefaultLeader Leader)
         {
             if (Leader.abilityCharges != 0)
-            {
                 LeaderActions = Leader.Order;
-            }
             else
-            {
                 LeaderActions = null;
-            }
         }
     }
 }

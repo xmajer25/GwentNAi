@@ -7,7 +7,7 @@ using GwentNAi.GameSource.Decks;
 
 namespace GwentNAi.GameSource.Player
 {
-    public abstract class DefaultLeader
+    public abstract class DefaultLeader : ICloneable
     {
         public int provisionValue { get; set; }
         public string leaderName { get; set; } = string.Empty;
@@ -27,6 +27,7 @@ namespace GwentNAi.GameSource.Player
 
         private static Random Shuffler = new();
 
+        public abstract object Clone();
 
         public abstract void Order(GameBoard board);
         public abstract void Update();
@@ -74,9 +75,9 @@ namespace GwentNAi.GameSource.Player
             DefaultCard card = handDeck.Cards[CardInHandIndex];
             Board[RowIndex].Insert(PosIndex, card);
             handDeck.Cards.RemoveAt(CardInHandIndex);
-            if (card is IDeploy)
+            if (card is IDeploy DeployCard)
             {
-                card.Deploy((IDeploy)card, board);
+                DeployCard.Deploy(board);
             }
                 
             RespondToDeployedCard(board, card);

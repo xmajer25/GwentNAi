@@ -22,19 +22,19 @@ namespace GwentNAi.GameSource.Cards.Neutral
             bleeding = 0;
         }
 
-        void IOrder.Order(GameBoard board)
+        public void Order(GameBoard board)
         {
-            Cooldown(this, 1);
+            Cooldown(1);
             board.CurrentlyPlayingLeader.UseAbility();
             if (currentValue < maxValue) currentValue++;
         }
 
-        void ICooldown.Cooldown(int cooldown)
+        public void Cooldown(int cooldown)
         {
             timeToOrder += (cooldown + 1);
         }
 
-        void IUpdate.StartTurnUpdate()
+        public void StartTurnUpdate()
         {
             if(timeToOrder > 0)
             {

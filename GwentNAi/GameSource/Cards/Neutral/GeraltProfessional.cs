@@ -22,12 +22,12 @@ namespace GwentNAi.GameSource.Cards.Neutral
             bleeding = 0;
         }
 
-        void IOrder.Order(GameBoard board)
+        public void Order(GameBoard board)
         {
-            pickEnemie(this, board);
+            pickEnemie(board);
         }
 
-        void IOrderExpandPickEnemie.pickEnemie(GameBoard board)
+        public void pickEnemie(GameBoard board)
         {
             List<List<int>> enemieIndexes = new List<List<int>>(2) { new List<int>(10), new List<int>(10) };
             List<List<DefaultCard>> enemieBoard;
@@ -49,7 +49,7 @@ namespace GwentNAi.GameSource.Cards.Neutral
             board.CurrentPlayerActions.ImidiateActions[0] = enemieIndexes;
         }
 
-        void IOrderExpandPickEnemie.postPickEnemieOrder(GameBoard board, int row, int index)
+        public void postPickEnemieOrder(GameBoard board, int row, int index)
         {
             List<List<DefaultCard>> enemieBoard = (board.CurrentPlayerBoard == board.Leader1.Board ? board.Leader2.Board : board.Leader1.Board);
             if (enemieBoard[row][index].currentValue % 3 == 0) enemieBoard[row][index].TakeDemage(enemieBoard[row][index].currentValue, false, board);
@@ -58,7 +58,7 @@ namespace GwentNAi.GameSource.Cards.Neutral
             board.CurrentlyPlayingLeader.UseAbility();
         }
 
-        void IUpdate.StartTurnUpdate()
+        public void StartTurnUpdate()
         {
             if (timeToOrder > 0)
             {

@@ -25,13 +25,13 @@ namespace GwentNAi.GameSource.Board
         {
             GameBoard clonedBoard = new()
             {
-                Leader1 = Leader1,
-                Leader2 = Leader2,
+                Leader1 = (DefaultLeader)Leader1.Clone(),
+                Leader2 = (DefaultLeader)Leader2.Clone(),
                 PointSumP1 = PointSumP1,
                 PointSumP2 = PointSumP2,
-                CurrentlyPlayingLeader = CurrentlyPlayingLeader,
-                CurrentPlayerBoard = CurrentPlayerBoard,
-                CurrentPlayerActions = CurrentPlayerActions
+                CurrentlyPlayingLeader = (DefaultLeader)CurrentlyPlayingLeader.Clone(),
+                CurrentPlayerBoard = CurrentPlayerBoard?.Select(innerList => innerList.Select(card => (DefaultCard)card.Clone()).ToList()).ToList(),
+                CurrentPlayerActions = (ActionContainer)CurrentPlayerActions.Clone()
             };
 
             return clonedBoard;
@@ -62,7 +62,7 @@ namespace GwentNAi.GameSource.Board
                 foreach (var card in row.ToList())
                 {
                     if(card.bleeding > 0) EvaluateBleeding(card);
-                    if (card is ITimer && Leader1 == CurrentlyPlayingLeader) card.Timer((ITimer)card, this);
+                    if (card is ITimer TimerCard && Leader1 == CurrentlyPlayingLeader) TimerCard.Timer(this);
                     if (card is IEndTurnUpdate UpdateCard && Leader1 == CurrentlyPlayingLeader) UpdateCard.EndTurnUpdate(this);
                 }
             }
@@ -72,7 +72,7 @@ namespace GwentNAi.GameSource.Board
                 foreach (var card in row.ToList())
                 {
                     if (card.bleeding > 0) EvaluateBleeding(card);
-                    if (card is ITimer && Leader2 == CurrentlyPlayingLeader) card.Timer((ITimer)card, this);
+                    if (card is ITimer TimerCard && Leader2 == CurrentlyPlayingLeader) TimerCard.Timer(this);
                     if (card is IEndTurnUpdate UpdateCard && Leader2 == CurrentlyPlayingLeader) UpdateCard.EndTurnUpdate(this);
                 }
             }
@@ -111,80 +111,45 @@ namespace GwentNAi.GameSource.Board
         public void RemoveCardsAtRoundEnd()
         {
             foreach(var row in Leader1.Board)
-            {
                 row.Clear();
-                /*foreach(var card in row)
-                {
-                }*/
-            }
+            
             foreach (var row in Leader2.Board)
-            {
                 row.Clear();
-                /*foreach (var card in row)
-                {
-                }*/
-            }
         }
 
         public void RemoveDestroyedCards()
         {
-            int currentRow = 0;
-            int currentColumn = 0;
-            List<int> cardsToRemoveIndexes = new List<int>();
-
-            foreach (var row in Leader1.Board)
+            Leader1.Board.ToList().ForEach(row =>
             {
-                foreach (var card in row)
+                row.Where(card => card.currentValue <= 0).ToList().ForEach(card =>
                 {
-                    if (card.currentValue <= 0) cardsToRemoveIndexes.Add(currentColumn);
-                    currentColumn++;
-                }
-
-                cardsToRemoveIndexes.Reverse();
-                foreach (int index in cardsToRemoveIndexes)
-                {
-                    Type cardType = Leader1.Board[currentRow][index].GetType();
+                    Type cardType = card.GetType();
                     DefaultCard graveyardInstance = (DefaultCard)Activator.CreateInstance(cardType);
 
-                    if (Leader1.Board[currentRow][index] is not IDoomed) 
+                    if (!(card is IDoomed))
                         Leader1.graveyardDeck.Cards.Add(graveyardInstance);
-                    if (Leader1.Board[currentRow][index] is IDeathwish)
-                        Leader1.Board[currentRow][index].DeathwishAbility((IDeathwish)Leader1.Board[currentRow][index], this);
-                    Leader1.Board[currentRow].RemoveAt(index);
-                }
-                cardsToRemoveIndexes.Clear();
-                currentColumn = 0;
-                currentRow++;
-            }
+                    if (card is IDeathwish DeathWishAbility)
+                        DeathWishAbility.DeathwishAbility(this);
 
-            currentRow = 0;
-            currentColumn = 0;
-            cardsToRemoveIndexes.Clear();
-            foreach (var row in Leader2.Board)
+                    row.Remove(card);
+                });
+            });
+
+            Leader2.Board.ToList().ForEach(row =>
             {
-                foreach (var card in row)
+                row.Where(card => card.currentValue <= 0).ToList().ForEach(card =>
                 {
-                    if (card.currentValue <= 0) cardsToRemoveIndexes.Add(currentColumn);
-                    currentColumn++;
-                }
-
-                cardsToRemoveIndexes.Reverse();
-                foreach (int index in cardsToRemoveIndexes)
-                {
-                    Type cardType = Leader2.Board[currentRow][index].GetType();
+                    Type cardType = card.GetType();
                     DefaultCard graveyardInstance = (DefaultCard)Activator.CreateInstance(cardType);
 
-                    if (Leader2.Board[currentRow][index] is not IDoomed) 
+                    if (!(card is IDoomed))
                         Leader2.graveyardDeck.Cards.Add(graveyardInstance);
-                    if (Leader2.Board[currentRow][index] is IDeathwish) 
-                        Leader2.Board[currentRow][index].DeathwishAbility((IDeathwish)Leader2.Board[currentRow][index], this);
+                    if (card is IDeathwish DeathWishCard)
+                        DeathWishCard.DeathwishAbility(this);
 
-                    Leader2.Board[currentRow].RemoveAt(index);
-                }
-                cardsToRemoveIndexes.Clear();
-                currentColumn = 0;
-                currentRow++;
-            }
+                    row.Remove(card);
+                });
+            });
         }
         
         public void EvaluateBleeding(DefaultCard bleedingCard)
@@ -195,9 +160,9 @@ namespace GwentNAi.GameSource.Board
             {
                 foreach(var card in row)
                 {
-                    if(card is IBleedingInteraction)
+                    if(card is IBleedingInteraction BleedCard)
                     {
-                        card.RespondToBleeding((IBleedingInteraction)(card));
+                        BleedCard.RespondToBleeding();
                     }
                 }
             }
@@ -205,9 +170,9 @@ namespace GwentNAi.GameSource.Board
             {
                 foreach (var card in row)
                 {
-                    if (card is IBleedingInteraction)
+                    if (card is IBleedingInteraction BleedCard)
                     {
-                        card.RespondToBleeding((IBleedingInteraction)(card));
+                        BleedCard.RespondToBleeding();
                     }
                 }
             }
@@ -216,21 +181,9 @@ namespace GwentNAi.GameSource.Board
         private void UpdatePoints()
         {
             PointSumP1 = PointSumP2 = 0;
-            foreach (var row in Leader1.Board)
-            {
-                foreach (var card in row)
-                {
-                    PointSumP1 += card.currentValue;
-                }
-            }
 
-            foreach (var row in Leader2.Board)
-            {
-                foreach (var card in row)
-                {
-                    PointSumP2 += card.currentValue;
-                }
-            }
+            PointSumP1 = Leader1.Board.Sum(row => row.Sum(obj => obj.currentValue));
+            PointSumP2 = Leader2.Board.Sum(row => row.Sum(obj => obj.currentValue));
         }
 
         private void UpdateCPCards()
@@ -244,7 +197,7 @@ namespace GwentNAi.GameSource.Board
                         MethodInfo methodInfo = card.GetType().GetMethod("StartTurnUpdate");
                         if(methodInfo != null)
                         {
-                            card.StartTurnUpdate((IUpdate) card);
+                            updateCard.StartTurnUpdate();
                         }
                     }
                 }

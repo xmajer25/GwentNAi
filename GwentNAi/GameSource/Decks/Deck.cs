@@ -6,5 +6,16 @@ namespace GwentNAi.GameSource.Decks
     {
         public List<DefaultCard> Cards { get; set; } = new List<DefaultCard>();
         public string Name { get; set; } = string.Empty;
+
+        public object Copy()
+        {
+            Deck copyDeck = new Deck()
+            {
+                Cards = Cards.Select(card => (DefaultCard)card.Clone()).ToList(),
+                Name = Name
+            };
+
+            return copyDeck;
+        }
     }
 }

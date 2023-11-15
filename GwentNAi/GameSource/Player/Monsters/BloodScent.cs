@@ -1,4 +1,6 @@
 ﻿using GwentNAi.GameSource.Board;
+using GwentNAi.GameSource.Cards;
+using GwentNAi.GameSource.Decks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +18,29 @@ namespace GwentNAi.GameSource.Player.Monsters
             leaderFaction = "monsters";
             abilityCharges = 3;
             hasPassed = false;
+        }
+
+        public override object Clone()
+        {
+            DefaultLeader clonedLeader = new BloodScent()
+            {
+                provisionValue = provisionValue,
+                leaderName = leaderName,
+                leaderFaction = leaderFaction,
+                isStarting = isStarting,
+                victories = victories,
+                abilityCharges = abilityCharges,
+                playerMethod = playerMethod,
+                hasPassed = hasPassed,
+                hasPlayedCard = hasPlayedCard,
+                hasUsedAbility = hasUsedAbility,
+                startingDeck = (Deck)startingDeck.Copy(),
+                handDeck = (Deck)handDeck.Copy(),
+                graveyardDeck = (Deck)graveyardDeck.Copy(),
+                Board = Board.Select(innerList => innerList.Select(card => (DefaultCard)card.Clone()).ToList()).ToList(),
+            };
+
+            return clonedLeader;
         }
         public override void Order(GameBoard board)
         {

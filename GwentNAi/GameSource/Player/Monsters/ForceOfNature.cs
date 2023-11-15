@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GwentNAi.GameSource.Cards.IExpand;
+using GwentNAi.GameSource.Decks;
 
 namespace GwentNAi.GameSource.Player.Monsters
 {
@@ -19,6 +20,29 @@ namespace GwentNAi.GameSource.Player.Monsters
             leaderFaction = "monsters";
             abilityCharges = 1;
             hasPassed = false;
+        }
+
+        public override object Clone()
+        {
+            DefaultLeader clonedLeader = new ForceOfNature()
+            {
+                provisionValue = provisionValue,
+                leaderName = leaderName,
+                leaderFaction = leaderFaction,
+                isStarting = isStarting,
+                victories = victories,
+                abilityCharges = abilityCharges,
+                playerMethod = playerMethod,
+                hasPassed = hasPassed,
+                hasPlayedCard = hasPlayedCard,
+                hasUsedAbility = hasUsedAbility,
+                startingDeck = (Deck)startingDeck.Copy(),
+                handDeck = (Deck)handDeck.Copy(),
+                graveyardDeck = (Deck)graveyardDeck.Copy(),
+                Board = Board.Select(innerList => innerList.ToList()).ToList(),
+            };
+
+            return clonedLeader;
         }
 
         public override void Order(GameBoard board)

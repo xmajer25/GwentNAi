@@ -9,14 +9,21 @@ namespace GwentNAi.MctsMove
 {
     public static class MCTSExpandChildren
     {
-        static void SwapCard(MCTSNode parent, GameBoard board)
+        public static void SwapCard(MCTSNode parent)
         {
-            foreach (int index in board.CurrentPlayerActions.ImidiateActions[0][0])
+            //Children for all possible swaps
+            foreach(int index in parent.Board.CurrentPlayerActions.SwapCards.Indexes.ToList())
             {
-                GameBoard boardClone = (GameBoard)board.Clone();
-                boardClone.CurrentlyPlayingLeader.SwapCards(index);
-                parent.AppendChild(boardClone);
+                GameBoard clonedBoard = (GameBoard)parent.Board.Clone();
+                clonedBoard.CurrentlyPlayingLeader.SwapCards(index);
+                clonedBoard.CurrentPlayerActions.SwapCards.CardSwaps--;
+                parent.AppendChild(clonedBoard, false);
             }
+
+            //Child where no swap has been chosen
+            GameBoard noSwapBoard = (GameBoard)parent.Board.Clone();
+            noSwapBoard.CurrentPlayerActions.SwapCards.StopSwapping = true;
+            parent.AppendChild(noSwapBoard, true);
         }
     }
 }

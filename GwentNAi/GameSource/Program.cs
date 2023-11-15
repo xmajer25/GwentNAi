@@ -18,7 +18,6 @@ namespace GwentNAi.GameSource
         private static Func<GameBoard, int> player1Move = (GameBoard board) => 0;
         private static Func<GameBoard, int> player2Move = (GameBoard board) => 0;
 
-        private static int roundStart;
 
         static void Main(string[] args)
         {
@@ -37,14 +36,11 @@ namespace GwentNAi.GameSource
             //game
             while (board.Leader1.victories != 2 && board.Leader2.victories != 2)
             {
-                roundStart = 2;
+                board.CurrentPlayerActions.SwapCards.PlayersToSwap = 2;
                 while (board.Leader1.hasPassed == false || board.Leader2.hasPassed == false)
                 {
-                    if(roundStart != 0)
-                    {
-                        board.SwapCards();
-                        roundStart--;
-                    }
+                    if (board.CurrentPlayerActions.SwapCards.PlayersToSwap != 0) board.SwapCards();
+                    
 
                     board.CurrentPlayerActions.GetAllActions(board.CurrentPlayerBoard, board.CurrentlyPlayingLeader.handDeck, board.CurrentlyPlayingLeader);
                     int moveOutcome = 0;

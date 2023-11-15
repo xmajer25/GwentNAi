@@ -2,6 +2,7 @@
 using GwentNAi.GameSource.Cards;
 using GwentNAi.GameSource.Cards.IExpand;
 using GwentNAi.GameSource.Cards.Monsters;
+using GwentNAi.GameSource.Decks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,29 @@ namespace GwentNAi.GameSource.Player.Monsters
         {
             if (abilityCharges == 0) return;
             PlayCardExpand(board);
+        }
+
+        public override object Clone()
+        {
+            DefaultLeader clonedLeader = new ArachasSwarm()
+            {
+                provisionValue = provisionValue,
+                leaderName = leaderName,
+                leaderFaction = leaderFaction,
+                isStarting = isStarting,
+                victories = victories,
+                abilityCharges = abilityCharges,
+                playerMethod = playerMethod,
+                hasPassed = hasPassed,
+                hasPlayedCard = hasPlayedCard,
+                hasUsedAbility = hasUsedAbility,
+                startingDeck = (Deck)startingDeck.Copy(),
+                handDeck = (Deck)handDeck.Copy(),
+                graveyardDeck = (Deck)graveyardDeck.Copy(),
+                Board = Board.Select(innerList => innerList.ToList()).ToList(),
+            };
+
+            return clonedLeader;
         }
 
         public void PlayCardExpand(GameBoard board)

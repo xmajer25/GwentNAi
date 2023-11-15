@@ -27,11 +27,11 @@ namespace GwentNAi.GameSource.Cards.Monsters
             bleeding = 0;
         }
 
-        void IOrder.Order(GameBoard board)
+        public void Order(GameBoard board)
         {
             PlayCardExpand(board);
         }
-        void ICooldown.Cooldown(int cooldown)
+        public void Cooldown(int cooldown)
         {
             timeToOrder += (cooldown + 1);
         }
@@ -80,7 +80,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
         {
             DefaultCard playedCard = new Ekimmara();
             board.CurrentlyPlayingLeader.Board[row].Insert(column, playedCard);
-            Cooldown(this, 4);
+            Cooldown(4);
             board.CurrentlyPlayingLeader.UseAbility();
         }
 

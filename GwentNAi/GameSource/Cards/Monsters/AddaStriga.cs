@@ -28,12 +28,12 @@ namespace GwentNAi.GameSource.Cards.Monsters
             timeToOrder = 0;
             bleeding = 0;
         }
-        void IOrder.Order(GameBoard board)
+        public void Order(GameBoard board)
         {
-            pickAll(this, board);
+            pickAll(board);
         }
 
-        void IOrderExpandPickAll.pickAll(GameBoard board)
+        public void pickAll(GameBoard board)
         {
             List<List<int>> p1Rows = new List<List<int>>(2) { new List<int>(10), new List<int>(10) };
             List<List<int>> p2Rows = new List<List<int>>(2) { new List<int>(10), new List<int>(10) };
