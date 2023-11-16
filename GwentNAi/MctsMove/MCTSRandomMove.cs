@@ -30,7 +30,7 @@ namespace GwentNAi.MctsMove
             int randomIndex, randomRow;
 
             board.CurrentlyPlayingLeader.handDeck.Cards.RemoveAt(0);
-            DefaultCard enemieCard = MonsterCards.GetRandomCard();
+            DefaultCard enemieCard = node.EnemieCards.GetRandomCard();
             enemieCard.PlaySelfExpand(node.Board);
             (randomIndex, randomRow) = GetRandomRowAndIndexFromImidiateActions(board.CurrentPlayerActions);
             board.CurrentPlayerActions.ClearImidiateActions();

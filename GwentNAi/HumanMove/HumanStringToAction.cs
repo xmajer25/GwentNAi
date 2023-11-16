@@ -28,7 +28,7 @@ namespace GwentNAi.HumanMove
                     cardIndex = int.Parse(match.Value) - 1;
                     actionCard = board.CurrentPlayerActions.PlayCardActions[cardIndex].ActionCard;
 
-                    board.CurrentlyPlayingLeader.handDeck.Cards[cardIndex].PlaySelfExpand(board);
+                    actionCard.PlaySelfExpand(board);
 
                     HumanConsolePrint.ListPositionsForCard(board.CurrentPlayerBoard, board.CurrentPlayerActions.ImidiateActions[0]);
                     cardPos = HumanConsoleGet.GetPositionForCard(board.CurrentPlayerActions.ImidiateActions[0]);

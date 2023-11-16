@@ -42,14 +42,14 @@ namespace GwentNAi.GameSource
                     if (board.CurrentPlayerActions.SwapCards.PlayersToSwap != 0) board.SwapCards();
                     
 
-                    board.CurrentPlayerActions.GetAllActions(board.CurrentPlayerBoard, board.CurrentlyPlayingLeader.handDeck, board.CurrentlyPlayingLeader);
+                    
                     int moveOutcome = 0;
                     //move
                     while (moveOutcome == 0)
                     {
+                        board.CurrentPlayerActions.GetAllActions(board.CurrentPlayerBoard, board.CurrentlyPlayingLeader.handDeck, board.CurrentlyPlayingLeader);
                         moveOutcome = (board.CurrentlyPlayingLeader == board.Leader1 ? player1Move(board) : player2Move(board));
                         board.MoveUpdate();
-                        board.CurrentPlayerActions.GetAllActions(board.CurrentPlayerBoard, board.CurrentlyPlayingLeader.handDeck, board.CurrentlyPlayingLeader);
                         ConsolePrint.UpdateBoard(board);
                     }
                     board.TurnUpdate();

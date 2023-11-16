@@ -49,12 +49,12 @@ namespace GwentNAi.MctsMove
                 clonedNode.Board.TurnUpdate();
                 
             }
-
+          
             if (clonedNode.Board.Leader1.victories == 2 && clonedNode.Board.Leader2.victories == 2) return Winner.Tie;
             if (clonedNode.Board.Leader1.victories == 2) return Winner.Leader1;
             return Winner.Leader2;
         }
-
+     
         private static void OnPlayersPass(MCTSNode node)
         {
             GameBoard board = node.Board;
@@ -62,8 +62,7 @@ namespace GwentNAi.MctsMove
             {
                 DetermineRoundWinner(board);
                 board.DrawBothHands(3);
-                board.Leader1.hasPassed = false;
-                board.Leader2.hasPassed = false;
+                board.ResetBoard();
                 board.CurrentPlayerActions.SwapCards.StopSwapping = true;
             }
         }

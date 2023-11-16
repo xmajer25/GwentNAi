@@ -29,11 +29,11 @@ namespace GwentNAi.GameSource.Board
                 Leader2 = (DefaultLeader)Leader2.Clone(),
                 PointSumP1 = PointSumP1,
                 PointSumP2 = PointSumP2,
-                CurrentlyPlayingLeader = (DefaultLeader)CurrentlyPlayingLeader.Clone(),
+                CurrentlyPlayingLeader = null,
                 CurrentPlayerBoard = CurrentPlayerBoard?.Select(innerList => innerList.Select(card => (DefaultCard)card.Clone()).ToList()).ToList(),
                 CurrentPlayerActions = (ActionContainer)CurrentPlayerActions.Clone()
             };
-
+            clonedBoard.CurrentlyPlayingLeader = (CurrentlyPlayingLeader == Leader1) ? clonedBoard.Leader1 : clonedBoard.Leader2;
             return clonedBoard;
         }
 
@@ -99,6 +99,7 @@ namespace GwentNAi.GameSource.Board
 
         public void SwapCards()
         {
+            CurrentPlayerActions.SwapCards.Indexes.Clear();
             for (int i = 0; i < CurrentlyPlayingLeader.handDeck.Cards.Count; i++)
             {
                 CurrentPlayerActions.SwapCards.Indexes.Add(i);

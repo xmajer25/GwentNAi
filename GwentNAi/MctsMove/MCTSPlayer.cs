@@ -1,7 +1,7 @@
 ﻿using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Player;
 using GwentNAi.MctsMove.Enums;
-using System.Xml.Linq;
+using System.Transactions;
 
 namespace GwentNAi.MctsMove
 {
@@ -11,43 +11,57 @@ namespace GwentNAi.MctsMove
         {
             GameBoard clonedBoard = (GameBoard)board.Clone();   
             MCTSNode Root = new MCTSNode(null, clonedBoard);
+            Winner winner;
+            double reward;
 
-            for(int i = 0; i < 100; i++)
+            for (int i = 0; i < 1500; i++)
             {
-                //SELECT
+                //SELECTION
                 MCTSNode SelectedNode = Root.Selection(Root.NumberOfVisits);
 
-                //(swap cards case)
+                //Special case - need to swap cards
                 if (PlayersHavePassed(SelectedNode) || SelectedNode.Board.CurrentPlayerActions.SwapCards.SwapAvailable)
                 {
                     if (i != 0) SelectedNode.Board.DrawBothHands(3);
+                    //EXPANSION
+                    if((SelectedNode == Root || SelectedNode.Parent.AllChildrenExplored) && SelectedNode.IsLeaf)
+                        MCTSExpandChildren.SwapCard(SelectedNode);
+                    SelectedNode = SelectedNode.FirstUnexploredChild();
 
-                    MCTSExpandChildren.SwapCard(SelectedNode);
-                    SelectedNode = SelectedNode.FirstChild();
-                    Winner winner;
-
+                    //SIMULATION
                     if (SelectedNode.EndMove && SelectedNode.Board.CurrentPlayerActions.SwapCards.PlayersToSwap == 1)
-                    {
                         winner = MCTSSimulation.OurTurnSimulation(SelectedNode);
-                    }
                     else
-                    {
                         winner = MCTSSimulation.Simulation(SelectedNode);
-                    }
 
-                    double reward = DetermineReward(Root, winner);
+                    //BACK_PROPAGATION
+                    reward = DetermineReward(Root, winner);
                     SelectedNode.UpdateStats(reward);
+
                     continue;
                 }
+
                 //ALSO HANDLE IMIDIATE ACTIONS -> i go sleep now
-                //Expand node
-                //IF end turn -> expand random enemie move (or multiple until move ends -> we want to get back on our turn)
-                //Simulation
-                //BackPropagation
+
+                //EXPANSION
+                if((SelectedNode == Root || SelectedNode.Parent.AllChildrenExplored) && SelectedNode.IsLeaf)
+                    MCTSExpandChildren.PlayCard(SelectedNode);
+                SelectedNode = SelectedNode.FirstUnexploredChild();
+
+                //SIMULATION
+                if (SelectedNode.EndMove)
+                    //here should probubly be enemie move -> iam kinda tired so no more explanations, gl
+                    winner = MCTSSimulation.Simulation(SelectedNode);
+                else
+                    winner = MCTSSimulation.OurTurnSimulation(SelectedNode);
+
+                //BACK_PROPAGATION
+                reward = DetermineReward(Root, winner);
+                SelectedNode.UpdateStats(reward);
             }
-            board.CurrentPlayerActions.ClearImidiateActions();
-            board.CurrentPlayerActions.SwapCards.StopSwapping = true;
-            //board = Execute(Root);
+
+            //MODIFY BOARD WITH BEST MOVE AND RETURN
+            board = Execute(Root, board);
             return -1;
         }
 
@@ -77,14 +91,24 @@ namespace GwentNAi.MctsMove
             return (winner == Winner.Leader1 ? board.Leader1 : board.Leader2);
         }
 
-        private static GameBoard Execute(MCTSNode node)
+        private static GameBoard Execute(MCTSNode node, GameBoard board)
         {
-            MCTSNode root = node;
+            int totalNumberOfVisits = node.NumberOfVisits;
             while(!node.EndMove)
             {
-                node = node.BestChild(root.NumberOfVisits);
+                node = node.BestChild(totalNumberOfVisits);
             }
-            return (GameBoard)node.Board.Clone();
+
+            board.Leader1 = node.Board.Leader1;
+            board.Leader2 = node.Board.Leader2;
+            board.PointSumP1 = node.Board.PointSumP1;
+            board.PointSumP2 = node.Board.PointSumP2;
+            board.CurrentlyPlayingLeader = node.Board.CurrentlyPlayingLeader;
+            board.CurrentPlayerBoard = node.Board.CurrentPlayerBoard;
+            board.CurrentPlayerActions.ClearImidiateActions();
+            board.CurrentPlayerActions.SwapCards.StopSwapping = true;
+
+            return board;
         }
     }
 }

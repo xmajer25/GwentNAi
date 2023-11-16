@@ -1,4 +1,5 @@
 ﻿using GwentNAi.GameSource.Board;
+using GwentNAi.GameSource.CardRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,9 @@ namespace GwentNAi.MctsMove
         public int NumberOfVisits { get; set; }
         public double Reward { get; set; }
         public bool IsLeaf => Children == null || Children.Count == 0;
+        public bool AllChildrenExplored => Children.All(child => child.NumberOfVisits > 0);
         public bool IsTerminal => Board.Leader1.victories == 2 || Board.Leader2.victories == 2;
+        public MonsterCards EnemieCards { get; set; }
 
         public MCTSNode(MCTSNode? parent, GameBoard board) 
         {
@@ -27,6 +30,7 @@ namespace GwentNAi.MctsMove
             Board = board;
             NumberOfVisits = 0;
             Reward = 0;
+            EnemieCards = new MonsterCards();
         }
 
         public object Clone()
@@ -38,7 +42,8 @@ namespace GwentNAi.MctsMove
                 EndMove = EndMove,
                 Move = Move,
                 NumberOfVisits = NumberOfVisits,
-                Reward = Reward
+                Reward = Reward, 
+                EnemieCards = (MonsterCards)EnemieCards.Clone(),
             };
 
             return clonedNode;
@@ -61,9 +66,12 @@ namespace GwentNAi.MctsMove
         public MCTSNode Selection(int TotalVisits)
         {
             MCTSNode selectedNode =  BestChild(TotalVisits);
-            while(!selectedNode.IsLeaf)
+            if (selectedNode.IsLeaf) return selectedNode;
+
+            while(selectedNode.AllChildrenExplored)
             {
                 selectedNode = selectedNode.BestChild(TotalVisits);
+                if(selectedNode.IsLeaf) return selectedNode;
             }
             return selectedNode;
         }
@@ -81,10 +89,10 @@ namespace GwentNAi.MctsMove
             return Children.OrderByDescending(obj => obj.GetUCB1Value(TotalVisits)).FirstOrDefault();
         }
 
-        public MCTSNode FirstChild()
+        public MCTSNode FirstUnexploredChild()
         {
             if (IsLeaf) return this;
-            return Children[0];
+            return Children.FirstOrDefault(obj => obj.NumberOfVisits == 0);
         }
 
         private double GetUCB1Value(int TotalVisits)
@@ -95,7 +103,7 @@ namespace GwentNAi.MctsMove
             }
 
             double averageReward = Reward / NumberOfVisits;
-            double explorationTerm = Math.Sqrt(Math.Log(TotalVisits) / averageReward);
+            double explorationTerm = Math.Sqrt(Math.Log(TotalVisits) / NumberOfVisits);
             return averageReward + explorationTerm;
         }
     }

@@ -32,14 +32,12 @@ namespace GwentNAi.GameSource.Cards
                 {
                     if (property.PropertyType == typeof(List<string>))
                     {
-                        // Deep copy for List<string>
                         List<string> originalList = (List<string>)property.GetValue(this);
                         List<string> clonedList = originalList.Select(s => string.Copy(s)).ToList();
                         property.SetValue(clonedInstance, clonedList);
                     }
                     else
                     {
-                        // Shallow copy for other types
                         property.SetValue(clonedInstance, property.GetValue(this));
                     }
                 }

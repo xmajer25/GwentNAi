@@ -2,7 +2,7 @@
   "profiles": {
     "GwentNAi": {
       "commandName": "Project",
-      "commandLineArgs": "-p -p\r\n",
+      "commandLineArgs": "-p -m\r\n",
       "hotReloadEnabled": true,
       "nativeDebugging": false
     }
