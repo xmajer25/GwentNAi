@@ -54,7 +54,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
                 {
                     if (board.Leader1.Board[i][j] == this)
                     {
-                        OldSpeartip transformedCard = GetOldSpeartip(board.Leader2.startingDeck.Cards);
+                        OldSpeartip transformedCard = GetOldSpeartip(board.Leader2.StartingDeck.Cards);
                         if (transformedCard == null) return;
 
                         board.Leader1.Board[i][j] = transformedCard;
@@ -73,7 +73,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
                 {
                     if (board.Leader2.Board[i][j] == this)
                     {
-                        OldSpeartip transformedCard = GetOldSpeartip(board.Leader2.startingDeck.Cards);
+                        OldSpeartip transformedCard = GetOldSpeartip(board.Leader2.StartingDeck.Cards);
                         if (transformedCard == null) return; 
 
                         board.Leader2.Board[i][j] = transformedCard;

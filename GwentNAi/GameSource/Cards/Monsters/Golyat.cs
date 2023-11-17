@@ -34,7 +34,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
             DefaultLeader enemieLeader = player == 0 ? board.Leader2 : board.Leader1;
             int enemieRow = (row == 0 ? 1 : 0);
             DefaultCard highestPowerUnit = new();
-            foreach(var card in enemieLeader.startingDeck.Cards)
+            foreach(var card in enemieLeader.StartingDeck.Cards)
             {
                 if(highestPowerUnit.currentValue < card.currentValue)
                 {
@@ -44,7 +44,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
             if (enemieLeader.Board[enemieRow].Count <= 9 )
             {
-                enemieLeader.startingDeck.Cards.Remove(highestPowerUnit);
+                enemieLeader.StartingDeck.Cards.Remove(highestPowerUnit);
                 enemieLeader.Board[enemieRow].Add(highestPowerUnit);
             }
             

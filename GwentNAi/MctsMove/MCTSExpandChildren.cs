@@ -52,6 +52,7 @@ namespace GwentNAi.MctsMove
             if (actionContainer.canPass)
             {
                 GameBoard passBoard = (GameBoard)parent.Board.Clone();
+                passBoard.CurrentPlayerActions.GetPassOrEndTurn(passBoard.CurrentlyPlayingLeader);
                 passBoard.CurrentPlayerActions.PassOrEndTurn();
                 parent.AppendChild(passBoard, true);
             }

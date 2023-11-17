@@ -9,19 +9,19 @@ namespace GwentNAi.GameSource.Player
 {
     public abstract class DefaultLeader : ICloneable
     {
-        public int provisionValue { get; set; }
-        public string leaderName { get; set; } = string.Empty;
-        public string leaderFaction { get; set; } = string.Empty;
-        public bool isStarting { get; set; }
-        public int victories { get; set; }
-        public int abilityCharges { get; set; }
-        public int playerMethod { get; set; } // example: MCTS (0), Human(1)...
-        public bool hasPassed { get; set; }
-        public bool hasPlayedCard { get; set; }
-        public bool hasUsedAbility { get; set; }
-        public Deck startingDeck { get; set; } = new Deck();
-        public Deck handDeck { get; set; } = new Deck();
-        public Deck graveyardDeck { get; set; } = new Deck();
+        public int ProvisionValue { get; set; }
+        public string LeaderName { get; set; } = string.Empty;
+        public string LeaderFaction { get; set; } = string.Empty;
+        public bool IsStarting { get; set; }
+        public int Victories { get; set; }
+        public int AbilityCharges { get; set; }
+        public int PlayerMethod { get; set; } // example: MCTS (0), Human(1)...
+        public bool HasPassed { get; set; }
+        public bool HasPlayedCard { get; set; }
+        public bool HasUsedAbility { get; set; }
+        public Deck StartingDeck { get; set; } = new Deck();
+        public Deck HandDeck { get; set; } = new Deck();
+        public Deck GraveyardDeck { get; set; } = new Deck();
 
         public List<List<DefaultCard>> Board { get; set; } = new List<List<DefaultCard>>(2) { new List<DefaultCard>(10), new List<DefaultCard>(10) };
 
@@ -34,15 +34,15 @@ namespace GwentNAi.GameSource.Player
 
         public void ShuffleStartingDeck()
         {
-            int n = startingDeck.Cards.Count;
+            int n = StartingDeck.Cards.Count;
 
             while (n > 1)
             {
                 n--;
                 int k = Shuffler.Next(n + 1);
-                DefaultCard value = startingDeck.Cards[k];
-                startingDeck.Cards[k] = startingDeck.Cards[n];
-                startingDeck.Cards[n] = value;
+                DefaultCard value = StartingDeck.Cards[k];
+                StartingDeck.Cards[k] = StartingDeck.Cards[n];
+                StartingDeck.Cards[n] = value;
             }
         }
 
@@ -50,31 +50,31 @@ namespace GwentNAi.GameSource.Player
         {
             for(int i = 0;  i < numberOfCards; i++)
             {
-                if (handDeck.Cards.Count >= 10) break;
-                if (startingDeck.Cards.Count <= 0) break;
+                if (HandDeck.Cards.Count >= 10) break;
+                if (StartingDeck.Cards.Count <= 0) break;
 
-                DefaultCard drawnCard = startingDeck.Cards.First();
-                startingDeck.Cards.RemoveAt(0);
-                handDeck.Cards.Add(drawnCard);
+                DefaultCard drawnCard = StartingDeck.Cards.First();
+                StartingDeck.Cards.RemoveAt(0);
+                HandDeck.Cards.Add(drawnCard);
             }
         }
 
         public void SwapCards(int index)
         {
-            DefaultCard handCard = handDeck.Cards[index];
-            int swappedCardIndex = Shuffler.Next(0, startingDeck.Cards.Count);
-            DefaultCard deckCard = startingDeck.Cards[swappedCardIndex];
+            DefaultCard handCard = HandDeck.Cards[index];
+            int swappedCardIndex = Shuffler.Next(0, StartingDeck.Cards.Count);
+            DefaultCard deckCard = StartingDeck.Cards[swappedCardIndex];
 
-            handDeck.Cards[index] = deckCard;
-            startingDeck.Cards[swappedCardIndex] = handCard;
+            HandDeck.Cards[index] = deckCard;
+            StartingDeck.Cards[swappedCardIndex] = handCard;
         }
 
         public void PlayCard(int CardInHandIndex, int RowIndex, int PosIndex, GameBoard board)
         {
-            hasPlayedCard = true;
-            DefaultCard card = handDeck.Cards[CardInHandIndex];
+            HasPlayedCard = true;
+            DefaultCard card = HandDeck.Cards[CardInHandIndex];
             Board[RowIndex].Insert(PosIndex, card);
-            handDeck.Cards.RemoveAt(CardInHandIndex);
+            HandDeck.Cards.RemoveAt(CardInHandIndex);
             if (card is IDeploy DeployCard)
             {
                 DeployCard.Deploy(board);
@@ -94,17 +94,17 @@ namespace GwentNAi.GameSource.Player
                     if (card is IThrive ThriveCard) ThriveCard.Thrive(currentlyPlayedCard.currentValue);
                 }
             }
-            foreach (var card in board.CurrentlyPlayingLeader.graveyardDeck.Cards)
+            foreach (var card in board.CurrentlyPlayingLeader.GraveyardDeck.Cards)
             {
                 if (card == currentlyPlayedCard) continue;
                 if (card is ICroneInteraction CroneInteractionCard && currentlyPlayedCard.descriptors.Contains("Crone")) CroneInteractionCard.RespondToCrone();
             }
-            foreach (var card in board.CurrentlyPlayingLeader.handDeck.Cards)
+            foreach (var card in board.CurrentlyPlayingLeader.HandDeck.Cards)
             {
                 if (card == currentlyPlayedCard) continue;
                 if (card is ICroneInteraction CroneInteractionCard && currentlyPlayedCard.descriptors.Contains("Crone")) CroneInteractionCard.RespondToCrone();
             }
-            foreach (var card in board.CurrentlyPlayingLeader.startingDeck.Cards)
+            foreach (var card in board.CurrentlyPlayingLeader.StartingDeck.Cards)
             {
                 if (card == currentlyPlayedCard) continue;
                 if (card is ICroneInteraction CroneInteractionCard && currentlyPlayedCard.descriptors.Contains("Crone")) CroneInteractionCard.RespondToCrone();
@@ -113,7 +113,7 @@ namespace GwentNAi.GameSource.Player
 
         public void Pass()
         {
-            hasPassed = true;
+            HasPassed = true;
         }
 
         public void EndTurn()
@@ -123,7 +123,7 @@ namespace GwentNAi.GameSource.Player
 
         public void UseAbility()
         {
-            hasUsedAbility = true;
+            HasUsedAbility = true;
         }
 
         public void PostPlayCardOrder(IPlayCardExpand obj , GameBoard board, int row, int column)

@@ -1,4 +1,5 @@
 ﻿using GwentNAi.GameSource.Board;
+using GwentNAi.GameSource.Cards;
 using GwentNAi.GameSource.Player;
 using GwentNAi.MctsMove.Enums;
 using System.Transactions;
@@ -14,13 +15,13 @@ namespace GwentNAi.MctsMove
             Winner winner;
             double reward;
 
-            for (int i = 0; i < 1500; i++)
+            for (int i = 0; i < 1800; i++)
             {
                 //SELECTION
                 MCTSNode SelectedNode = Root.Selection(Root.NumberOfVisits);
 
                 //Special case - need to swap cards
-                if (PlayersHavePassed(SelectedNode) || SelectedNode.Board.CurrentPlayerActions.SwapCards.SwapAvailable)
+                if (PlayersHavePassed(SelectedNode) || SelectedNode.Board.CurrentPlayerActions.SwapCards.SwapAvailable || PlayerHasSwapped3Cards(SelectedNode))
                 {
                     if (i != 0) SelectedNode.Board.DrawBothHands(3);
                     //EXPANSION
@@ -42,6 +43,7 @@ namespace GwentNAi.MctsMove
                 }
 
                 //ALSO HANDLE IMIDIATE ACTIONS -> i go sleep now
+                //ALSO FIX -> the card that gets points if dominant just goes insane
 
                 //EXPANSION
                 if((SelectedNode == Root || SelectedNode.Parent.AllChildrenExplored) && SelectedNode.IsLeaf)
@@ -67,12 +69,24 @@ namespace GwentNAi.MctsMove
 
         private static bool PlayersHavePassed(MCTSNode node)
         {
-            if(node.Board.Leader1.hasPassed && node.Board.Leader2.hasPassed)
+            if(node.Board.Leader1.HasPassed && node.Board.Leader2.HasPassed)
             {
                 node.Board.SwapCards();
                 return true;
             }
             return false;
+        }
+
+        private static bool PlayerHasSwapped3Cards(MCTSNode node)
+        {
+            if (node.Board.CurrentPlayerActions.SwapCards.CardSwaps != 3) return false;
+            for(int i = 1; i <= 3; i++) 
+            {
+                node = node.Parent;
+                if (node == null) return false;
+                if (node.Board.CurrentPlayerActions.SwapCards.CardSwaps != i) return false;
+            }
+            return true;
         }
 
         
@@ -99,14 +113,17 @@ namespace GwentNAi.MctsMove
                 node = node.BestChild(totalNumberOfVisits);
             }
 
-            board.Leader1 = node.Board.Leader1;
-            board.Leader2 = node.Board.Leader2;
+            board.Leader1 = (DefaultLeader)node.Board.Leader1.Clone();
+            board.Leader2 = (DefaultLeader)node.Board.Leader2.Clone();
             board.PointSumP1 = node.Board.PointSumP1;
             board.PointSumP2 = node.Board.PointSumP2;
             board.CurrentlyPlayingLeader = node.Board.CurrentlyPlayingLeader;
             board.CurrentPlayerBoard = node.Board.CurrentPlayerBoard;
             board.CurrentPlayerActions.ClearImidiateActions();
-            board.CurrentPlayerActions.SwapCards.StopSwapping = true;
+            if (board.CurrentPlayerActions.SwapCards.PlayersToSwap > 0)
+                board.CurrentPlayerActions.SwapCards.StopSwapping = true;
+            else
+                board.CurrentPlayerActions.SwapCards.Indexes.Clear();
 
             return board;
         }

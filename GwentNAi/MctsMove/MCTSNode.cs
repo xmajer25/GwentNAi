@@ -19,7 +19,7 @@ namespace GwentNAi.MctsMove
         public double Reward { get; set; }
         public bool IsLeaf => Children == null || Children.Count == 0;
         public bool AllChildrenExplored => Children.All(child => child.NumberOfVisits > 0);
-        public bool IsTerminal => Board.Leader1.victories == 2 || Board.Leader2.victories == 2;
+        public bool IsTerminal => Board.Leader1.Victories == 2 || Board.Leader2.Victories == 2;
         public MonsterCards EnemieCards { get; set; }
 
         public MCTSNode(MCTSNode? parent, GameBoard board) 

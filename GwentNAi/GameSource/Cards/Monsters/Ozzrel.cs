@@ -42,12 +42,12 @@ namespace GwentNAi.GameSource.Cards.Monsters
             if (isMelee)
             {
                 graveYard = (board.CurrentlyPlayingLeader == board.Leader1
-                    ? board.Leader2.graveyardDeck.Cards
-                    : board.Leader1.graveyardDeck.Cards);
+                    ? board.Leader2.GraveyardDeck.Cards
+                    : board.Leader1.GraveyardDeck.Cards);
             }
             else
             {
-                graveYard = board.CurrentlyPlayingLeader.graveyardDeck.Cards;
+                graveYard = board.CurrentlyPlayingLeader.GraveyardDeck.Cards;
             }
 
             foreach(var card in graveYard)

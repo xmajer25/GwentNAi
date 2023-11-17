@@ -41,7 +41,7 @@ namespace GwentNAi.GameSource.Board
         {
             RemoveDestroyedCards();
             UpdatePoints();
-            if (CurrentlyPlayingLeader.abilityCharges <= 0) CurrentPlayerActions.LeaderActions = null;
+            if (CurrentlyPlayingLeader.AbilityCharges <= 0) CurrentPlayerActions.LeaderActions = null;
         }
 
         public void TurnUpdate()
@@ -79,8 +79,8 @@ namespace GwentNAi.GameSource.Board
         }
         public void ResetBoard()
         {
-            Leader1.hasPassed = false;
-            Leader2.hasPassed = false;
+            Leader1.HasPassed = false;
+            Leader2.HasPassed = false;
             RemoveCardsAtRoundEnd();
             UpdatePoints();
         }
@@ -100,7 +100,7 @@ namespace GwentNAi.GameSource.Board
         public void SwapCards()
         {
             CurrentPlayerActions.SwapCards.Indexes.Clear();
-            for (int i = 0; i < CurrentlyPlayingLeader.handDeck.Cards.Count; i++)
+            for (int i = 0; i < CurrentlyPlayingLeader.HandDeck.Cards.Count; i++)
             {
                 CurrentPlayerActions.SwapCards.Indexes.Add(i);
             }
@@ -128,7 +128,7 @@ namespace GwentNAi.GameSource.Board
                     DefaultCard graveyardInstance = (DefaultCard)Activator.CreateInstance(cardType);
 
                     if (!(card is IDoomed))
-                        Leader1.graveyardDeck.Cards.Add(graveyardInstance);
+                        Leader1.GraveyardDeck.Cards.Add(graveyardInstance);
                     if (card is IDeathwish DeathWishAbility)
                         DeathWishAbility.DeathwishAbility(this);
 
@@ -144,7 +144,7 @@ namespace GwentNAi.GameSource.Board
                     DefaultCard graveyardInstance = (DefaultCard)Activator.CreateInstance(cardType);
 
                     if (!(card is IDoomed))
-                        Leader2.graveyardDeck.Cards.Add(graveyardInstance);
+                        Leader2.GraveyardDeck.Cards.Add(graveyardInstance);
                     if (card is IDeathwish DeathWishCard)
                         DeathWishCard.DeathwishAbility(this);
 
@@ -210,8 +210,8 @@ namespace GwentNAi.GameSource.Board
             CurrentlyPlayingLeader = (CurrentlyPlayingLeader == Leader1 ? Leader2 : Leader1);
             CurrentPlayerBoard = (CurrentPlayerBoard == Leader1.Board ? Leader2.Board : Leader1.Board);
 
-            CurrentlyPlayingLeader.hasPlayedCard = false;
-            CurrentlyPlayingLeader.hasUsedAbility = false;
+            CurrentlyPlayingLeader.HasPlayedCard = false;
+            CurrentlyPlayingLeader.HasUsedAbility = false;
         }
 
         

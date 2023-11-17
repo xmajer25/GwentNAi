@@ -66,20 +66,20 @@ namespace GwentNAi.GameSource.Board
             PlayCardActions.Clear();
 
             GetOrderActions(CurrentPlayerBoard);
-            if(!Leader.hasPlayedCard) GetPlayAction(CurrentPlayerHand);
+            if(!Leader.HasPlayedCard) GetPlayAction(CurrentPlayerHand);
             GetLeaderAction(Leader);
             GetPassOrEndTurn(Leader);
         }
 
         public void GetPassOrEndTurn(DefaultLeader Leader)
         {
-            if(Leader.hasPlayedCard == false && Leader.hasUsedAbility == false) 
+            if(Leader.HasPlayedCard == false && Leader.HasUsedAbility == false) 
             {
                 PassOrEndTurn = Leader.Pass;
                 canPass = true;
                 canEnd = false;
             }
-            else if (Leader.hasPlayedCard == true)
+            else if (Leader.HasPlayedCard == true)
             {
                 PassOrEndTurn = Leader.EndTurn;
                 canPass = false;
@@ -126,7 +126,7 @@ namespace GwentNAi.GameSource.Board
 
         public void GetLeaderAction(DefaultLeader Leader)
         {
-            if (Leader.abilityCharges != 0)
+            if (Leader.AbilityCharges != 0)
                 LeaderActions = Leader.Order;
             else
                 LeaderActions = null;

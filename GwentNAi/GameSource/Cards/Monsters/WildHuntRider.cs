@@ -51,8 +51,8 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
         private int GetNumberOfCopies(GameBoard board)
         {
-            int count = board.CurrentlyPlayingLeader.startingDeck.Cards.OfType<WildHuntRider>().Count();
-            board.CurrentlyPlayingLeader.startingDeck.Cards.RemoveAll(obj => obj is WildHuntRider);
+            int count = board.CurrentlyPlayingLeader.StartingDeck.Cards.OfType<WildHuntRider>().Count();
+            board.CurrentlyPlayingLeader.StartingDeck.Cards.RemoveAll(obj => obj is WildHuntRider);
 
             return count;
         }

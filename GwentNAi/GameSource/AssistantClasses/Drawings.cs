@@ -96,7 +96,7 @@ namespace GwentNAi.GameSource.AssistantClasses
 
         public static void DrawCrown(GameBoard board)
         {
-            if (board.Leader1.victories >= 1)
+            if (board.Leader1.Victories >= 1)
             {
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 Console.SetCursorPosition(windowWidth - 14, 0);
@@ -111,7 +111,7 @@ namespace GwentNAi.GameSource.AssistantClasses
                 Console.Write("  \\_O_<");
                 Console.ForegroundColor = ConsoleColor.White;
             }
-            if (board.Leader1.victories >= 2)
+            if (board.Leader1.Victories >= 2)
             {
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 Console.SetCursorPosition(windowWidth - 7, 0);
@@ -127,7 +127,7 @@ namespace GwentNAi.GameSource.AssistantClasses
                 Console.ForegroundColor = ConsoleColor.White;
             }
 
-            if (board.Leader2.victories >= 1)
+            if (board.Leader2.Victories >= 1)
             {
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
                 Console.SetCursorPosition(windowWidth - 14, windowSeparator - 5);
@@ -142,7 +142,7 @@ namespace GwentNAi.GameSource.AssistantClasses
                 Console.Write("  \\_O_<");
                 Console.ForegroundColor = ConsoleColor.White;
             }
-            if (board.Leader2.victories >= 2)
+            if (board.Leader2.Victories >= 2)
             {
                 Console.ForegroundColor = ConsoleColor.DarkCyan;
                 Console.SetCursorPosition(windowWidth - 7, windowSeparator - 5);

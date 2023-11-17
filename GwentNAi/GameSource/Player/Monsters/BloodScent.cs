@@ -13,30 +13,30 @@ namespace GwentNAi.GameSource.Player.Monsters
     {
         public BloodScent() 
         {
-            provisionValue = 15;
-            leaderName = "BloodScent";
-            leaderFaction = "monsters";
-            abilityCharges = 3;
-            hasPassed = false;
+            ProvisionValue = 15;
+            LeaderName = "BloodScent";
+            LeaderFaction = "monsters";
+            AbilityCharges = 3;
+            HasPassed = false;
         }
 
         public override object Clone()
         {
             DefaultLeader clonedLeader = new BloodScent()
             {
-                provisionValue = provisionValue,
-                leaderName = leaderName,
-                leaderFaction = leaderFaction,
-                isStarting = isStarting,
-                victories = victories,
-                abilityCharges = abilityCharges,
-                playerMethod = playerMethod,
-                hasPassed = hasPassed,
-                hasPlayedCard = hasPlayedCard,
-                hasUsedAbility = hasUsedAbility,
-                startingDeck = (Deck)startingDeck.Copy(),
-                handDeck = (Deck)handDeck.Copy(),
-                graveyardDeck = (Deck)graveyardDeck.Copy(),
+                ProvisionValue = ProvisionValue,
+                LeaderName = LeaderName,
+                LeaderFaction = LeaderFaction,
+                IsStarting = IsStarting,
+                Victories = Victories,
+                AbilityCharges = AbilityCharges,
+                PlayerMethod = PlayerMethod,
+                HasPassed = HasPassed,
+                HasPlayedCard = HasPlayedCard,
+                HasUsedAbility = HasUsedAbility,
+                StartingDeck = (Deck)StartingDeck.Copy(),
+                HandDeck = (Deck)HandDeck.Copy(),
+                GraveyardDeck = (Deck)GraveyardDeck.Copy(),
                 Board = Board.Select(innerList => innerList.Select(card => (DefaultCard)card.Clone()).ToList()).ToList(),
             };
 
@@ -44,9 +44,9 @@ namespace GwentNAi.GameSource.Player.Monsters
         }
         public override void Order(GameBoard board)
         {
-            if (abilityCharges == 0) return;
-            abilityCharges--;
-            Console.WriteLine("Current charges: " + abilityCharges);
+            if (AbilityCharges == 0) return;
+            AbilityCharges--;
+            Console.WriteLine("Current charges: " + AbilityCharges);
         }
 
         public override void Update()

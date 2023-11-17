@@ -16,16 +16,16 @@ namespace GwentNAi.GameSource.Player.Monsters
     {
         public ArachasSwarm() 
         {
-            provisionValue = 15;
-            leaderName = "ArachasSwarm";
-            leaderFaction = "monsters";
-            abilityCharges = 5;
-            hasPassed = false;
+            ProvisionValue = 15;
+            LeaderName = "ArachasSwarm";
+            LeaderFaction = "monsters";
+            AbilityCharges = 5;
+            HasPassed = false;
         }
 
         public override void Order(GameBoard board)
         {
-            if (abilityCharges == 0) return;
+            if (AbilityCharges == 0) return;
             PlayCardExpand(board);
         }
 
@@ -33,19 +33,19 @@ namespace GwentNAi.GameSource.Player.Monsters
         {
             DefaultLeader clonedLeader = new ArachasSwarm()
             {
-                provisionValue = provisionValue,
-                leaderName = leaderName,
-                leaderFaction = leaderFaction,
-                isStarting = isStarting,
-                victories = victories,
-                abilityCharges = abilityCharges,
-                playerMethod = playerMethod,
-                hasPassed = hasPassed,
-                hasPlayedCard = hasPlayedCard,
-                hasUsedAbility = hasUsedAbility,
-                startingDeck = (Deck)startingDeck.Copy(),
-                handDeck = (Deck)handDeck.Copy(),
-                graveyardDeck = (Deck)graveyardDeck.Copy(),
+                ProvisionValue = ProvisionValue,
+                LeaderName = LeaderName,
+                LeaderFaction = LeaderFaction,
+                IsStarting = IsStarting,
+                Victories = Victories,
+                AbilityCharges = AbilityCharges,
+                PlayerMethod = PlayerMethod,
+                HasPassed = HasPassed,
+                HasPlayedCard = HasPlayedCard,
+                HasUsedAbility = HasUsedAbility,
+                StartingDeck = (Deck)StartingDeck.Copy(),
+                HandDeck = (Deck)HandDeck.Copy(),
+                GraveyardDeck = (Deck)GraveyardDeck.Copy(),
                 Board = Board.Select(innerList => innerList.ToList()).ToList(),
             };
 
@@ -79,7 +79,7 @@ namespace GwentNAi.GameSource.Player.Monsters
         {
             DefaultCard playedCard = new Drone();
             board.CurrentlyPlayingLeader.Board[row].Insert(column, playedCard);
-            abilityCharges--;
+            AbilityCharges--;
         }
 
         public override void Update()

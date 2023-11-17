@@ -20,9 +20,9 @@ namespace GwentNAi.GameSource.AssistantClasses
             Console.ForegroundColor = ConsoleColor.White;
             
             UpdatePoints(board.PointSumP1, board.PointSumP2);
-            UpdateGraveyard(board.Leader1.graveyardDeck.Cards.Count, board.Leader2.graveyardDeck.Cards.Count);
-            UpdateDeck(board.Leader1.startingDeck.Cards.Count, board.Leader2.startingDeck.Cards.Count);
-            UpdateHand(board.Leader1.handDeck.Cards.Count, board.Leader2.handDeck.Cards.Count);
+            UpdateGraveyard(board.Leader1.GraveyardDeck.Cards.Count, board.Leader2.GraveyardDeck.Cards.Count);
+            UpdateDeck(board.Leader1.StartingDeck.Cards.Count, board.Leader2.StartingDeck.Cards.Count);
+            UpdateHand(board.Leader1.HandDeck.Cards.Count, board.Leader2.HandDeck.Cards.Count);
 
             int rowIndex = 0; 
             int colIndex;

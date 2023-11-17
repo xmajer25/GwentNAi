@@ -10,7 +10,7 @@ namespace GwentNAi.HumanMove
             ActionContainer actionContainer = board.CurrentPlayerActions;
 
             if (SwapCards(board) == -1) return -1;
-            if (board.CurrentlyPlayingLeader.hasPassed) return -1;
+            if (board.CurrentlyPlayingLeader.HasPassed) return -1;
 
             HumanConsolePrint.swapColor(board);
             int[] maxActionId = HumanConsolePrint.ListActions(actionContainer);
@@ -30,7 +30,7 @@ namespace GwentNAi.HumanMove
                 HumanConsolePrint.swapColor(board);
                 while(actionContainer.SwapCards.Indexes.Count != 0)
                 {
-                    HumanConsolePrint.ListCards(actionContainer.SwapCards.Indexes, board.CurrentlyPlayingLeader.handDeck, "Swap cards in hand");
+                    HumanConsolePrint.ListCards(actionContainer.SwapCards.Indexes, board.CurrentlyPlayingLeader.HandDeck, "Swap cards in hand");
                     cardSwapped = HumanConsoleGet.GetIndex(actionContainer.SwapCards.Indexes);
                     if (cardSwapped == -1)
                     {

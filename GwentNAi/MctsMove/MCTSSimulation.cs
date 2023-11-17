@@ -16,16 +16,16 @@ namespace GwentNAi.MctsMove
                 if (clonedNode.IsTerminal) break;
 
                 clonedNode.Board.TurnUpdate();
-                clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.CurrentPlayerBoard, clonedNode.Board.CurrentlyPlayingLeader.handDeck, clonedNode.Board.CurrentlyPlayingLeader);
+                clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.CurrentPlayerBoard, clonedNode.Board.CurrentlyPlayingLeader.HandDeck, clonedNode.Board.CurrentlyPlayingLeader);
                 MCTSRandomMove.PlayRandomEnemieMove(clonedNode);
 
                 clonedNode.Board.TurnUpdate();
-                clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.CurrentPlayerBoard, clonedNode.Board.CurrentlyPlayingLeader.handDeck, clonedNode.Board.CurrentlyPlayingLeader);
+                clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.CurrentPlayerBoard, clonedNode.Board.CurrentlyPlayingLeader.HandDeck, clonedNode.Board.CurrentlyPlayingLeader);
                 MCTSRandomMove.PlayRandomMove(clonedNode);
             }
 
-            if (clonedNode.Board.Leader1.victories == 2 && clonedNode.Board.Leader2.victories == 2) return Winner.Tie;
-            if (clonedNode.Board.Leader1.victories == 2) return Winner.Leader1;
+            if (clonedNode.Board.Leader1.Victories == 2 && clonedNode.Board.Leader2.Victories == 2) return Winner.Tie;
+            if (clonedNode.Board.Leader1.Victories == 2) return Winner.Leader1;
             return Winner.Leader2;
         }
 
@@ -38,27 +38,27 @@ namespace GwentNAi.MctsMove
 
                 if (clonedNode.IsTerminal) break;
 
-                clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.CurrentPlayerBoard, clonedNode.Board.CurrentlyPlayingLeader.handDeck, clonedNode.Board.CurrentlyPlayingLeader);
+                clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.CurrentPlayerBoard, clonedNode.Board.CurrentlyPlayingLeader.HandDeck, clonedNode.Board.CurrentlyPlayingLeader);
                 MCTSRandomMove.PlayRandomMove(clonedNode);
 
                 clonedNode.Board.TurnUpdate();
 
-                clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.CurrentPlayerBoard, clonedNode.Board.CurrentlyPlayingLeader.handDeck, clonedNode.Board.CurrentlyPlayingLeader);
+                clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.CurrentPlayerBoard, clonedNode.Board.CurrentlyPlayingLeader.HandDeck, clonedNode.Board.CurrentlyPlayingLeader);
                 MCTSRandomMove.PlayRandomEnemieMove(clonedNode);
 
                 clonedNode.Board.TurnUpdate();
                 
             }
           
-            if (clonedNode.Board.Leader1.victories == 2 && clonedNode.Board.Leader2.victories == 2) return Winner.Tie;
-            if (clonedNode.Board.Leader1.victories == 2) return Winner.Leader1;
+            if (clonedNode.Board.Leader1.Victories == 2 && clonedNode.Board.Leader2.Victories == 2) return Winner.Tie;
+            if (clonedNode.Board.Leader1.Victories == 2) return Winner.Leader1;
             return Winner.Leader2;
         }
      
         private static void OnPlayersPass(MCTSNode node)
         {
             GameBoard board = node.Board;
-            if(board.Leader1.hasPassed == true && board.Leader2.hasPassed == true)
+            if(board.Leader1.HasPassed == true && board.Leader2.HasPassed == true)
             {
                 DetermineRoundWinner(board);
                 board.DrawBothHands(3);
@@ -71,16 +71,16 @@ namespace GwentNAi.MctsMove
         {
             if (board.PointSumP1 == board.PointSumP2)
             {
-                board.Leader1.victories++;
-                board.Leader2.victories++;
+                board.Leader1.Victories++;
+                board.Leader2.Victories++;
             }
             else if (board.PointSumP1 > board.PointSumP2)
             {
-                board.Leader1.victories++;
+                board.Leader1.Victories++;
             }
             else
             {
-                board.Leader2.victories++;
+                board.Leader2.Victories++;
             }
         }
     }
