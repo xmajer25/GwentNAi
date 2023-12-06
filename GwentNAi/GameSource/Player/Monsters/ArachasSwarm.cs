@@ -46,7 +46,7 @@ namespace GwentNAi.GameSource.Player.Monsters
                 StartingDeck = (Deck)StartingDeck.Copy(),
                 HandDeck = (Deck)HandDeck.Copy(),
                 GraveyardDeck = (Deck)GraveyardDeck.Copy(),
-                Board = Board.Select(innerList => innerList.ToList()).ToList(),
+                Board = Board.Select(innerList => innerList.Select(card => (DefaultCard)card.Clone()).ToList()).ToList(),
             };
 
             return clonedLeader;
@@ -54,7 +54,7 @@ namespace GwentNAi.GameSource.Player.Monsters
 
         public void PlayCardExpand(GameBoard board)
         {
-            List<List<DefaultCard>> CPboard = board.CurrentlyPlayingLeader.Board;
+            List<List<DefaultCard>> CPboard = board.GetCurrentBoard();
             List<List<int>> possibleIndexes = new List<List<int>>(2) { new List<int>(10), new List<int>(10) };
             int currentRow = 0;
             int currentCulumn = 0;
@@ -78,7 +78,7 @@ namespace GwentNAi.GameSource.Player.Monsters
         public void PostPlayCardOrder(GameBoard board, int row, int column)
         {
             DefaultCard playedCard = new Drone();
-            board.CurrentlyPlayingLeader.Board[row].Insert(column, playedCard);
+            board.GetCurrentBoard()[row].Insert(column, playedCard);
             AbilityCharges--;
         }
 

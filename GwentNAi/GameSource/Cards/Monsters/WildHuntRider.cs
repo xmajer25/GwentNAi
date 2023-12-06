@@ -30,37 +30,37 @@ namespace GwentNAi.GameSource.Cards.Monsters
         {
             if (!IsDominant(board)) return;
 
-            int thisIndex = board.CurrentPlayerBoard[0].IndexOf((DefaultCard)this);
+            int thisIndex = board.GetCurrentBoard()[0].IndexOf((DefaultCard)this);
             int thisRow = 0;
             int numberOfCopies = GetNumberOfCopies(board);
             if (thisIndex == -1)
             {
-                thisIndex = board.CurrentPlayerBoard[1].IndexOf((DefaultCard)this);
+                thisIndex = board.GetCurrentBoard()[1].IndexOf((DefaultCard)this);
                 thisRow = 1;
             }
             
             for(int i = 0; i < numberOfCopies; i++)
             {
-                if (board.CurrentPlayerBoard[thisRow].Count != 9)
+                if (board.GetCurrentBoard()[thisRow].Count != 9)
                 {
                     DefaultCard insertedCard = new WildHuntRider();
-                    board.CurrentPlayerBoard[thisRow].Insert(thisIndex + 1 + i, insertedCard);
+                    board.GetCurrentBoard()[thisRow].Insert(thisIndex + 1 + i, insertedCard);
                 }
             }
         }
 
         private int GetNumberOfCopies(GameBoard board)
         {
-            int count = board.CurrentlyPlayingLeader.StartingDeck.Cards.OfType<WildHuntRider>().Count();
-            board.CurrentlyPlayingLeader.StartingDeck.Cards.RemoveAll(obj => obj is WildHuntRider);
+            int count = board.GetCurrentLeader().StartingDeck.Cards.OfType<WildHuntRider>().Count();
+            board.GetCurrentLeader().StartingDeck.Cards.RemoveAll(obj => obj is WildHuntRider);
 
             return count;
         }
 
         private bool IsDominant(GameBoard board)
         {
-            List<List<DefaultCard>> enemiePlayerBoard = (board.CurrentPlayerBoard == board.Leader1.Board ? board.Leader2.Board : board.Leader1.Board);
-            DefaultCard currentMax = board.CurrentPlayerBoard
+            List<List<DefaultCard>> enemiePlayerBoard = board.GetEnemieBoard();
+            DefaultCard currentMax = board.GetCurrentBoard()
                 .SelectMany(list => list)
                 .OrderByDescending(obj => obj.currentValue)
                 .FirstOrDefault();

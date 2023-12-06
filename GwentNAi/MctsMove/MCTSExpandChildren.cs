@@ -1,5 +1,6 @@
 ﻿using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards;
+using GwentNAi.GameSource.Cards.IExpand;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,13 +11,26 @@ namespace GwentNAi.MctsMove
 {
     public static class MCTSExpandChildren
     {
+        public static void ExpandOneEnemie(MCTSNode parent)
+        {
+            GameBoard clonedBoard = (GameBoard)parent.Board.Clone();
+            MCTSNode enemie = new MCTSNode(parent, clonedBoard);
+            enemie.Board.TurnUpdate();
+            enemie.Board.CurrentPlayerActions.GetAllActions(enemie.Board.GetCurrentBoard(), enemie.Board.GetCurrentLeader().HandDeck, enemie.Board.GetCurrentLeader());
+            MCTSRandomMove.PlayRandomEnemieMove(enemie);
+            parent.AppendChild(enemie.Board, true);
+
+            enemie.Board.TurnUpdate();
+            enemie.Board.CurrentPlayerActions.GetAllActions(enemie.Board.GetCurrentBoard(), enemie.Board.GetCurrentLeader().HandDeck, enemie.Board.GetCurrentLeader());
+        }
+
         public static void SwapCard(MCTSNode parent)
         {
             //Children for all possible swaps
             foreach(int index in parent.Board.CurrentPlayerActions.SwapCards.Indexes.ToList())
             {
                 GameBoard clonedBoard = (GameBoard)parent.Board.Clone();
-                clonedBoard.CurrentlyPlayingLeader.SwapCards(index);
+                clonedBoard.GetCurrentLeader().SwapCards(index);
                 clonedBoard.CurrentPlayerActions.SwapCards.CardSwaps--;
                 parent.AppendChild(clonedBoard, false);
             }
@@ -30,7 +44,7 @@ namespace GwentNAi.MctsMove
         public static void PlayCard(MCTSNode parent) 
         {
             ActionContainer actionContainer = parent.Board.CurrentPlayerActions;
-
+            //PLAY CARD CHILDREN
             for (int cardIndex = 0; cardIndex < actionContainer.PlayCardActions.Count; cardIndex++)
             {
                 DefaultCard playCard = actionContainer.PlayCardActions[cardIndex].ActionCard;
@@ -41,21 +55,76 @@ namespace GwentNAi.MctsMove
                     if (actionContainer.ImidiateActions[0][row].Count == 9) continue;
                     foreach(int index in actionContainer.ImidiateActions[0][row])
                     {
+                        //PLAY CARD
                         GameBoard clonedBoard = (GameBoard)parent.Board.Clone();
                         clonedBoard.CurrentPlayerActions.ClearImidiateActions();
                         clonedBoard.CurrentPlayerActions.PlayCardActions.Clear();
-                        clonedBoard.CurrentlyPlayingLeader.PlayCard(cardIndex, row, index, clonedBoard);
-                        parent.AppendChild(clonedBoard, false);
+                        clonedBoard.GetCurrentLeader().PlayCard(cardIndex, row, index, clonedBoard);
+
+                        //playCard = clonedBoard.CurrentPlayerBoard[row][index];
+
+                        //DEPLOY OPTIONS CHILDREN
+                        if (clonedBoard.CurrentPlayerActions.AreImidiateActionsFull())
+                        {
+                            //PICK ENEMIE DEPLOY CHILDREN
+                            if (playCard is IDeployExpandPickEnemies PickEnemiesCard)
+                            {
+                                for(int deployRow = 0; deployRow < clonedBoard.CurrentPlayerActions.ImidiateActions[0].Count; deployRow++)
+                                {
+                                    foreach(int deployIndex in clonedBoard.CurrentPlayerActions.ImidiateActions[0][deployRow])
+                                    {
+                                        GameBoard clonedDeployBoard = (GameBoard)clonedBoard.Clone();
+                                        clonedDeployBoard.CurrentPlayerActions.ClearImidiateActions();
+                                        
+                                        PickEnemiesCard.postPickEnemieAbilitiy(clonedDeployBoard, deployRow, deployIndex);
+                                        parent.AppendChild(clonedDeployBoard, false);
+                                    }
+                                }
+                            }
+                            //PICK ALLY DEPLOY CHILDREN
+                            else if (playCard is IDeployExpandPickAlly PickAllyCard)
+                            {
+                                for (int deployRow = 0; deployRow < clonedBoard.CurrentPlayerActions.ImidiateActions[0].Count; deployRow++)
+                                {
+                                    foreach (int deployIndex in clonedBoard.CurrentPlayerActions.ImidiateActions[0][deployRow])
+                                    {
+                                        GameBoard clonedDeployBoard = (GameBoard)clonedBoard.Clone();
+                                        clonedDeployBoard.CurrentPlayerActions.ClearImidiateActions();
+                                        PickAllyCard.PostPickAllyAbilitiy(clonedDeployBoard, deployRow, deployIndex);
+                                        parent.AppendChild(clonedDeployBoard, false);
+                                    }
+                                }
+                            }
+                            //PICK CARD DEPLOY CHILDREN
+                            else if (playCard is IDeployExpandPickCard PickCardCard)
+                            {
+                                foreach (int deployIndex in clonedBoard.CurrentPlayerActions.ImidiateActions[0][0])
+                                {
+                                    GameBoard clonedDeployBoard = (GameBoard)clonedBoard.Clone();
+                                    clonedDeployBoard.CurrentPlayerActions.ClearImidiateActions();
+                                    PickCardCard.postPickCardAbility(clonedDeployBoard, deployIndex);
+                                    parent.AppendChild(clonedDeployBoard, false);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            parent.AppendChild(clonedBoard, false);
+                        }
                     }
                 }
             }
+
+            //PASS CHILD
             if (actionContainer.canPass)
             {
                 GameBoard passBoard = (GameBoard)parent.Board.Clone();
-                passBoard.CurrentPlayerActions.GetPassOrEndTurn(passBoard.CurrentlyPlayingLeader);
+                passBoard.CurrentPlayerActions.GetPassOrEndTurn(passBoard.GetCurrentLeader());
                 passBoard.CurrentPlayerActions.PassOrEndTurn();
                 parent.AppendChild(passBoard, true);
             }
+
+            //END CHILD
             if (actionContainer.canEnd)
             {
                 GameBoard endBoard = (GameBoard)parent.Board.Clone();

@@ -19,7 +19,7 @@ namespace GwentNAi.HumanMove
 
         public static void swapColor(GameBoard board)
         {
-            currentColor = (board.CurrentlyPlayingLeader == board.Leader1 ? ConsoleColor.DarkMagenta : ConsoleColor.DarkCyan);
+            currentColor = (board.GetCurrentLeader() == board.Leader1 ? ConsoleColor.DarkMagenta : ConsoleColor.DarkCyan);
         }
 
         public static int[] ListActions(ActionContainer currentPlayerActions)

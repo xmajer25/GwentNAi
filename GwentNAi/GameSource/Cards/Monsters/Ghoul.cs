@@ -31,7 +31,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
         {
             if (!isMelee(board)) return;
 
-            List<DefaultCard> graveYard = board.CurrentlyPlayingLeader.GraveyardDeck.Cards;
+            List<DefaultCard> graveYard = board.GetCurrentLeader().GraveyardDeck.Cards;
             List<int> graveYardIndexes = new List<int>();
             int cardIndex = 0;
 
@@ -49,16 +49,16 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
         public void postPickCardAbility(GameBoard board, int cardIndex)
         {
-            DefaultCard consumedCard = board.CurrentlyPlayingLeader.GraveyardDeck.Cards[cardIndex];
+            DefaultCard consumedCard = board.GetCurrentLeader().GraveyardDeck.Cards[cardIndex];
             currentValue += consumedCard.maxValue;
             maxValue = maxValue - currentValue + consumedCard.maxValue;
-            board.CurrentlyPlayingLeader.GraveyardDeck.Cards.RemoveAt(cardIndex);
+            board.GetCurrentLeader().GraveyardDeck.Cards.RemoveAt(cardIndex);
         }
 
         private bool isMelee(GameBoard board)
         {
-            int meleeRow = (board.CurrentlyPlayingLeader == board.Leader1 ? 1 : 0);
-            int currentRow = board.CurrentPlayerBoard[0].IndexOf((DefaultCard)this) == -1 ? 1 : 0;
+            int meleeRow = (board.GetCurrentLeader() == board.Leader1 ? 1 : 0);
+            int currentRow = board.GetCurrentBoard()[0].IndexOf((DefaultCard)this) == -1 ? 1 : 0;
             return currentRow == meleeRow;
         }
     }

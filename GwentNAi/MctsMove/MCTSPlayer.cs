@@ -15,7 +15,7 @@ namespace GwentNAi.MctsMove
             Winner winner;
             double reward;
 
-            for (int i = 0; i < 1800; i++)
+            for (int i = 0; i < 3000; i++)
             {
                 //SELECTION
                 MCTSNode SelectedNode = Root.Selection(Root.NumberOfVisits);
@@ -23,7 +23,7 @@ namespace GwentNAi.MctsMove
                 //Special case - need to swap cards
                 if (PlayersHavePassed(SelectedNode) || SelectedNode.Board.CurrentPlayerActions.SwapCards.SwapAvailable || PlayerHasSwapped3Cards(SelectedNode))
                 {
-                    if (i != 0) SelectedNode.Board.DrawBothHands(3);
+                    if (SelectedNode.Board.Leader1.Victories != 0 && SelectedNode.Board.Leader2.Victories != 0) SelectedNode.Board.DrawBothHands(3);
                     //EXPANSION
                     if((SelectedNode == Root || SelectedNode.Parent.AllChildrenExplored) && SelectedNode.IsLeaf)
                         MCTSExpandChildren.SwapCard(SelectedNode);
@@ -43,7 +43,6 @@ namespace GwentNAi.MctsMove
                 }
 
                 //ALSO HANDLE IMIDIATE ACTIONS -> i go sleep now
-                //ALSO FIX -> the card that gets points if dominant just goes insane
 
                 //EXPANSION
                 if((SelectedNode == Root || SelectedNode.Parent.AllChildrenExplored) && SelectedNode.IsLeaf)
@@ -52,10 +51,13 @@ namespace GwentNAi.MctsMove
 
                 //SIMULATION
                 if (SelectedNode.EndMove)
-                    //here should probubly be enemie move -> iam kinda tired so no more explanations, gl
-                    winner = MCTSSimulation.Simulation(SelectedNode);
-                else
-                    winner = MCTSSimulation.OurTurnSimulation(SelectedNode);
+                {
+                    MCTSExpandChildren.ExpandOneEnemie(SelectedNode);
+                    if(SelectedNode.Children.Count > 0)
+                        SelectedNode = SelectedNode.Children.First();
+                }
+                
+                winner = MCTSSimulation.OurTurnSimulation(SelectedNode);
 
                 //BACK_PROPAGATION
                 reward = DetermineReward(Root, winner);
@@ -97,7 +99,7 @@ namespace GwentNAi.MctsMove
                 return -0.2;
 
             DefaultLeader victoriousLeader = GetWinner(winner, rootNode.Board);
-            return (rootNode.Board.CurrentlyPlayingLeader == victoriousLeader ? 1 : -1);
+            return (rootNode.Board.GetCurrentLeader() == victoriousLeader ? 1 : -1);
         }
 
         private static DefaultLeader GetWinner(Winner winner, GameBoard board)
@@ -117,8 +119,8 @@ namespace GwentNAi.MctsMove
             board.Leader2 = (DefaultLeader)node.Board.Leader2.Clone();
             board.PointSumP1 = node.Board.PointSumP1;
             board.PointSumP2 = node.Board.PointSumP2;
-            board.CurrentlyPlayingLeader = node.Board.CurrentlyPlayingLeader;
-            board.CurrentPlayerBoard = node.Board.CurrentPlayerBoard;
+            board.CurrentlyPlayingLeader = node.Board.GetCurrentLeader();
+            board.CurrentPlayerBoard = node.Board.GetCurrentBoard();
             board.CurrentPlayerActions.ClearImidiateActions();
             if (board.CurrentPlayerActions.SwapCards.PlayersToSwap > 0)
                 board.CurrentPlayerActions.SwapCards.StopSwapping = true;

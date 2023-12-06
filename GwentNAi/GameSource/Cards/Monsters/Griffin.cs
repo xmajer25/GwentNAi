@@ -32,8 +32,8 @@ namespace GwentNAi.GameSource.Cards.Monsters
             int currentRow = 0;
             int currentIndex = 0;
 
-            foreach (var row in board.CurrentPlayerBoard)
-            {
+            foreach (var row in board.GetCurrentBoard())
+            {   
                 foreach (var card in row)
                 {
                     if (card == this)
@@ -57,7 +57,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
         public void PostPickAllyAbilitiy(GameBoard board, int row, int index)
         {
-            DefaultCard DestroyedAlly = board.CurrentPlayerBoard[row][index];
+            DefaultCard DestroyedAlly = board.GetCurrentBoard()[row][index];
             DestroyedAlly.TakeDemage(DestroyedAlly.currentValue, true, board);
         }
     }

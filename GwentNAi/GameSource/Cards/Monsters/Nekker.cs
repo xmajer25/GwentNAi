@@ -28,17 +28,18 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
         public void Deploy(GameBoard board)
         {
-            int thisIndex = board.CurrentPlayerBoard[0].IndexOf((DefaultCard)this);
+            List<List<DefaultCard>> currentBoard = board.GetCurrentBoard();
+            int thisIndex = currentBoard[0].IndexOf((DefaultCard)this);
             int thisRow = 0;
             if (thisIndex == -1)
             {
-                thisIndex = board.CurrentPlayerBoard[1].IndexOf((DefaultCard)this);
+                thisIndex = currentBoard[1].IndexOf((DefaultCard)this);
                 thisRow = 1;
             }
 
-            if (board.CurrentPlayerBoard[thisRow].Count != 9)
+            if (currentBoard[thisRow].Count != 9)
             {
-                board.CurrentPlayerBoard[thisRow].Insert(thisIndex + 1, new Nekker());
+                currentBoard[thisRow].Insert(thisIndex + 1, new Nekker());
             }
         }
 

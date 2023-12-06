@@ -37,11 +37,31 @@ namespace GwentNAi.GameSource.Board
             return clonedBoard;
         }
 
+        public List<List<DefaultCard>> GetCurrentBoard()
+        {
+            return CurrentPlayerBoard == Leader1.Board ? Leader1.Board : Leader2.Board;
+        }
+
+        public List<List<DefaultCard>> GetEnemieBoard()
+        {
+            return CurrentPlayerBoard == Leader1.Board ? Leader2.Board : Leader1.Board;
+        }
+
+        public DefaultLeader GetCurrentLeader()
+        {
+            return CurrentlyPlayingLeader == Leader1 ? Leader1 : Leader2;
+        }
+
+        public DefaultLeader GetEnemieLeader()
+        {
+            return CurrentlyPlayingLeader == Leader1 ? Leader2 : Leader1;
+        }
+
         public void MoveUpdate()
         {
             RemoveDestroyedCards();
             UpdatePoints();
-            if (CurrentlyPlayingLeader.AbilityCharges <= 0) CurrentPlayerActions.LeaderActions = null;
+            if (GetCurrentLeader().AbilityCharges <= 0) CurrentPlayerActions.LeaderActions = null;
         }
 
         public void TurnUpdate()
@@ -62,8 +82,8 @@ namespace GwentNAi.GameSource.Board
                 foreach (var card in row.ToList())
                 {
                     if(card.bleeding > 0) EvaluateBleeding(card);
-                    if (card is ITimer TimerCard && Leader1 == CurrentlyPlayingLeader) TimerCard.Timer(this);
-                    if (card is IEndTurnUpdate UpdateCard && Leader1 == CurrentlyPlayingLeader) UpdateCard.EndTurnUpdate(this);
+                    if (card is ITimer TimerCard && Leader1 == GetCurrentLeader()) TimerCard.Timer(this);
+                    if (card is IEndTurnUpdate UpdateCard && Leader1 == GetCurrentLeader()) UpdateCard.EndTurnUpdate(this);
                 }
             }
 
@@ -72,8 +92,8 @@ namespace GwentNAi.GameSource.Board
                 foreach (var card in row.ToList())
                 {
                     if (card.bleeding > 0) EvaluateBleeding(card);
-                    if (card is ITimer TimerCard && Leader2 == CurrentlyPlayingLeader) TimerCard.Timer(this);
-                    if (card is IEndTurnUpdate UpdateCard && Leader2 == CurrentlyPlayingLeader) UpdateCard.EndTurnUpdate(this);
+                    if (card is ITimer TimerCard && Leader2 == GetCurrentLeader()) TimerCard.Timer(this);
+                    if (card is IEndTurnUpdate UpdateCard && Leader2 == GetCurrentLeader()) UpdateCard.EndTurnUpdate(this);
                 }
             }
         }
@@ -100,7 +120,7 @@ namespace GwentNAi.GameSource.Board
         public void SwapCards()
         {
             CurrentPlayerActions.SwapCards.Indexes.Clear();
-            for (int i = 0; i < CurrentlyPlayingLeader.HandDeck.Cards.Count; i++)
+            for (int i = 0; i < GetCurrentLeader().HandDeck.Cards.Count; i++)
             {
                 CurrentPlayerActions.SwapCards.Indexes.Add(i);
             }
@@ -189,7 +209,7 @@ namespace GwentNAi.GameSource.Board
 
         private void UpdateCPCards()
         {
-            foreach (var row in CurrentlyPlayingLeader.Board)
+            foreach (var row in GetCurrentLeader().Board)
             {
                 foreach (var card in row)
                 {

@@ -35,7 +35,7 @@ namespace GwentNAi.HumanMove
 
                     board.CurrentPlayerActions.ClearImidiateActions();
                     board.CurrentPlayerActions.PlayCardActions.Clear();
-                    board.CurrentlyPlayingLeader.PlayCard(cardIndex, cardPos[0], cardPos[1], board);
+                    board.GetCurrentLeader().PlayCard(cardIndex, cardPos[0], cardPos[1], board);
 
                     //deploy
                     while (board.CurrentPlayerActions.AreImidiateActionsFull())
@@ -107,15 +107,15 @@ namespace GwentNAi.HumanMove
                     break;
                 case 'l':
                     board.CurrentPlayerActions.LeaderActions(board);
-                    board.CurrentlyPlayingLeader.UseAbility();
+                    board.GetCurrentLeader().UseAbility();
                     while (board.CurrentPlayerActions.AreImidiateActionsFull())
                     {
-                        if(board.CurrentlyPlayingLeader is IPlayCardExpand)
+                        if(board.GetCurrentLeader() is IPlayCardExpand)
                         {
                             HumanConsolePrint.ListPositionsForCard(board.CurrentPlayerBoard, board.CurrentPlayerActions.ImidiateActions[0]);
                             cardPos = HumanConsoleGet.GetPositionForCard(board.CurrentPlayerActions.ImidiateActions[0]);
                             board.CurrentPlayerActions.ClearImidiateActions();
-                            board.CurrentlyPlayingLeader.PostPlayCardOrder((IPlayCardExpand)board.CurrentlyPlayingLeader, board, cardPos[0], cardPos[1]);
+                            board.GetCurrentLeader().PostPlayCardOrder((IPlayCardExpand)board.GetCurrentLeader(), board, cardPos[0], cardPos[1]);
                         }
                     }
                     break;

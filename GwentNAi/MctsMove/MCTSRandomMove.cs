@@ -21,7 +21,7 @@ namespace GwentNAi.MctsMove
         public static void PlayRandomEnemieMove(MCTSNode node)
         {
             GameBoard board = node.Board;
-            if(board.CurrentlyPlayingLeader.HandDeck.Cards.Count == 0)
+            if(board.GetCurrentLeader().HandDeck.Cards.Count == 0)
             {
                 board.CurrentPlayerActions.PassOrEndTurn();
                 return;
@@ -29,20 +29,20 @@ namespace GwentNAi.MctsMove
 
             int randomIndex, randomRow;
 
-            board.CurrentlyPlayingLeader.HandDeck.Cards.RemoveAt(0);
+            board.GetCurrentLeader().HandDeck.Cards.RemoveAt(0);
             DefaultCard enemieCard = node.EnemieCards.GetRandomCard();
             enemieCard.PlaySelfExpand(node.Board);
             (randomIndex, randomRow) = GetRandomRowAndIndexFromImidiateActions(board.CurrentPlayerActions);
             board.CurrentPlayerActions.ClearImidiateActions();
             board.CurrentPlayerActions.PlayCardActions.Clear();
-            board.CurrentlyPlayingLeader.HasPlayedCard = true;
-            board.CurrentPlayerBoard[randomRow].Insert(randomIndex, enemieCard);
+            board.GetCurrentLeader().HasPlayedCard = true;
+            board.GetCurrentBoard()[randomRow].Insert(randomIndex, enemieCard);
         }
 
         private static int PlayRandomCard(MCTSNode node)
         {
             ActionContainer possibleActions = node.Board.CurrentPlayerActions;
-            DefaultLeader leader = node.Board.CurrentlyPlayingLeader;
+            DefaultLeader leader = node.Board.GetCurrentLeader();
             int randomCardIndex, randomIndex, randomRow;
 
             if (possibleActions.PlayCardActions.Count == 0)

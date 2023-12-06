@@ -33,7 +33,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
         public void Deploy(GameBoard board)
         {
-            int meleeRow = (board.CurrentlyPlayingLeader == board.Leader1 ? 1 : 0);
+            int meleeRow = (board.GetCurrentLeader() == board.Leader1 ? 1 : 0);
             int currentRow = GetCurrentRow(board);
             isMelee = (meleeRow == currentRow);
             List<int> graveYardIndexes = new List<int>();
@@ -41,13 +41,13 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
             if (isMelee)
             {
-                graveYard = (board.CurrentlyPlayingLeader == board.Leader1
+                graveYard = (board.GetCurrentLeader() == board.Leader1
                     ? board.Leader2.GraveyardDeck.Cards
                     : board.Leader1.GraveyardDeck.Cards);
             }
             else
             {
-                graveYard = board.CurrentlyPlayingLeader.GraveyardDeck.Cards;
+                graveYard = board.GetCurrentLeader().GraveyardDeck.Cards;
             }
 
             foreach(var card in graveYard)
@@ -59,22 +59,34 @@ namespace GwentNAi.GameSource.Cards.Monsters
                 cardIndex++;
             }
 
-            board.CurrentPlayerActions.ImidiateActions[0][0] = graveYardIndexes;
+
+            if(graveYardIndexes.Count > 0)
+            {
+                board.CurrentPlayerActions.ImidiateActions[0][0] = graveYardIndexes;
+            }
+            else
+            {
+                board.CurrentPlayerActions.ImidiateActions[0][0].Clear();
+            }
         }
 
         public void postPickCardAbility(GameBoard board, int cardIndex)
         {
-            DefaultCard consumedCard = graveYard[cardIndex];
-            currentValue += consumedCard.maxValue;
-            maxValue = maxValue - currentValue + consumedCard.maxValue;
-            graveYard.RemoveAt(cardIndex);
+            try
+            {
+                DefaultCard consumedCard = graveYard[cardIndex];
+                currentValue += consumedCard.maxValue;
+                maxValue = maxValue - currentValue + consumedCard.maxValue;
+                graveYard.RemoveAt(cardIndex);
+            }catch(Exception ex) { }
+            
         }
 
         private int GetCurrentRow(GameBoard board)
         {
             int currentRow = 0;
             bool found = false;
-            foreach (var row in board.CurrentlyPlayingLeader.Board)
+            foreach (var row in board.GetCurrentBoard())
             {
                 foreach (var card in row)
                 {

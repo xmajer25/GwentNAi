@@ -29,10 +29,10 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
         public void Deploy(GameBoard board)
         {
-            hasTriggeredThrive = board.CurrentPlayerBoard[0].Any(obj => obj is IThrive && obj.currentValue < currentValue);
+            hasTriggeredThrive = board.GetCurrentBoard()[0].Any(obj => obj is IThrive && obj.currentValue < currentValue);
             if(!hasTriggeredThrive)
             {
-                hasTriggeredThrive = board.CurrentPlayerBoard[1].Any(obj => obj is IThrive && obj.currentValue < currentValue);
+                hasTriggeredThrive = board.GetCurrentBoard()[1].Any(obj => obj is IThrive && obj.currentValue < currentValue);
             }
             if (!hasTriggeredThrive)
             {

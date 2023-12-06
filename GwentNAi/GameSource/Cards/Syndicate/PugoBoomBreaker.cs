@@ -30,7 +30,7 @@ namespace GwentNAi.GameSource.Cards.Syndicate
 
         public void Deploy(GameBoard board)
         {
-            List<List<DefaultCard>> currentBoard = board.CurrentlyPlayingLeader.Board;
+            List<List<DefaultCard>> currentBoard = board.GetCurrentBoard();
             if (currentBoard[0].Count == 0 && currentBoard[1].Count == 0)
             {
                 TakeDemage(5, false, board);

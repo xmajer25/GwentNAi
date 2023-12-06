@@ -85,7 +85,7 @@ namespace GwentNAi.GameSource.Player
 
         private void RespondToDeployedCard(GameBoard board, DefaultCard currentlyPlayedCard)
         {
-            foreach(var row in board.CurrentlyPlayingLeader.Board)
+            foreach(var row in board.GetCurrentBoard())
             {
                 foreach(var card in row)
                 {
@@ -94,17 +94,17 @@ namespace GwentNAi.GameSource.Player
                     if (card is IThrive ThriveCard) ThriveCard.Thrive(currentlyPlayedCard.currentValue);
                 }
             }
-            foreach (var card in board.CurrentlyPlayingLeader.GraveyardDeck.Cards)
+            foreach (var card in board.GetCurrentLeader().GraveyardDeck.Cards)
             {
                 if (card == currentlyPlayedCard) continue;
                 if (card is ICroneInteraction CroneInteractionCard && currentlyPlayedCard.descriptors.Contains("Crone")) CroneInteractionCard.RespondToCrone();
             }
-            foreach (var card in board.CurrentlyPlayingLeader.HandDeck.Cards)
+            foreach (var card in board.GetCurrentLeader().HandDeck.Cards)
             {
                 if (card == currentlyPlayedCard) continue;
                 if (card is ICroneInteraction CroneInteractionCard && currentlyPlayedCard.descriptors.Contains("Crone")) CroneInteractionCard.RespondToCrone();
             }
-            foreach (var card in board.CurrentlyPlayingLeader.StartingDeck.Cards)
+            foreach (var card in board.GetCurrentLeader().StartingDeck.Cards)
             {
                 if (card == currentlyPlayedCard) continue;
                 if (card is ICroneInteraction CroneInteractionCard && currentlyPlayedCard.descriptors.Contains("Crone")) CroneInteractionCard.RespondToCrone();

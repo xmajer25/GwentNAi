@@ -36,8 +36,9 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
         private bool IsDominant(GameBoard board)
         {
-            List<List<DefaultCard>> enemiePlayerBoard = (board.CurrentPlayerBoard == board.Leader1.Board ? board.Leader2.Board : board.Leader1.Board);
-            DefaultCard currentMax = board.CurrentPlayerBoard
+            List<List<DefaultCard>> enemiePlayerBoard = board.GetEnemieBoard();
+
+            DefaultCard currentMax = board.GetCurrentBoard()
                 .SelectMany(list => list)
                 .OrderByDescending(obj => obj.currentValue)
                 .FirstOrDefault();

@@ -38,7 +38,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
         public void PlayCardExpand(GameBoard board)
         {
-            List<List<DefaultCard>> CPboard = board.CurrentlyPlayingLeader.Board;
+            List<List<DefaultCard>> CPboard = board.GetCurrentBoard();
             List<List<int>> possibleIndexes = new List<List<int>>(2) { new List<int>(10), new List<int>(10) };
 
             int currentRow = GetCurrentRow(board);
@@ -60,7 +60,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
         {
             int currentRow = 0;
             bool found = false;
-            foreach(var row in board.CurrentlyPlayingLeader.Board)
+            foreach(var row in board.GetCurrentBoard())
             {
                 foreach(var card in row)
                 {
@@ -79,9 +79,9 @@ namespace GwentNAi.GameSource.Cards.Monsters
         public void PostPlayCardOrder(GameBoard board, int row, int column)
         {
             DefaultCard playedCard = new Ekimmara();
-            board.CurrentlyPlayingLeader.Board[row].Insert(column, playedCard);
+            board.GetCurrentBoard()[row].Insert(column, playedCard);
             Cooldown(4);
-            board.CurrentlyPlayingLeader.UseAbility();
+            board.GetCurrentLeader().UseAbility();
         }
 
         void IUpdate.StartTurnUpdate()

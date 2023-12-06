@@ -30,8 +30,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
         public void Deploy(GameBoard board)
         {
             List<List<int>> enemieIndexes = new List<List<int>>(2) { new List<int>(10), new List<int>(10) };
-            List<List<DefaultCard>> enemieBoard;
-            enemieBoard = (board.CurrentPlayerBoard == board.Leader1.Board ? board.Leader2.Board : board.Leader1.Board);
+            List<List<DefaultCard>> enemieBoard = board.GetEnemieBoard();
             int currentRow = 0;
             int currentIndex = 0;
 
@@ -51,7 +50,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
         public void postPickEnemieAbilitiy(GameBoard board, int row, int index)
         {
-            List<List<DefaultCard>> enemieBoard = (board.CurrentPlayerBoard == board.Leader1.Board ? board.Leader2.Board : board.Leader1.Board);
+            List<List<DefaultCard>> enemieBoard = board.GetEnemieBoard();
             enemieBoard[row][index].TakeDemage(2, false, board);
         }
 

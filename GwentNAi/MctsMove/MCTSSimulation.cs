@@ -16,11 +16,11 @@ namespace GwentNAi.MctsMove
                 if (clonedNode.IsTerminal) break;
 
                 clonedNode.Board.TurnUpdate();
-                clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.CurrentPlayerBoard, clonedNode.Board.CurrentlyPlayingLeader.HandDeck, clonedNode.Board.CurrentlyPlayingLeader);
+                clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.GetCurrentBoard(), clonedNode.Board.GetCurrentLeader().HandDeck, clonedNode.Board.GetCurrentLeader());
                 MCTSRandomMove.PlayRandomEnemieMove(clonedNode);
 
                 clonedNode.Board.TurnUpdate();
-                clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.CurrentPlayerBoard, clonedNode.Board.CurrentlyPlayingLeader.HandDeck, clonedNode.Board.CurrentlyPlayingLeader);
+                clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.GetCurrentBoard(), clonedNode.Board.GetCurrentLeader().HandDeck, clonedNode.Board.GetCurrentLeader());
                 MCTSRandomMove.PlayRandomMove(clonedNode);
             }
 
@@ -38,12 +38,12 @@ namespace GwentNAi.MctsMove
 
                 if (clonedNode.IsTerminal) break;
 
-                clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.CurrentPlayerBoard, clonedNode.Board.CurrentlyPlayingLeader.HandDeck, clonedNode.Board.CurrentlyPlayingLeader);
+                clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.GetCurrentBoard(), clonedNode.Board.GetCurrentLeader().HandDeck, clonedNode.Board.GetCurrentLeader());
                 MCTSRandomMove.PlayRandomMove(clonedNode);
 
                 clonedNode.Board.TurnUpdate();
 
-                clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.CurrentPlayerBoard, clonedNode.Board.CurrentlyPlayingLeader.HandDeck, clonedNode.Board.CurrentlyPlayingLeader);
+                clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.GetCurrentBoard(), clonedNode.Board.GetCurrentLeader().HandDeck, clonedNode.Board.GetCurrentLeader());
                 MCTSRandomMove.PlayRandomEnemieMove(clonedNode);
 
                 clonedNode.Board.TurnUpdate();

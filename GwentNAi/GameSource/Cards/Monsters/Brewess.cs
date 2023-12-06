@@ -31,7 +31,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
         public void Order(GameBoard board)
         {
             List<List<int>> allyIndexes = new List<List<int>>(2) { new List<int>(10), new List<int>(10) };
-            List<List<DefaultCard>> currentBoard = board.CurrentPlayerBoard;
+            List<List<DefaultCard>> currentBoard = board.GetCurrentBoard();
             int currentRow = 0;
             int currentIndex = 0;
 
@@ -56,7 +56,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
         public void PostPickAllyOrder(GameBoard board, int row, int index)
         {
-            DefaultCard consumedCard = board.CurrentPlayerBoard[row][index];
+            DefaultCard consumedCard = board.GetCurrentBoard()[row][index];
             currentValue += consumedCard.currentValue;
             maxValue += consumedCard.currentValue;
             consumedCard.TakeDemage(consumedCard.currentValue, true, board);

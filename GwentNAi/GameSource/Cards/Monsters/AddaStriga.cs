@@ -80,14 +80,14 @@ namespace GwentNAi.GameSource.Cards.Monsters
             int multiplier = 1;
             List<List<DefaultCard>> targetedBoard = (player == 0 ? board.Leader1.Board : board.Leader2.Board);
             DefaultLeader targetedLeader = (player == 0 ? board.Leader1 : board.Leader2);
-            if (targetedLeader == board.CurrentlyPlayingLeader) multiplier = 2;
+            if (targetedLeader == board.GetCurrentLeader()) multiplier = 2;
             DefaultCard consumedCard = targetedBoard[row][index];
 
             currentValue += consumedCard.currentValue * multiplier;
             maxValue += consumedCard.currentValue * multiplier;
             consumedCard.TakeDemage(consumedCard.currentValue, true, board);
             timeToOrder--;
-            board.CurrentlyPlayingLeader.UseAbility();
+            board.GetCurrentLeader().UseAbility();
         }
     }
 }
