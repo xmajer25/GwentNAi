@@ -10,9 +10,9 @@ namespace GwentNAi.GameSource.CardRepository
 {
     public class MonsterCards : ICloneable
     {
-        private readonly List<DefaultCard> Cards = new List<DefaultCard>()
+        private readonly List<DefaultCard> Cards = new()
         {
-            new AddaStriga(), new Brewess(), new Ekimmara(), new Ghoul(), new Golyat(), new Griffin(), new IceGiant(),
+            new AddaStriga(), new Brewess(), new Ghoul(), new Golyat(), new Griffin(), new IceGiant(),
             new Katakan(), new Nekker(), new NekkerWarrior(), new OldSpeartip(), new OldSpeartipAsleep(), new Ozzrel(), 
             new Protofleder(), new Weavess(), new Whispess(), new WildHuntHound(), new WildHuntRider(), new Wyvern()
         };

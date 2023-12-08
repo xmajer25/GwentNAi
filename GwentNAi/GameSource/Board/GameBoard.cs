@@ -1,5 +1,6 @@
 ﻿using GwentNAi.GameSource.Cards;
 using GwentNAi.GameSource.Cards.IDefault;
+using GwentNAi.GameSource.CustomExceptions;
 using GwentNAi.GameSource.Player;
 using System.Data;
 using System.Reflection;
@@ -23,22 +24,31 @@ namespace GwentNAi.GameSource.Board
 
         public object Clone()
         {
+            DefaultLeader oldLeader1 = Leader1;
+            DefaultLeader oldLeader2 = Leader2;
+            DefaultLeader newLeader1 = (DefaultLeader)oldLeader1.Clone();
+            DefaultLeader newLeader2 = (DefaultLeader)oldLeader2.Clone();
             GameBoard clonedBoard = new()
             {
-                Leader1 = (DefaultLeader)Leader1.Clone(),
-                Leader2 = (DefaultLeader)Leader2.Clone(),
+                Leader1 = newLeader1,
+                Leader2 = newLeader2,
                 PointSumP1 = PointSumP1,
                 PointSumP2 = PointSumP2,
-                CurrentlyPlayingLeader = null,
-                CurrentPlayerBoard = CurrentPlayerBoard?.Select(innerList => innerList.Select(card => (DefaultCard)card.Clone()).ToList()).ToList(),
+                CurrentlyPlayingLeader = (CurrentlyPlayingLeader == oldLeader1) ? newLeader1 : newLeader2,
+                CurrentPlayerBoard = (CurrentlyPlayingLeader.Board == oldLeader1.Board ? newLeader1.Board : newLeader2.Board),
                 CurrentPlayerActions = (ActionContainer)CurrentPlayerActions.Clone()
+
             };
-            clonedBoard.CurrentlyPlayingLeader = (CurrentlyPlayingLeader == Leader1) ? clonedBoard.Leader1 : clonedBoard.Leader2;
+            clonedBoard.CurrentPlayerActions.GetAllActions(clonedBoard.GetCurrentBoard(), clonedBoard.GetCurrentLeader().HandDeck, clonedBoard.GetCurrentLeader());
             return clonedBoard;
         }
 
         public List<List<DefaultCard>> GetCurrentBoard()
         {
+            if(CurrentPlayerBoard != Leader1.Board && CurrentPlayerBoard != Leader2.Board)
+            {
+                throw new CustomException("GetCurrentBoard Inner Error");
+            }
             return CurrentPlayerBoard == Leader1.Board ? Leader1.Board : Leader2.Board;
         }
 
@@ -49,6 +59,10 @@ namespace GwentNAi.GameSource.Board
 
         public DefaultLeader GetCurrentLeader()
         {
+            if(CurrentlyPlayingLeader != Leader1 && CurrentlyPlayingLeader != Leader2)
+            {
+                throw new CustomException("GetCurrentLeader Inner Error");
+            }
             return CurrentlyPlayingLeader == Leader1 ? Leader1 : Leader2;
         }
 
@@ -227,8 +241,10 @@ namespace GwentNAi.GameSource.Board
 
         private void SwapPlayers()
         {
-            CurrentlyPlayingLeader = (CurrentlyPlayingLeader == Leader1 ? Leader2 : Leader1);
-            CurrentPlayerBoard = (CurrentPlayerBoard == Leader1.Board ? Leader2.Board : Leader1.Board);
+            CurrentlyPlayingLeader = GetEnemieLeader();
+            CurrentPlayerBoard = GetEnemieBoard();
+
+            if (CurrentlyPlayingLeader.Board != CurrentPlayerBoard) throw new CustomException("Inner Error -> Swap Failed");
 
             CurrentlyPlayingLeader.HasPlayedCard = false;
             CurrentlyPlayingLeader.HasUsedAbility = false;

@@ -14,7 +14,7 @@ namespace GwentNAi.GameSource.Board
         public List<List<List<int>>> ImidiateActions { get; set; } = new List<List<List<int>>>(2) {new List<List<int>>(2) { new List<int>(10), new List<int>(10) },
                                                                                      new List<List<int>>(2) { new List<int>(10), new List<int>(10) } };
         public Action<GameBoard>? LeaderActions = null;
-        public Action PassOrEndTurn = () => { };
+        public Action PassOrEndTurn { get; set; } = () => { };
         public SwapCards SwapCards = new();
 
         public bool canPass { get; set; }
@@ -25,11 +25,7 @@ namespace GwentNAi.GameSource.Board
         {
             ActionContainer clonedActionContainer = new ActionContainer()
             {
-                OrderActions = OrderActions.Select(action => (PossibleAction)action.Clone()).ToList(),
                 PlayCardActions = PlayCardActions.Select(action => (PossibleAction)action.Clone()).ToList(),
-                ImidiateActions = ImidiateActions.Select(midList => midList.Select(innerList => innerList.ToList()).ToList()).ToList(),
-                LeaderActions = LeaderActions,
-                PassOrEndTurn = PassOrEndTurn,
                 SwapCards = (SwapCards)SwapCards.Clone(),
                 canPass = canPass,
                 canEnd = canEnd,

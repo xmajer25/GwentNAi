@@ -25,7 +25,7 @@ namespace GwentNAi.GameSource
             ConsolePrint.Init();
             ConsolePrint.DrawStaticElements();
 
-            PlayMethodSetting(player1, player2);
+            PlayMethodSetting();
             (board.Leader1, board.Leader2) = LeaderSetting();
             DeckSetting();
             DetermineStartingPlayer();
@@ -100,7 +100,7 @@ namespace GwentNAi.GameSource
             Drawings.DrawCrown(board);
         }
 
-        static private void PlayMethodSetting(int player1Method, int player2Method)
+        static private void PlayMethodSetting()
         {
             if (player1 == 0) player1Move = MCTSPlayer.MCTSMove;
             if (player1 == 1) player1Move = HumanPlayer.HumanMove;
@@ -121,7 +121,7 @@ namespace GwentNAi.GameSource
             ConsolePrint.DrawLeader(1, leader2.LeaderFaction);
             ConsolePrint.ClearBottom();
 
-            return (leader1, leader2: leader2);
+            return (leader1, leader2);
         }
 
         static private void DeckSetting()

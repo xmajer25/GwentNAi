@@ -16,12 +16,19 @@ namespace GwentNAi.MctsMove
                 if (clonedNode.IsTerminal) break;
 
                 clonedNode.Board.TurnUpdate();
-                clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.GetCurrentBoard(), clonedNode.Board.GetCurrentLeader().HandDeck, clonedNode.Board.GetCurrentLeader());
-                MCTSRandomMove.PlayRandomEnemieMove(clonedNode);
+                if (!clonedNode.Board.GetCurrentLeader().HasPassed)
+                {
+                    clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.GetCurrentBoard(), clonedNode.Board.GetCurrentLeader().HandDeck, clonedNode.Board.GetCurrentLeader());
+                    MCTSRandomMove.PlayRandomEnemieMove(clonedNode);
+                }
+                
 
                 clonedNode.Board.TurnUpdate();
-                clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.GetCurrentBoard(), clonedNode.Board.GetCurrentLeader().HandDeck, clonedNode.Board.GetCurrentLeader());
-                MCTSRandomMove.PlayRandomMove(clonedNode);
+                if(!clonedNode.Board.GetCurrentLeader().HasPassed)
+                {
+                    clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.GetCurrentBoard(), clonedNode.Board.GetCurrentLeader().HandDeck, clonedNode.Board.GetCurrentLeader());
+                    MCTSRandomMove.PlayRandomMove(clonedNode);
+                }
             }
 
             if (clonedNode.Board.Leader1.Victories == 2 && clonedNode.Board.Leader2.Victories == 2) return Winner.Tie;
@@ -38,14 +45,20 @@ namespace GwentNAi.MctsMove
 
                 if (clonedNode.IsTerminal) break;
 
-                clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.GetCurrentBoard(), clonedNode.Board.GetCurrentLeader().HandDeck, clonedNode.Board.GetCurrentLeader());
-                MCTSRandomMove.PlayRandomMove(clonedNode);
-
+                if (!clonedNode.Board.GetCurrentLeader().HasPassed)
+                {
+                    clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.GetCurrentBoard(), clonedNode.Board.GetCurrentLeader().HandDeck, clonedNode.Board.GetCurrentLeader());
+                    MCTSRandomMove.PlayRandomMove(clonedNode);
+                }
+                
                 clonedNode.Board.TurnUpdate();
 
-                clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.GetCurrentBoard(), clonedNode.Board.GetCurrentLeader().HandDeck, clonedNode.Board.GetCurrentLeader());
-                MCTSRandomMove.PlayRandomEnemieMove(clonedNode);
-
+                if(!clonedNode.Board.GetCurrentLeader().HasPassed)
+                {
+                    clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.GetCurrentBoard(), clonedNode.Board.GetCurrentLeader().HandDeck, clonedNode.Board.GetCurrentLeader());
+                    MCTSRandomMove.PlayRandomEnemieMove(clonedNode);
+                }
+                
                 clonedNode.Board.TurnUpdate();
                 
             }

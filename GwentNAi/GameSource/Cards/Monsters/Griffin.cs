@@ -28,31 +28,29 @@ namespace GwentNAi.GameSource.Cards.Monsters
         }
         public void Deploy(GameBoard board)
         {
-            List<List<int>> allyIndexes = new List<List<int>>(2) { new List<int>(10), new List<int>(10) };
-            int currentRow = 0;
+            List<List<DefaultCard>> AllyBoard = board.GetCurrentBoard();
             int currentIndex = 0;
-
-            foreach (var row in board.GetCurrentBoard())
+            bool isAllyPresent = false;
+            for (int row = 0; row < AllyBoard.Count; row++)
             {   
-                foreach (var card in row)
+                foreach (var card in AllyBoard[row])
                 {
                     if (card == this)
                     {
                         currentIndex++;
                         continue;
                     }
-                    allyIndexes[currentRow].Add(currentIndex);
+                    isAllyPresent = true;
+                    board.CurrentPlayerActions.ImidiateActions[0][row].Add(currentIndex);
                     currentIndex++;
                 }
                 currentIndex = 0;
-                currentRow++;
             }
-            if (allyIndexes[0].Count == 0 && allyIndexes[1].Count == 0)
+            if (!isAllyPresent)
             {
                 this.TakeDemage(currentValue, true, board);
                 return;
             }
-            board.CurrentPlayerActions.ImidiateActions[0] = allyIndexes;
         }
 
         public void PostPickAllyAbilitiy(GameBoard board, int row, int index)

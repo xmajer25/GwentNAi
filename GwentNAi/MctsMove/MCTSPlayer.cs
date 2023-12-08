@@ -1,5 +1,6 @@
 ﻿using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards;
+using GwentNAi.GameSource.CustomExceptions;
 using GwentNAi.GameSource.Player;
 using GwentNAi.MctsMove.Enums;
 using System.Transactions;
@@ -23,7 +24,9 @@ namespace GwentNAi.MctsMove
                 //Special case - need to swap cards
                 if (PlayersHavePassed(SelectedNode) || SelectedNode.Board.CurrentPlayerActions.SwapCards.SwapAvailable || PlayerHasSwapped3Cards(SelectedNode))
                 {
+                    //--Draw both hands
                     if (SelectedNode.Board.Leader1.Victories != 0 && SelectedNode.Board.Leader2.Victories != 0) SelectedNode.Board.DrawBothHands(3);
+
                     //EXPANSION
                     if((SelectedNode == Root || SelectedNode.Parent.AllChildrenExplored) && SelectedNode.IsLeaf)
                         MCTSExpandChildren.SwapCard(SelectedNode);
@@ -42,11 +45,13 @@ namespace GwentNAi.MctsMove
                     continue;
                 }
 
-                //ALSO HANDLE IMIDIATE ACTIONS -> i go sleep now
-
                 //EXPANSION
                 if((SelectedNode == Root || SelectedNode.Parent.AllChildrenExplored) && SelectedNode.IsLeaf)
+                {
                     MCTSExpandChildren.PlayCard(SelectedNode);
+                    MCTSExpandChildren.OrderCard(SelectedNode);
+                }
+                    
                 SelectedNode = SelectedNode.FirstUnexploredChild();
 
                 //SIMULATION
@@ -56,8 +61,8 @@ namespace GwentNAi.MctsMove
                     if(SelectedNode.Children.Count > 0)
                         SelectedNode = SelectedNode.Children.First();
                 }
-                
-                winner = MCTSSimulation.OurTurnSimulation(SelectedNode);
+        
+                winner = MCTSSimulation.Simulation(SelectedNode);
 
                 //BACK_PROPAGATION
                 reward = DetermineReward(Root, winner);
@@ -110,17 +115,20 @@ namespace GwentNAi.MctsMove
         private static GameBoard Execute(MCTSNode node, GameBoard board)
         {
             int totalNumberOfVisits = node.NumberOfVisits;
+            MCTSNode controlNode = node;
             while(!node.EndMove)
             {
                 node = node.BestChild(totalNumberOfVisits);
+                if (controlNode == node) throw new CustomException("Unfinished Move Inner Error");
+                controlNode = node;
             }
 
             board.Leader1 = (DefaultLeader)node.Board.Leader1.Clone();
             board.Leader2 = (DefaultLeader)node.Board.Leader2.Clone();
             board.PointSumP1 = node.Board.PointSumP1;
             board.PointSumP2 = node.Board.PointSumP2;
-            board.CurrentlyPlayingLeader = node.Board.GetCurrentLeader();
-            board.CurrentPlayerBoard = node.Board.GetCurrentBoard();
+            board.CurrentlyPlayingLeader = node.Board.GetCurrentLeader() == node.Board.Leader1 ? board.Leader1 : board.Leader2;
+            board.CurrentPlayerBoard = node.Board.GetCurrentBoard() == node.Board.Leader1.Board ? board.Leader1.Board : board.Leader2.Board;
             board.CurrentPlayerActions.ClearImidiateActions();
             if (board.CurrentPlayerActions.SwapCards.PlayersToSwap > 0)
                 board.CurrentPlayerActions.SwapCards.StopSwapping = true;

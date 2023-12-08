@@ -35,8 +35,6 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
         public void pickAll(GameBoard board)
         {
-            List<List<int>> p1Rows = new List<List<int>>(2) { new List<int>(10), new List<int>(10) };
-            List<List<int>> p2Rows = new List<List<int>>(2) { new List<int>(10), new List<int>(10) };
             int currentRow = 0;
             int currentColumn = 0;
 
@@ -47,7 +45,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
                 {
                     if (card.currentValue < this.currentValue && card.descriptors.Contains("Token"))
                     {
-                        p1Rows[currentRow].Add(currentColumn);
+                        board.CurrentPlayerActions.ImidiateActions[0][currentRow].Add(currentColumn);
                     }
                     currentColumn++;
                 }
@@ -63,16 +61,13 @@ namespace GwentNAi.GameSource.Cards.Monsters
                 {
                     if (card.currentValue < this.currentValue && card.descriptors.Contains("Token"))
                     {
-                        p2Rows[currentRow].Add(currentColumn);
+                        board.CurrentPlayerActions.ImidiateActions[1][currentRow].Add(currentColumn);
                     }
                     currentColumn++;
                 }
                 currentRow++;
                 currentColumn = 0;
             }
-
-            board.CurrentPlayerActions.ImidiateActions[0] = p1Rows;
-            board.CurrentPlayerActions.ImidiateActions[1] = p2Rows;
         }
 
         void IOrderExpandPickAll.postPickAllOrder(GameBoard board, int player, int row, int index)

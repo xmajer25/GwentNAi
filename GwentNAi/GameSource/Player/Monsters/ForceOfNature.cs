@@ -53,12 +53,11 @@ namespace GwentNAi.GameSource.Player.Monsters
 
         public void PlayCardExpand(GameBoard board)
         {
-            List<List<DefaultCard>> CPboard = board.GetCurrentBoard();
             List<List<int>> possibleIndexes = new List<List<int>>(2) { new List<int>(10), new List<int>(10) };
             int currentRow = 0;
             int currentCulumn = 0;
 
-            foreach (var row in CPboard)
+            foreach (var row in Board)
             {
                 foreach (var card in row)
                 {
@@ -77,7 +76,7 @@ namespace GwentNAi.GameSource.Player.Monsters
         public void PostPlayCardOrder(GameBoard board, int row, int column)
         {
             DefaultCard playedCard = new WoodlandSpirit();
-            board.GetCurrentBoard()[row].Insert(column, playedCard);
+            PlayCard(playedCard, row, column, board);
             AbilityCharges--;
         }
 

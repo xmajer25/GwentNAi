@@ -18,10 +18,11 @@ namespace GwentNAi.MctsMove
             enemie.Board.TurnUpdate();
             enemie.Board.CurrentPlayerActions.GetAllActions(enemie.Board.GetCurrentBoard(), enemie.Board.GetCurrentLeader().HandDeck, enemie.Board.GetCurrentLeader());
             MCTSRandomMove.PlayRandomEnemieMove(enemie);
-            parent.AppendChild(enemie.Board, true);
-
             enemie.Board.TurnUpdate();
             enemie.Board.CurrentPlayerActions.GetAllActions(enemie.Board.GetCurrentBoard(), enemie.Board.GetCurrentLeader().HandDeck, enemie.Board.GetCurrentLeader());
+
+            parent.AppendChild(enemie.Board, true);
+            
         }
 
         public static void SwapCard(MCTSNode parent)
@@ -57,11 +58,11 @@ namespace GwentNAi.MctsMove
                     {
                         //PLAY CARD
                         GameBoard clonedBoard = (GameBoard)parent.Board.Clone();
+                        playCard = clonedBoard.CurrentPlayerActions.PlayCardActions[cardIndex].ActionCard;
                         clonedBoard.CurrentPlayerActions.ClearImidiateActions();
-                        clonedBoard.CurrentPlayerActions.PlayCardActions.Clear();
                         clonedBoard.GetCurrentLeader().PlayCard(cardIndex, row, index, clonedBoard);
 
-                        //playCard = clonedBoard.CurrentPlayerBoard[row][index];
+
 
                         //DEPLOY OPTIONS CHILDREN
                         if (clonedBoard.CurrentPlayerActions.AreImidiateActionsFull())
@@ -74,9 +75,13 @@ namespace GwentNAi.MctsMove
                                     foreach(int deployIndex in clonedBoard.CurrentPlayerActions.ImidiateActions[0][deployRow])
                                     {
                                         GameBoard clonedDeployBoard = (GameBoard)clonedBoard.Clone();
+                                        playCard = clonedDeployBoard.GetCurrentLeader().Board[row][index];
+
+                                        clonedDeployBoard.CurrentPlayerActions.PlayCardActions.Clear();
                                         clonedDeployBoard.CurrentPlayerActions.ClearImidiateActions();
-                                        
-                                        PickEnemiesCard.postPickEnemieAbilitiy(clonedDeployBoard, deployRow, deployIndex);
+
+                                        if(playCard is IDeployExpandPickEnemies iPE)
+                                            iPE.postPickEnemieAbilitiy(clonedDeployBoard, deployRow, deployIndex);
                                         parent.AppendChild(clonedDeployBoard, false);
                                     }
                                 }
@@ -89,8 +94,13 @@ namespace GwentNAi.MctsMove
                                     foreach (int deployIndex in clonedBoard.CurrentPlayerActions.ImidiateActions[0][deployRow])
                                     {
                                         GameBoard clonedDeployBoard = (GameBoard)clonedBoard.Clone();
+                                        playCard = clonedDeployBoard.GetCurrentLeader().Board[row][index];
+
+                                        clonedDeployBoard.CurrentPlayerActions.PlayCardActions.Clear();
                                         clonedDeployBoard.CurrentPlayerActions.ClearImidiateActions();
-                                        PickAllyCard.PostPickAllyAbilitiy(clonedDeployBoard, deployRow, deployIndex);
+
+                                        if (playCard is IDeployExpandPickAlly iPA)
+                                            iPA.PostPickAllyAbilitiy(clonedDeployBoard, deployRow, deployIndex);
                                         parent.AppendChild(clonedDeployBoard, false);
                                     }
                                 }
@@ -101,14 +111,20 @@ namespace GwentNAi.MctsMove
                                 foreach (int deployIndex in clonedBoard.CurrentPlayerActions.ImidiateActions[0][0])
                                 {
                                     GameBoard clonedDeployBoard = (GameBoard)clonedBoard.Clone();
+                                    playCard = clonedDeployBoard.GetCurrentLeader().Board[row][index];
+
+                                    clonedDeployBoard.CurrentPlayerActions.PlayCardActions.Clear();
                                     clonedDeployBoard.CurrentPlayerActions.ClearImidiateActions();
-                                    PickCardCard.postPickCardAbility(clonedDeployBoard, deployIndex);
+
+                                    if (playCard is IDeployExpandPickCard iPC)
+                                        iPC.postPickCardAbility(clonedDeployBoard, deployIndex);
                                     parent.AppendChild(clonedDeployBoard, false);
                                 }
                             }
                         }
                         else
                         {
+                            clonedBoard.CurrentPlayerActions.PlayCardActions.Clear();
                             parent.AppendChild(clonedBoard, false);
                         }
                     }
@@ -129,6 +145,114 @@ namespace GwentNAi.MctsMove
             {
                 GameBoard endBoard = (GameBoard)parent.Board.Clone();
                 parent.AppendChild(endBoard, true);
+            }
+        }
+
+
+        public static void OrderCard(MCTSNode parent)
+        {
+            for(int cardIndex = 0; cardIndex < parent.Board.CurrentPlayerActions.OrderActions.Count; cardIndex++)
+            {
+
+                GameBoard clonedBoard = (GameBoard)parent.Board.Clone();
+
+                DefaultCard actionCard = clonedBoard.CurrentPlayerActions.OrderActions[cardIndex].ActionCard;
+                clonedBoard.CurrentPlayerActions.ClearImidiateActions();
+                if (actionCard is IOrder orderCard)
+                {
+                    orderCard.Order(clonedBoard);
+                }
+
+                if (clonedBoard.CurrentPlayerActions.AreImidiateActionsFull())
+                {
+                    GameBoard clonedOrderBoard = (GameBoard)clonedBoard.Clone();
+                    actionCard = clonedOrderBoard.CurrentPlayerActions.OrderActions[cardIndex].ActionCard;
+
+                    //PICK ENEMIE ORDER
+                    if (actionCard is IOrderExpandPickEnemie pickEnemieCard)
+                    {
+                        for (int deployRow = 0; deployRow < clonedBoard.CurrentPlayerActions.ImidiateActions[0].Count; deployRow++)
+                        {
+                            foreach (int deployIndex in clonedBoard.CurrentPlayerActions.ImidiateActions[0][deployRow])
+                            {
+                                GameBoard childBoard = (GameBoard)clonedOrderBoard.Clone();
+                                actionCard = childBoard.CurrentPlayerActions.OrderActions[cardIndex].ActionCard;
+                                childBoard.CurrentPlayerActions.ClearImidiateActions();
+
+                                if(actionCard is IOrderExpandPickEnemie pEC)
+                                    pEC.postPickEnemieOrder(childBoard, deployRow, deployIndex);
+
+                                childBoard.CurrentPlayerActions.OrderActions.RemoveAt(cardIndex);
+                                parent.AppendChild(childBoard, false);
+                            }
+                        }
+                    }
+
+                    //PICK ALLY ORDER
+                    else if(actionCard is IOrderExpandPickAlly pickAllyCard)
+                    {
+                        for (int deployRow = 0; deployRow < clonedBoard.CurrentPlayerActions.ImidiateActions[0].Count; deployRow++)
+                        {
+                            foreach (int deployIndex in clonedBoard.CurrentPlayerActions.ImidiateActions[0][deployRow])
+                            {
+                                GameBoard childBoard = (GameBoard)clonedOrderBoard.Clone();
+                                actionCard = childBoard.CurrentPlayerActions.OrderActions[cardIndex].ActionCard;
+                                childBoard.CurrentPlayerActions.ClearImidiateActions();
+
+                                if(actionCard is IOrderExpandPickAlly pAC)
+                                    pAC.PostPickAllyOrder(childBoard, deployRow, deployIndex);
+
+                                childBoard.CurrentPlayerActions.OrderActions.RemoveAt(cardIndex);
+                                parent.AppendChild(childBoard, false);
+                            }
+                        }
+                    }
+
+                    //PICK FROM ALL ORDER
+                    else if(actionCard is IOrderExpandPickAll pickAllCard)
+                    {
+                        for(int orderPlayer = 0; orderPlayer < clonedBoard.CurrentPlayerActions.ImidiateActions.Count; orderPlayer++)
+                        {
+                            for (int deployRow = 0; deployRow < clonedBoard.CurrentPlayerActions.ImidiateActions[orderPlayer].Count; deployRow++)
+                            {
+                                foreach (int deployIndex in clonedBoard.CurrentPlayerActions.ImidiateActions[0][deployRow])
+                                {
+                                    GameBoard childBoard = (GameBoard)clonedOrderBoard.Clone();
+                                    actionCard = childBoard.CurrentPlayerActions.OrderActions[cardIndex].ActionCard;
+                                    childBoard.CurrentPlayerActions.ClearImidiateActions();
+
+                                    if (actionCard is IOrderExpandPickAll pAC)
+                                        pAC.postPickAllOrder(childBoard, orderPlayer, deployRow, deployIndex);
+
+                                    childBoard.CurrentPlayerActions.OrderActions.RemoveAt(cardIndex);
+                                    parent.AppendChild(childBoard, false);
+                                }
+                            }
+
+                        }
+                        
+                    }
+
+                    //PLAY CARD ORDER
+                    else if(actionCard is IPlayCardExpand playCardCard)
+                    {
+                        for (int deployRow = 0; deployRow < clonedBoard.CurrentPlayerActions.ImidiateActions[0].Count; deployRow++)
+                        {
+                            foreach (int deployIndex in clonedBoard.CurrentPlayerActions.ImidiateActions[0][deployRow])
+                            {
+                                GameBoard childBoard = (GameBoard)clonedOrderBoard.Clone();
+                                actionCard = childBoard.CurrentPlayerActions.OrderActions[cardIndex].ActionCard;
+                                childBoard.CurrentPlayerActions.ClearImidiateActions();
+
+                                if (actionCard is IPlayCardExpand pCC)
+                                    pCC.PostPlayCardOrder(childBoard, deployRow, deployIndex);
+
+                                childBoard.CurrentPlayerActions.OrderActions.RemoveAt(cardIndex);
+                                parent.AppendChild(childBoard, false);
+                            }
+                        }
+                    }
+                }
             }
         }
     }

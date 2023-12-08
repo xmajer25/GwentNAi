@@ -12,7 +12,7 @@ namespace GwentNAi.GameSource.Board
         {
             return new PossibleAction()
             {
-                ActionCard = ActionCard,
+                ActionCard = (DefaultCard)ActionCard.Clone(),
                 CardName = CardName
             };
         }

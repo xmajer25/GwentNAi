@@ -47,7 +47,8 @@ namespace GwentNAi.MctsMove
 
             if (possibleActions.PlayCardActions.Count == 0)
             {
-                node.Board.CurrentPlayerActions.PassOrEndTurn();
+                //node.Board.CurrentPlayerActions.PassOrEndTurn();
+                leader.Pass();
                 return -1;
             }
             randomCardIndex = Random.Next(0, possibleActions.PlayCardActions.Count);

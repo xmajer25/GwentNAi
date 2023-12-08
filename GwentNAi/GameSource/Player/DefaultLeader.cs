@@ -83,6 +83,16 @@ namespace GwentNAi.GameSource.Player
             RespondToDeployedCard(board, card);
         }
 
+        public void PlayCard(DefaultCard card, int RowIndex, int PosIndex, GameBoard board)
+        {
+            Board[RowIndex].Insert(PosIndex, card);
+            if (card is IDeploy DeployCard)
+            {
+                DeployCard.Deploy(board);
+            }
+            RespondToDeployedCard(board, card);
+        }
+
         private void RespondToDeployedCard(GameBoard board, DefaultCard currentlyPlayedCard)
         {
             foreach(var row in board.GetCurrentBoard())

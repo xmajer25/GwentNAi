@@ -29,23 +29,15 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
         public void Deploy(GameBoard board)
         {
-            List<List<int>> enemieIndexes = new List<List<int>>(2) { new List<int>(10), new List<int>(10) };
             List<List<DefaultCard>> enemieBoard = board.GetEnemieBoard();
-            int currentRow = 0;
-            int currentIndex = 0;
 
-            foreach (var row in enemieBoard)
+            for (int currentRow = 0; currentRow < enemieBoard.Count; currentRow++)
             {
-                foreach (var card in row)
+                for (int currentIndex = 0; currentIndex < enemieBoard[currentRow].Count; currentIndex++)
                 {
-                    enemieIndexes[currentRow].Add(currentIndex);
-                    currentIndex++;
-                }
-                currentIndex = 0;
-                currentRow++;
+                    board.CurrentPlayerActions.ImidiateActions[0][currentRow].Add(currentIndex);
+                }  
             }
-
-            board.CurrentPlayerActions.ImidiateActions[0] = enemieIndexes;
         }
 
         public void postPickEnemieAbilitiy(GameBoard board, int row, int index)
