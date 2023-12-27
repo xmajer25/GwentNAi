@@ -25,8 +25,11 @@ namespace GwentNAi.MctsMove
                 if (PlayersHavePassed(SelectedNode) || SelectedNode.Board.CurrentPlayerActions.SwapCards.SwapAvailable || PlayerHasSwapped3Cards(SelectedNode))
                 {
                     //--Draw both hands
-                    if (SelectedNode.Board.Leader1.Victories != 0 && SelectedNode.Board.Leader2.Victories != 0) SelectedNode.Board.DrawBothHands(3);
-
+                    /*if (SelectedNode.Board.Leader1.Victories != 0 && SelectedNode.Board.Leader2.Victories != 0)
+                    {
+                        SelectedNode.Board.DrawBothHands(3);
+                        SelectedNode.Board.SwapCards();
+                    }*/
                     //EXPANSION
                     if((SelectedNode == Root || SelectedNode.Parent.AllChildrenExplored) && SelectedNode.IsLeaf)
                         MCTSExpandChildren.SwapCard(SelectedNode);

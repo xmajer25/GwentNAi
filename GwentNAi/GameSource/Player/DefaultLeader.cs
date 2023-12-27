@@ -78,6 +78,7 @@ namespace GwentNAi.GameSource.Player
             if (card is IDeploy DeployCard)
             {
                 DeployCard.Deploy(board);
+                board.RemoveDestroyedCards();
             }
                 
             RespondToDeployedCard(board, card);

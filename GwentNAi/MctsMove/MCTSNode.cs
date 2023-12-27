@@ -63,6 +63,14 @@ namespace GwentNAi.MctsMove
             Children.Add(child);
         }
 
+        public void AppendChild(GameBoard board, bool endMove, string move)
+        {
+            MCTSNode child = new(this, board);
+            child.EndMove = endMove;
+            child.Move = move;
+            Children.Add(child);
+        }
+
         public MCTSNode Selection(int TotalVisits)
         {
             MCTSNode selectedNode =  BestChild(TotalVisits);

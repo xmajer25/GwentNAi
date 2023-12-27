@@ -33,13 +33,13 @@ namespace GwentNAi.MctsMove
                 GameBoard clonedBoard = (GameBoard)parent.Board.Clone();
                 clonedBoard.GetCurrentLeader().SwapCards(index);
                 clonedBoard.CurrentPlayerActions.SwapCards.CardSwaps--;
-                parent.AppendChild(clonedBoard, false);
+                parent.AppendChild(clonedBoard, false, "Swapping " + index + ". card");
             }
 
             //Child where no swap has been chosen
             GameBoard noSwapBoard = (GameBoard)parent.Board.Clone();
             noSwapBoard.CurrentPlayerActions.SwapCards.StopSwapping = true;
-            parent.AppendChild(noSwapBoard, true);
+            parent.AppendChild(noSwapBoard, true, "Stop Swapping" );
         }
 
         public static void PlayCard(MCTSNode parent) 
@@ -82,7 +82,7 @@ namespace GwentNAi.MctsMove
 
                                         if(playCard is IDeployExpandPickEnemies iPE)
                                             iPE.postPickEnemieAbilitiy(clonedDeployBoard, deployRow, deployIndex);
-                                        parent.AppendChild(clonedDeployBoard, false);
+                                        parent.AppendChild(clonedDeployBoard, false, "Playing (o)card " + playCard.name);
                                     }
                                 }
                             }
@@ -101,7 +101,7 @@ namespace GwentNAi.MctsMove
 
                                         if (playCard is IDeployExpandPickAlly iPA)
                                             iPA.PostPickAllyAbilitiy(clonedDeployBoard, deployRow, deployIndex);
-                                        parent.AppendChild(clonedDeployBoard, false);
+                                        parent.AppendChild(clonedDeployBoard, false, "Playing (o)card " + playCard.name);
                                     }
                                 }
                             }
@@ -118,14 +118,14 @@ namespace GwentNAi.MctsMove
 
                                     if (playCard is IDeployExpandPickCard iPC)
                                         iPC.postPickCardAbility(clonedDeployBoard, deployIndex);
-                                    parent.AppendChild(clonedDeployBoard, false);
+                                    parent.AppendChild(clonedDeployBoard, false, "Playing (o)card " + playCard.name);
                                 }
                             }
                         }
                         else
                         {
                             clonedBoard.CurrentPlayerActions.PlayCardActions.Clear();
-                            parent.AppendChild(clonedBoard, false);
+                            parent.AppendChild(clonedBoard, false, "Playing card " + playCard.name);
                         }
                     }
                 }
@@ -137,14 +137,14 @@ namespace GwentNAi.MctsMove
                 GameBoard passBoard = (GameBoard)parent.Board.Clone();
                 passBoard.CurrentPlayerActions.GetPassOrEndTurn(passBoard.GetCurrentLeader());
                 passBoard.CurrentPlayerActions.PassOrEndTurn();
-                parent.AppendChild(passBoard, true);
+                parent.AppendChild(passBoard, true, "Passing");
             }
 
             //END CHILD
             if (actionContainer.canEnd)
             {
                 GameBoard endBoard = (GameBoard)parent.Board.Clone();
-                parent.AppendChild(endBoard, true);
+                parent.AppendChild(endBoard, true, "Ending turn");
             }
         }
 
@@ -161,6 +161,15 @@ namespace GwentNAi.MctsMove
                 if (actionCard is IOrder orderCard)
                 {
                     orderCard.Order(clonedBoard);
+                }
+
+                if((actionCard is IOrderExpandPickAll || 
+                    actionCard is IOrderExpandPickEnemie || 
+                    actionCard is IOrderExpandPickAlly ||
+                    actionCard is IPlayCardExpand) && 
+                    !clonedBoard.CurrentPlayerActions.AreImidiateActionsFull())
+                {
+                    continue;
                 }
 
                 if (clonedBoard.CurrentPlayerActions.AreImidiateActionsFull())

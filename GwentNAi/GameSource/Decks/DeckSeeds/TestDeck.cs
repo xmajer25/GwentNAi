@@ -10,11 +10,11 @@ namespace GwentNAi.GameSource.Decks.DeckSeeds
         {
             Cards = new()
             {
-                new OldSpeartipAsleep(), new OldSpeartipAsleep(), new OldSpeartipAsleep(), new OldSpeartipAsleep(), new OldSpeartipAsleep(),
-                new OldSpeartipAsleep(), new OldSpeartipAsleep(), new OldSpeartipAsleep(), new GeraltProfessional(), new GeraltProfessional(),
-                new GeraltProfessional(), new Brewess(), new Nekker(), new Nekker(), new Nekker(),
-                new Nekker(), new Nekker(), new Nekker(), new Nekker(), new Nekker(),
-                new Nekker(), new Nekker(), new Nekker(), new Nekker(), new Nekker()
+                new Griffin(), new Griffin(), new Griffin(), new Griffin(), new Griffin(),
+                new Griffin(), new Griffin(), new Griffin(), new Griffin(), new Griffin(),
+                new Griffin(), new Griffin(), new Griffin(), new Griffin(), new Griffin(),
+                new Griffin(), new Griffin(), new Griffin(), new Griffin(), new Griffin(),
+                new Griffin(), new Griffin(), new Griffin(), new Griffin(), new Griffin()
             };
             Name = "Test Deck";
         }
