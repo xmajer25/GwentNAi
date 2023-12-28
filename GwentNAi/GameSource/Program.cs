@@ -47,6 +47,8 @@ namespace GwentNAi.GameSource
                     //move
                     while (moveOutcome == 0)
                     {
+                        if (board.CurrentlyPlayingLeader.HasPassed) break;
+
                         board.CurrentPlayerActions.GetAllActions(board.GetCurrentBoard(), board.GetCurrentLeader().HandDeck, board.GetCurrentLeader());
                         moveOutcome = (board.GetCurrentLeader() == board.Leader1 ? player1Move(board) : player2Move(board));
                         board.MoveUpdate();

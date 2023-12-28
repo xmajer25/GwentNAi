@@ -31,26 +31,32 @@ namespace GwentNAi.GameSource.Cards.Monsters
             List<List<DefaultCard>> AllyBoard = board.GetCurrentBoard();
             int currentIndex = 0;
             bool isAllyPresent = false;
-            for (int row = 0; row < AllyBoard.Count; row++)
-            {   
-                foreach (var card in AllyBoard[row])
+            int row = GetCurrentRow(AllyBoard);
+
+            foreach (var card in AllyBoard[row])
+            {
+                if (card == this)
                 {
-                    if (card == this)
-                    {
-                        currentIndex++;
-                        continue;
-                    }
-                    isAllyPresent = true;
-                    board.CurrentPlayerActions.ImidiateActions[0][row].Add(currentIndex);
                     currentIndex++;
+                    continue;
                 }
-                currentIndex = 0;
+                isAllyPresent = true;
+                board.CurrentPlayerActions.ImidiateActions[0][row].Add(currentIndex);
+                currentIndex++;
             }
+            
             if (!isAllyPresent)
             {
+                board.CurrentPlayerActions.ClearImidiateActions();
                 this.TakeDemage(currentValue, true, board);
                 return;
             }
+        }
+
+        public int GetCurrentRow(List<List<DefaultCard>> AllyBoard)
+        {
+            int isInRow = AllyBoard[0].IndexOf(this);
+            return (isInRow == -1) ? 1 : 0;
         }
 
         public void PostPickAllyAbilitiy(GameBoard board, int row, int index)

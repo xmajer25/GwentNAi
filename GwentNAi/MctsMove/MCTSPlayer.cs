@@ -104,10 +104,10 @@ namespace GwentNAi.MctsMove
         private static double DetermineReward(MCTSNode rootNode, Winner winner)
         {
             if(winner == Winner.Tie)
-                return -0.2;
+                return (-0.2);
 
             DefaultLeader victoriousLeader = GetWinner(winner, rootNode.Board);
-            return (rootNode.Board.GetCurrentLeader() == victoriousLeader ? 1 : -1);
+            return (rootNode.Board.GetCurrentLeader() == victoriousLeader ? 1 : (-1));
         }
 
         private static DefaultLeader GetWinner(Winner winner, GameBoard board)

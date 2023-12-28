@@ -32,7 +32,6 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
         public void Deploy(GameBoard board)
         {
-            List<List<int>> allyIndexes = new List<List<int>>(2) { new List<int>(10), new List<int>(10) };
             List<List<DefaultCard>> allyBoard = board.GetCurrentBoard();
             int currentRow = 0;
             int currentIndex = 0;
@@ -46,14 +45,12 @@ namespace GwentNAi.GameSource.Cards.Monsters
                         currentIndex++;
                         continue;
                     }
-                    allyIndexes[currentRow].Add(currentIndex);
+                    board.CurrentPlayerActions.ImidiateActions[0][currentRow].Add(currentIndex);
                     currentIndex++;
                 }
                 currentIndex = 0;
                 currentRow++;
             }
-
-            board.CurrentPlayerActions.ImidiateActions[0] = allyIndexes;
         }
 
         public void PostPickAllyAbilitiy(GameBoard board, int row, int index)

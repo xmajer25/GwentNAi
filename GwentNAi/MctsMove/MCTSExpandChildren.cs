@@ -15,14 +15,15 @@ namespace GwentNAi.MctsMove
         {
             GameBoard clonedBoard = (GameBoard)parent.Board.Clone();
             MCTSNode enemie = new MCTSNode(parent, clonedBoard);
+
+            //SWAP PLAYERS -> PLAY RANDOM MOVE -> SWAP BACK
             enemie.Board.TurnUpdate();
             enemie.Board.CurrentPlayerActions.GetAllActions(enemie.Board.GetCurrentBoard(), enemie.Board.GetCurrentLeader().HandDeck, enemie.Board.GetCurrentLeader());
             MCTSRandomMove.PlayRandomEnemieMove(enemie);
             enemie.Board.TurnUpdate();
-            enemie.Board.CurrentPlayerActions.GetAllActions(enemie.Board.GetCurrentBoard(), enemie.Board.GetCurrentLeader().HandDeck, enemie.Board.GetCurrentLeader());
 
-            parent.AppendChild(enemie.Board, true);
-            
+            enemie.Board.CurrentPlayerActions.GetAllActions(enemie.Board.GetCurrentBoard(), enemie.Board.GetCurrentLeader().HandDeck, enemie.Board.GetCurrentLeader());
+            parent.AppendChild(enemie.Board, true, "ENEMIE");
         }
 
         public static void SwapCard(MCTSNode parent)
@@ -45,12 +46,15 @@ namespace GwentNAi.MctsMove
         public static void PlayCard(MCTSNode parent) 
         {
             ActionContainer actionContainer = parent.Board.CurrentPlayerActions;
+
             //PLAY CARD CHILDREN
             for (int cardIndex = 0; cardIndex < actionContainer.PlayCardActions.Count; cardIndex++)
             {
+                //EXPAND OPTIONS FOR CARD PLACEMENT 
                 DefaultCard playCard = actionContainer.PlayCardActions[cardIndex].ActionCard;
                 playCard.PlaySelfExpand(parent.Board);
 
+                //CREATE CHILD FOR EACH OPTION
                 for (int row = 0; row < actionContainer.ImidiateActions[0].Count; row++)
                 {
                     if (actionContainer.ImidiateActions[0][row].Count == 9) continue;
@@ -75,14 +79,14 @@ namespace GwentNAi.MctsMove
                                     foreach(int deployIndex in clonedBoard.CurrentPlayerActions.ImidiateActions[0][deployRow])
                                     {
                                         GameBoard clonedDeployBoard = (GameBoard)clonedBoard.Clone();
-                                        playCard = clonedDeployBoard.GetCurrentLeader().Board[row][index];
+                                        playCard = clonedDeployBoard.GetCurrentBoard()[row][index];
 
                                         clonedDeployBoard.CurrentPlayerActions.PlayCardActions.Clear();
                                         clonedDeployBoard.CurrentPlayerActions.ClearImidiateActions();
 
                                         if(playCard is IDeployExpandPickEnemies iPE)
                                             iPE.postPickEnemieAbilitiy(clonedDeployBoard, deployRow, deployIndex);
-                                        parent.AppendChild(clonedDeployBoard, false, "Playing (o)card " + playCard.name);
+                                        parent.AppendChild(clonedDeployBoard, false, "Playing (epEnemie)card " + playCard.name + " targeting: " + deployRow + "-" + deployIndex);
                                     }
                                 }
                             }
@@ -94,14 +98,14 @@ namespace GwentNAi.MctsMove
                                     foreach (int deployIndex in clonedBoard.CurrentPlayerActions.ImidiateActions[0][deployRow])
                                     {
                                         GameBoard clonedDeployBoard = (GameBoard)clonedBoard.Clone();
-                                        playCard = clonedDeployBoard.GetCurrentLeader().Board[row][index];
+                                        playCard = clonedDeployBoard.GetCurrentBoard()[row][index];
 
                                         clonedDeployBoard.CurrentPlayerActions.PlayCardActions.Clear();
                                         clonedDeployBoard.CurrentPlayerActions.ClearImidiateActions();
 
                                         if (playCard is IDeployExpandPickAlly iPA)
                                             iPA.PostPickAllyAbilitiy(clonedDeployBoard, deployRow, deployIndex);
-                                        parent.AppendChild(clonedDeployBoard, false, "Playing (o)card " + playCard.name);
+                                        parent.AppendChild(clonedDeployBoard, false, "Playing (epAlly)card " + playCard.name + " targeting: " + deployRow + "-" + deployIndex);
                                     }
                                 }
                             }
@@ -111,17 +115,18 @@ namespace GwentNAi.MctsMove
                                 foreach (int deployIndex in clonedBoard.CurrentPlayerActions.ImidiateActions[0][0])
                                 {
                                     GameBoard clonedDeployBoard = (GameBoard)clonedBoard.Clone();
-                                    playCard = clonedDeployBoard.GetCurrentLeader().Board[row][index];
+                                    playCard = clonedDeployBoard.GetCurrentBoard()[row][index];
 
                                     clonedDeployBoard.CurrentPlayerActions.PlayCardActions.Clear();
                                     clonedDeployBoard.CurrentPlayerActions.ClearImidiateActions();
 
                                     if (playCard is IDeployExpandPickCard iPC)
                                         iPC.postPickCardAbility(clonedDeployBoard, deployIndex);
-                                    parent.AppendChild(clonedDeployBoard, false, "Playing (o)card " + playCard.name);
+                                    parent.AppendChild(clonedDeployBoard, false, "Playing (epCard)card " + playCard.name + " targeting: " +  deployIndex);
                                 }
                             }
                         }
+                        //NO DEPLOY OPTIONS CARD
                         else
                         {
                             clonedBoard.CurrentPlayerActions.PlayCardActions.Clear();
@@ -131,8 +136,10 @@ namespace GwentNAi.MctsMove
                 }
             }
 
+            parent.Board.CurrentPlayerActions.GetPassOrEndTurn(parent.Board.GetCurrentLeader());
+
             //PASS CHILD
-            if (actionContainer.canPass)
+            if (parent.Board.CurrentPlayerActions.canPass)
             {
                 GameBoard passBoard = (GameBoard)parent.Board.Clone();
                 passBoard.CurrentPlayerActions.GetPassOrEndTurn(passBoard.GetCurrentLeader());
@@ -141,7 +148,7 @@ namespace GwentNAi.MctsMove
             }
 
             //END CHILD
-            if (actionContainer.canEnd)
+            if (parent.Board.CurrentPlayerActions.canEnd)
             {
                 GameBoard endBoard = (GameBoard)parent.Board.Clone();
                 parent.AppendChild(endBoard, true, "Ending turn");

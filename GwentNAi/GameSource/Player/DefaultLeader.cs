@@ -75,6 +75,7 @@ namespace GwentNAi.GameSource.Player
             DefaultCard card = HandDeck.Cards[CardInHandIndex];
             Board[RowIndex].Insert(PosIndex, card);
             HandDeck.Cards.RemoveAt(CardInHandIndex);
+
             if (card is IDeploy DeployCard)
             {
                 DeployCard.Deploy(board);
@@ -86,11 +87,15 @@ namespace GwentNAi.GameSource.Player
 
         public void PlayCard(DefaultCard card, int RowIndex, int PosIndex, GameBoard board)
         {
+            HasPlayedCard = true;
             Board[RowIndex].Insert(PosIndex, card);
+
             if (card is IDeploy DeployCard)
             {
                 DeployCard.Deploy(board);
+                board.RemoveDestroyedCards();
             }
+
             RespondToDeployedCard(board, card);
         }
 
