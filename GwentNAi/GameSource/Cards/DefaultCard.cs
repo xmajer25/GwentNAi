@@ -47,8 +47,9 @@ namespace GwentNAi.GameSource.Cards
 
         public virtual void PlaySelfExpand(GameBoard board)
         {
-            List<List<DefaultCard>> CPboard = board.CurrentlyPlayingLeader.Board;
-            List<List<int>> possibleIndexes = new List<List<int>>(2) { new List<int>(10), new List<int>(10) };
+            List<List<DefaultCard>> CPboard = board.GetCurrentBoard();
+            board.CurrentPlayerActions.ClearImidiateActions();
+
             int currentRow = 0;
             int currentCulumn = 0;
 
@@ -56,16 +57,19 @@ namespace GwentNAi.GameSource.Cards
             {
                 foreach (var card in row)
                 {
-                    possibleIndexes[currentRow].Add(currentCulumn);
+                    board.CurrentPlayerActions.ImidiateActions[0][currentRow].Add(currentCulumn);
                     currentCulumn++;
                 }
-                possibleIndexes[currentRow].Add(currentCulumn);
-                if (possibleIndexes[currentRow].Count == 10) possibleIndexes[currentRow].Clear();
+                board.CurrentPlayerActions.ImidiateActions[0][currentRow].Add(currentCulumn);
+
+                //CLEAR IF ROW IS FULL
+                if (board.CurrentPlayerActions.ImidiateActions[0][currentRow].Count == 10) board.CurrentPlayerActions.ImidiateActions[0][currentRow].Clear();
+
+
                 currentRow++;
                 currentCulumn = 0;
             }
 
-            board.CurrentPlayerActions.ImidiateActions[0] = possibleIndexes;
         }
 
         public virtual void TakeDemage(int damage, bool lethal, GameBoard board)

@@ -11,8 +11,8 @@ namespace GwentNAi.GameSource.Decks.DeckSeeds
             Cards = new()
             {
                 new IceGiant(), new IceGiant(), new IceGiant(), new IceGiant(), new IceGiant(),
-                new IceGiant(), new IceGiant(), new IceGiant(), new Griffin(), new Griffin(),
-                new Griffin(), new Griffin(), new Griffin(), new Griffin(), new Griffin(),
+                new IceGiant(), new IceGiant(), new IceGiant(), new IceGiant(), new IceGiant(),
+                new IceGiant(), new IceGiant(), new IceGiant(), new IceGiant(), new IceGiant(),
                 new Griffin(), new Griffin(), new Griffin(), new Griffin(), new Griffin(),
                 new Griffin(), new Griffin(), new Griffin(), new Griffin(), new Griffin()
             };

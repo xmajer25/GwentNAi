@@ -29,20 +29,17 @@ namespace GwentNAi.GameSource.Cards.Monsters
         public void Deploy(GameBoard board)
         {
             List<List<DefaultCard>> AllyBoard = board.GetCurrentBoard();
-            int currentIndex = 0;
             bool isAllyPresent = false;
             int row = GetCurrentRow(AllyBoard);
-
-            foreach (var card in AllyBoard[row])
+            
+            for (int card = 0; card < AllyBoard[row].Count; card++)
             {
-                if (card == this)
+                if (AllyBoard[row][card] == this)
                 {
-                    currentIndex++;
                     continue;
                 }
                 isAllyPresent = true;
-                board.CurrentPlayerActions.ImidiateActions[0][row].Add(currentIndex);
-                currentIndex++;
+                board.CurrentPlayerActions.ImidiateActions[0][row].Add(card);
             }
             
             if (!isAllyPresent)

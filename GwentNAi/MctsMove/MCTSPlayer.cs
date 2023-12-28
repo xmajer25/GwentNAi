@@ -24,6 +24,7 @@ namespace GwentNAi.MctsMove
                 //Special case - need to swap cards
                 if (PlayersHavePassed(SelectedNode) || SelectedNode.Board.CurrentPlayerActions.SwapCards.SwapAvailable || PlayerHasSwapped3Cards(SelectedNode))
                 {
+                    //----------------NEEDS FIX--------------------
                     //--Draw both hands
                     /*if (SelectedNode.Board.Leader1.Victories != 0 && SelectedNode.Board.Leader2.Victories != 0)
                     {
