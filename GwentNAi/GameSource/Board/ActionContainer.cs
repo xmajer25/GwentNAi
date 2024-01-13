@@ -11,8 +11,11 @@ namespace GwentNAi.GameSource.Board
     {
         public List<PossibleAction> OrderActions = new();
         public List<PossibleAction> PlayCardActions = new();
-        public List<List<List<int>>> ImidiateActions { get; set; } = new List<List<List<int>>>(2) {new List<List<int>>(2) { new List<int>(10), new List<int>(10) },
-                                                                                     new List<List<int>>(2) { new List<int>(10), new List<int>(10) } };
+        public List<List<List<int>>> ImidiateActions { get; set; } = new List<List<List<int>>>(2) 
+        {
+            new List<List<int>>(2) { new List<int>(10), new List<int>(10) },
+            new List<List<int>>(2) { new List<int>(10), new List<int>(10) } 
+        };
         public Action<GameBoard>? LeaderActions = null;
         public Action? PassOrEndTurn { get; set; } = () => { };
         public SwapCards SwapCards = new();
@@ -26,11 +29,18 @@ namespace GwentNAi.GameSource.Board
             ActionContainer clonedActionContainer = new ActionContainer()
             {
                 PlayCardActions = PlayCardActions.Select(action => (PossibleAction)action.Clone()).ToList(),
+                OrderActions = OrderActions.Select(action => (PossibleAction)action.Clone()).ToList(),
                 SwapCards = (SwapCards)SwapCards.Clone(),
                 canPass = canPass,
                 canEnd = canEnd,
                 canLeaderAbility = canLeaderAbility
             };
+
+            clonedActionContainer.ImidiateActions = ImidiateActions
+            .Select(outerList => outerList
+            .Select(innerList => new List<int>(innerList))
+            .ToList())
+            .ToList();
 
             return clonedActionContainer;
         }

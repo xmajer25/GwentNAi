@@ -33,15 +33,14 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
             List<DefaultCard> graveYard = board.GetCurrentLeader().GraveyardDeck.Cards;
             List<int> graveYardIndexes = new List<int>();
-            int cardIndex = 0;
 
-            foreach (var card in graveYard)
+            for(int cardIndex = 0; cardIndex < graveYard.Count; cardIndex++)
             {
+                DefaultCard card = graveYard[cardIndex];
                 if (card.type == "unit" && card.border == 0)
                 {
                     graveYardIndexes.Add(cardIndex);
                 }
-                cardIndex++;
             }
 
             board.CurrentPlayerActions.ImidiateActions[0][0] = graveYardIndexes;

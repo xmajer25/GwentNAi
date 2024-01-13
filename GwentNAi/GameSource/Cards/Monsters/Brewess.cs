@@ -33,21 +33,18 @@ namespace GwentNAi.GameSource.Cards.Monsters
             if (charge <= 0) return;
             List<List<DefaultCard>> currentBoard = board.GetCurrentBoard();
             int currentRow = 0;
-            int currentIndex = 0;
 
             foreach (var row in currentBoard)
             {
-                foreach (var card in row)
+                for(int currentIndex = 0;  currentIndex < row.Count; currentIndex++) 
                 {
-                    if(card == this)
+                    DefaultCard card = row[currentIndex];
+                    if (card == this)
                     {
-                        currentIndex++;
                         continue;
                     }
                     board.CurrentPlayerActions.ImidiateActions[0][currentRow].Add(currentIndex);
-                    currentIndex++;
                 }
-                currentIndex = 0;
                 currentRow++;
             }
         }

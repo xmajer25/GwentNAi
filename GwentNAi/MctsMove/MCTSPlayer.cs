@@ -16,7 +16,7 @@ namespace GwentNAi.MctsMove
             Winner winner;
             double reward;
 
-            for (int i = 0; i < 3000; i++)
+            for (int i = 0; i < 3500; i++)
             {
                 //SELECTION
                 MCTSNode SelectedNode = Root.Selection(Root.NumberOfVisits);

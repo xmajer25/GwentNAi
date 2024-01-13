@@ -51,23 +51,20 @@ namespace GwentNAi.GameSource.Cards
             board.CurrentPlayerActions.ClearImidiateActions();
 
             int currentRow = 0;
-            int currentCulumn = 0;
 
             foreach (var row in CPboard)
             {
-                foreach (var card in row)
+                int i;
+                for(i = 0; i < row.Count; i++)
                 {
-                    board.CurrentPlayerActions.ImidiateActions[0][currentRow].Add(currentCulumn);
-                    currentCulumn++;
+                    board.CurrentPlayerActions.ImidiateActions[0][currentRow].Add(i);
                 }
-                board.CurrentPlayerActions.ImidiateActions[0][currentRow].Add(currentCulumn);
+                board.CurrentPlayerActions.ImidiateActions[0][currentRow].Add(i);
 
                 //CLEAR IF ROW IS FULL
                 if (board.CurrentPlayerActions.ImidiateActions[0][currentRow].Count == 10) board.CurrentPlayerActions.ImidiateActions[0][currentRow].Clear();
 
-
                 currentRow++;
-                currentCulumn = 0;
             }
 
         }

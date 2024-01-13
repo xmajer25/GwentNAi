@@ -36,37 +36,33 @@ namespace GwentNAi.GameSource.Cards.Monsters
         public void pickAll(GameBoard board)
         {
             int currentRow = 0;
-            int currentColumn = 0;
-
 
             foreach (var row in board.Leader1.Board)
             {
-                foreach (var card in row)
+                for(int currentIndex = 0; currentIndex < row.Count; currentIndex++)
                 {
+                    var card = row[currentIndex];
                     if (card.currentValue < this.currentValue && card.descriptors.Contains("Token"))
                     {
-                        board.CurrentPlayerActions.ImidiateActions[0][currentRow].Add(currentColumn);
+                        board.CurrentPlayerActions.ImidiateActions[0][currentRow].Add(currentIndex);
                     }
-                    currentColumn++;
                 }
                 currentRow++;
-                currentColumn = 0;
             }
 
-            currentRow = currentColumn = 0;
+            currentRow =  0;
 
             foreach (var row in board.Leader2.Board)
             {
-                foreach (var card in row)
+                for (int currentIndex = 0; currentIndex < row.Count; currentIndex++)
                 {
+                    var card = row[currentIndex];
                     if (card.currentValue < this.currentValue && card.descriptors.Contains("Token"))
                     {
-                        board.CurrentPlayerActions.ImidiateActions[1][currentRow].Add(currentColumn);
+                        board.CurrentPlayerActions.ImidiateActions[1][currentRow].Add(currentIndex);
                     }
-                    currentColumn++;
                 }
                 currentRow++;
-                currentColumn = 0;
             }
         }
 

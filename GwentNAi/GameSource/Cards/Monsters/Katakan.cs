@@ -58,22 +58,8 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
         private int GetCurrentRow(GameBoard board)
         {
-            int currentRow = 0;
-            bool found = false;
-            foreach(var row in board.GetCurrentBoard())
-            {
-                foreach(var card in row)
-                {
-                    if (card == this)
-                    {
-                        found = true;
-                        break;
-                    }
-                }
-                if (found) break;
-                currentRow++;
-            }
-            return currentRow;
+            int isInRow = board.GetCurrentBoard()[0].IndexOf(this);
+            return (isInRow == -1) ? 1 : 0;
         }
 
         public void PostPlayCardOrder(GameBoard board, int row, int column)

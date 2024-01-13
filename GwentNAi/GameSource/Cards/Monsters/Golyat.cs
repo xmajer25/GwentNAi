@@ -29,14 +29,15 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
         public void DeathwishAbility(GameBoard board)
         {
-            int player, row;
-            (player, row) = GetPlayerAndRow(board);
-            DefaultLeader enemieLeader = player == 0 ? board.Leader2 : board.Leader1;
+            int  row = GetRow(board);
+            DefaultLeader enemieLeader = board.GetEnemieLeader();
             int enemieRow = (row == 0 ? 1 : 0);
             DefaultCard highestPowerUnit = new();
-            foreach(var card in enemieLeader.StartingDeck.Cards)
+
+            for(int cardIndex = 0; cardIndex < enemieLeader.StartingDeck.Cards.Count; cardIndex++)
             {
-                if(highestPowerUnit.currentValue < card.currentValue)
+                DefaultCard card = enemieLeader.StartingDeck.Cards[cardIndex];
+                if (highestPowerUnit.currentValue < card.currentValue)
                 {
                     highestPowerUnit = card;
                 }
@@ -50,7 +51,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
             
         }
 
-        private (int, int) GetPlayerAndRow(GameBoard board)
+        private int GetRow(GameBoard board)
         {
             int foundRow = 0;
             foreach(var row in board.Leader1.Board)
@@ -59,7 +60,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
                 {
                     if(card == this)
                     {
-                        return (0, foundRow);
+                        return foundRow;
                     }
                 }
                 foundRow++;
@@ -72,12 +73,12 @@ namespace GwentNAi.GameSource.Cards.Monsters
                 {
                     if (card == this)
                     {
-                        return (1, foundRow);
+                        return foundRow;
                     }
                 }
                 foundRow++;
             }
-            return (-1, -1);
+            return -1;
         }
     }
 }
