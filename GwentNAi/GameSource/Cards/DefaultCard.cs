@@ -1,70 +1,51 @@
 ﻿
 using GwentNAi.GameSource.Board;
-using GwentNAi.GameSource.Cards.IDefault;
 using GwentNAi.GameSource.Cards.IExpand;
-using System.Reflection;
 
 namespace GwentNAi.GameSource.Cards
 {
     public class DefaultCard : IPlaySelfExpand, ICloneable
     {
-        public virtual int currentValue { get; set; }
-        public int maxValue { get; set; }
-        public int shield { get; set; }
-        public int provisionValue { get; set; }
-        public int border { get; set; }
-        public int bleeding { get; set; }
-        public string type { get; set; } = string.Empty;
-        public string faction { get; set; } = string.Empty;
-        public string name { get; set; } = string.Empty;
-        public string shortName { get; set; } = string.Empty;
-        public List<string> descriptors { get; set; } = new List<string>();
+        public virtual int CurrentValue { get; set; }
+        public int MaxValue { get; set; }
+        public int Shield { get; set; }
+        public int Border { get; set; }
+        public int Bleeding { get; set; }
+        public string Type { get; set; } = string.Empty;
+        public string Faction { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string ShortName { get; set; } = string.Empty;
+        public List<string> Descriptors { get; set; } = new List<string>();
 
-        public int timeToOrder { get; set; }
+        public int TimeToOrder { get; set; }
 
         public object Clone()
         {
-            DefaultCard clonedInstance = (DefaultCard)Activator.CreateInstance(this.GetType());
-            PropertyInfo[] properties = this.GetType().GetProperties();
-            foreach(PropertyInfo property in properties)
-            {
-                if (property.CanRead && property.CanWrite)
-                {
-                    if (property.PropertyType == typeof(List<string>))
-                    {
-                        List<string> originalList = (List<string>)property.GetValue(this);
-                        List<string> clonedList = originalList.Select(s => string.Copy(s)).ToList();
-                        property.SetValue(clonedInstance, clonedList);
-                    }
-                    else
-                    {
-                        property.SetValue(clonedInstance, property.GetValue(this));
-                    }
-                }
-            }
+            DefaultCard clonedInstance = (DefaultCard)base.MemberwiseClone();
+
+            // Deep clone for List<string> properties
+            clonedInstance.Descriptors = new List<string>(Descriptors);
+            if (clonedInstance.Name != this.Name) throw new Exception("Inner error: incorect name cloned");
             return clonedInstance;
         }
 
-        public virtual void PlaySelfExpand(GameBoard board)
+        public virtual void GetPlacementOptions(GameBoard board)
         {
             List<List<DefaultCard>> CPboard = board.GetCurrentBoard();
             board.CurrentPlayerActions.ClearImidiateActions();
 
-            int currentRow = 0;
 
-            foreach (var row in CPboard)
+            for (int row = 0; row < CPboard.Count; row++)
             {
-                int i;
-                for(i = 0; i < row.Count; i++)
+                for (int i = 0; i <= CPboard[row].Count; i++)
                 {
-                    board.CurrentPlayerActions.ImidiateActions[0][currentRow].Add(i);
+                    board.CurrentPlayerActions.ImidiateActions[0][row].Add(i);
                 }
-                board.CurrentPlayerActions.ImidiateActions[0][currentRow].Add(i);
-
                 //CLEAR IF ROW IS FULL
-                if (board.CurrentPlayerActions.ImidiateActions[0][currentRow].Count == 10) board.CurrentPlayerActions.ImidiateActions[0][currentRow].Clear();
+                if (board.CurrentPlayerActions.ImidiateActions[0][row].Count == 10) board.CurrentPlayerActions.ImidiateActions[0][row].Clear();
+                if (board.CurrentPlayerActions.ImidiateActions[0][row].Any(index => index > CPboard[row].Count)) throw new Exception();
+                if (board.CurrentPlayerActions.ImidiateActions[0][row].Count - 1 > CPboard[row].Count) throw new Exception("Inner Error: index out of range added");
 
-                currentRow++;
             }
 
         }
@@ -73,13 +54,13 @@ namespace GwentNAi.GameSource.Cards
         {
             if (lethal)
             {
-                currentValue = 0;
+                CurrentValue = 0;
                 return;
             }
-            int _excessDamage = damage - shield;
-            shield -= damage;
-            if(shield < 0) shield = 0;
-            if(_excessDamage > 0) currentValue -= _excessDamage;
+            int _excessDamage = damage - Shield;
+            Shield -= damage;
+            if (Shield < 0) Shield = 0;
+            if (_excessDamage > 0) CurrentValue -= _excessDamage;
         }
 
         public void PostPlayCardOrder(GameBoard board, int row, int column)

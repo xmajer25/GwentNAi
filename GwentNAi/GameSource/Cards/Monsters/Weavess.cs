@@ -1,13 +1,6 @@
 ﻿using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards.IDefault;
 using GwentNAi.GameSource.Cards.IExpand;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
@@ -16,45 +9,47 @@ namespace GwentNAi.GameSource.Cards.Monsters
         int boost = 2;
         public Weavess()
         {
-            currentValue = 6;
-            maxValue = 6;
-            shield = 0;
-            provisionValue = 7;
-            border = 1;
-            type = "unit";
-            faction = "monster";
-            name = "Weavess";
-            shortName = "Weavess";
-            descriptors = new List<string>() { "Relict", "Crone" };
-            timeToOrder = -1;
-            bleeding = 0;
+            CurrentValue = 6;
+            MaxValue = 6;
+            Shield = 0;
+            Border = 1;
+            Type = "unit";
+            Faction = "monster";
+            Name = "Weavess";
+            ShortName = "Weavess";
+            Descriptors = new List<string>() { "Relict", "Crone" };
+            TimeToOrder = -1;
+            Bleeding = 0;
         }
 
         public void Deploy(GameBoard board)
         {
             List<List<DefaultCard>> allyBoard = board.GetCurrentBoard();
-            int currentRow = 0;
 
-            foreach (var row in allyBoard)
+            for (int row = 0; row < allyBoard.Count; row++)
             {
-                for(int currentIndex = 0; currentIndex < row.Count; currentIndex++)
+                for (int currentIndex = 0; currentIndex < allyBoard[row].Count; currentIndex++)
                 {
-                    DefaultCard card = row[currentIndex];
-                    if(card == this)
-                    {
-                        continue;
-                    }
-                    board.CurrentPlayerActions.ImidiateActions[0][currentRow].Add(currentIndex);
+                    board.CurrentPlayerActions.ImidiateActions[0][row].Add(currentIndex);
                 }
-                currentRow++;
+
+                //Remove position of this card
+                int WeavessPosition = allyBoard[row].IndexOf(this);
+                if (WeavessPosition != -1) board.CurrentPlayerActions.ImidiateActions[0][row].RemoveAt(WeavessPosition);
+
+                //Check correctness
+                if (board.CurrentPlayerActions.ImidiateActions[0][row].Contains(allyBoard[row].Count))
+                {
+                    throw new Exception("Inner Error: Outside of range position added");
+                }
             }
         }
 
         public void PostPickAllyAbilitiy(GameBoard board, int row, int index)
         {
             DefaultCard boostedCard = board.GetCurrentBoard()[row][index];
-            boostedCard.currentValue += boost;
-            boostedCard.maxValue += boost;
+            boostedCard.CurrentValue += boost;
+            boostedCard.MaxValue += boost;
         }
 
         public void RespondToCrone()

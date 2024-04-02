@@ -1,13 +1,5 @@
 ﻿using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards.IDefault;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
@@ -16,26 +8,25 @@ namespace GwentNAi.GameSource.Cards.Monsters
         private int timer = 3;
         public OldSpeartipAsleep()
         {
-            currentValue = 6;
-            maxValue = 6;
-            shield = 2;
-            provisionValue = 6;
-            border = 1;
-            type = "unit";
-            faction = "monster";
-            name = "OdlSpeartip:Asleep";
-            shortName = "Speart:A";
-            descriptors = new List<string>() { "Ogroid" };
-            timeToOrder = 0;
-            bleeding = 0;
+            CurrentValue = 6;
+            MaxValue = 6;
+            Shield = 2;
+            Border = 1;
+            Type = "unit";
+            Faction = "monster";
+            Name = "OdlSpeartip:Asleep";
+            ShortName = "Speart:A";
+            Descriptors = new List<string>() { "Ogroid" };
+            TimeToOrder = 0;
+            Bleeding = 0;
         }
 
         public override void TakeDemage(int damage, bool lethal, GameBoard board)
         {
-            int _excessDamage = shield - damage;
-            shield -= damage;
-            if (shield < 0) shield = 0;
-            currentValue -= _excessDamage;
+            int _excessDamage = Shield - damage;
+            Shield -= damage;
+            if (Shield < 0) Shield = 0;
+            CurrentValue -= _excessDamage;
 
             Transform(board, false);
         }
@@ -60,8 +51,8 @@ namespace GwentNAi.GameSource.Cards.Monsters
                         board.Leader1.Board[i][j] = transformedCard;
                         if (byTimer)
                         {
-                            board.Leader1.Board[i][j].currentValue += 6;
-                            board.Leader1.Board[i][j].maxValue += 6;
+                            board.Leader1.Board[i][j].CurrentValue += 6;
+                            board.Leader1.Board[i][j].MaxValue += 6;
                         }
                         return;
                     }
@@ -74,13 +65,13 @@ namespace GwentNAi.GameSource.Cards.Monsters
                     if (board.Leader2.Board[i][j] == this)
                     {
                         OldSpeartip transformedCard = GetOldSpeartip(board.Leader2.StartingDeck.Cards);
-                        if (transformedCard == null) return; 
+                        if (transformedCard == null) return;
 
                         board.Leader2.Board[i][j] = transformedCard;
                         if (byTimer)
                         {
-                            board.Leader2.Board[i][j].currentValue += 6;
-                            board.Leader2.Board[i][j].maxValue += 6;
+                            board.Leader2.Board[i][j].CurrentValue += 6;
+                            board.Leader2.Board[i][j].MaxValue += 6;
                         }
                         return;
                     }
@@ -90,9 +81,9 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
         private OldSpeartip GetOldSpeartip(List<DefaultCard> Deck)
         {
-            foreach(var card in Deck)
+            foreach (var card in Deck)
             {
-                if(card.GetType() == typeof(OldSpeartip))
+                if (card.GetType() == typeof(OldSpeartip))
                 {
                     Deck.Remove(card);
                     return new OldSpeartip();

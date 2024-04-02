@@ -2,14 +2,14 @@
 
 namespace GwentNAi.GameSource.Decks
 {
-    public class Deck
+    public class DefaultDeck
     {
         public List<DefaultCard> Cards { get; set; } = new List<DefaultCard>();
         public string Name { get; set; } = string.Empty;
 
         public object Copy()
         {
-            Deck copyDeck = new Deck()
+            DefaultDeck copyDeck = new DefaultDeck()
             {
                 Cards = Cards.Select(card => (DefaultCard)card.Clone()).ToList(),
                 Name = Name

@@ -1,9 +1,9 @@
-﻿using GwentNAi.GameSource.Board;
-using GwentNAi.GameSource.Cards;
+﻿using GwentNAi.GameSource.AssistantClasses;
+using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.CustomExceptions;
 using GwentNAi.GameSource.Player;
 using GwentNAi.MctsMove.Enums;
-using System.Transactions;
+using System.Diagnostics;
 
 namespace GwentNAi.MctsMove
 {
@@ -11,65 +11,89 @@ namespace GwentNAi.MctsMove
     {
         public static int MCTSMove(GameBoard board)
         {
-            GameBoard clonedBoard = (GameBoard)board.Clone();   
+            int Iterations = board.GetCurrentLeader().Iterations;
+            int Simulations = board.GetCurrentLeader().Simulations;
+
+            GameBoard clonedBoard = (GameBoard)board.Clone();
             MCTSNode Root = new MCTSNode(null, clonedBoard);
             Winner winner;
             double reward;
 
-            for (int i = 0; i < 3500; i++)
+            for (int i = 0; i < Iterations; i++)
             {
                 //SELECTION
                 MCTSNode SelectedNode = Root.Selection(Root.NumberOfVisits);
 
-                //Special case - need to swap cards
-                if (PlayersHavePassed(SelectedNode) || SelectedNode.Board.CurrentPlayerActions.SwapCards.SwapAvailable || PlayerHasSwapped3Cards(SelectedNode))
+                if (PlayersHavePassed(SelectedNode))
                 {
-                    //----------------NEEDS FIX--------------------
-                    //--Draw both hands
-                    /*if (SelectedNode.Board.Leader1.Victories != 0 && SelectedNode.Board.Leader2.Victories != 0)
-                    {
-                        SelectedNode.Board.DrawBothHands(3);
-                        SelectedNode.Board.SwapCards();
-                    }*/
+                    MCTSNode newRoundBoard = (MCTSNode)SelectedNode.Clone();
+                    MCTSSimulation.DetermineRoundWinner(newRoundBoard.Board);
+                    newRoundBoard.Board.DrawBothHands(3);
+                    newRoundBoard.Board.ResetBoard();
+                    newRoundBoard.Board.GetSwapCards();
+
+                    SelectedNode.Children.Clear();
+                    SelectedNode.AppendChild(newRoundBoard.Board, false, "New round board");
+                    SelectedNode = SelectedNode.Children.First();
+                }
+
+                //Special case - need to swap cards
+                if (SelectedNode.Board.CurrentPlayerActions.CardSwaps.SwapAvailable || PlayerHasSwapped3Cards(SelectedNode))
+                {
                     //EXPANSION
-                    if((SelectedNode == Root || SelectedNode.Parent.AllChildrenExplored) && SelectedNode.IsLeaf)
+                    if (SelectedNode.IsLeaf)
                         MCTSExpandChildren.SwapCard(SelectedNode);
                     SelectedNode = SelectedNode.FirstUnexploredChild();
 
                     //SIMULATION
-                    if (SelectedNode.EndMove && SelectedNode.Board.CurrentPlayerActions.SwapCards.PlayersToSwap == 1)
-                        winner = MCTSSimulation.OurTurnSimulation(SelectedNode);
-                    else
-                        winner = MCTSSimulation.Simulation(SelectedNode);
+                    reward = 0;
+
+                    for(int sim = 0; sim < Simulations; sim++)
+                    {
+                        if (SelectedNode.EndMove && SelectedNode.Board.CurrentPlayerActions.CardSwaps.PlayersToSwap == 1)
+                            winner = MCTSSimulation.OurTurnSimulation(SelectedNode);
+                        else
+                            winner = MCTSSimulation.Simulation(SelectedNode);
+
+                        reward += DetermineReward(Root, winner);
+                    }
+                    
 
                     //BACK_PROPAGATION
-                    reward = DetermineReward(Root, winner);
                     SelectedNode.UpdateStats(reward);
 
                     continue;
                 }
 
                 //EXPANSION
-                if((SelectedNode == Root || SelectedNode.Parent.AllChildrenExplored) && SelectedNode.IsLeaf)
+                if (SelectedNode.IsLeaf && !SelectedNode.Board.GetCurrentLeader().HasPassed)
                 {
                     MCTSExpandChildren.PlayCard(SelectedNode);
                     MCTSExpandChildren.OrderCard(SelectedNode);
+                    MCTSExpandChildren.LeaderAbility(SelectedNode);
+                    MCTSExpandChildren.PassOrEndTurn(SelectedNode);
                 }
-                    
+
                 SelectedNode = SelectedNode.FirstUnexploredChild();
 
-                //SIMULATION
-                if (SelectedNode.EndMove)
+                //ENEMIE MOVE
+                if (SelectedNode.EndMove && !SelectedNode.Board.GetEnemieLeader().HasPassed)
                 {
                     MCTSExpandChildren.ExpandOneEnemie(SelectedNode);
-                    if(SelectedNode.Children.Count > 0)
+                    if (SelectedNode.Children.Count > 0)
                         SelectedNode = SelectedNode.Children.First();
                 }
-        
-                winner = MCTSSimulation.Simulation(SelectedNode);
+
+                //SIMULATION
+                reward = 0;
+                for(int sim = 0; sim < Simulations; sim++) 
+                {
+                    winner = MCTSSimulation.Simulation(SelectedNode);
+                    reward += DetermineReward(Root, winner);
+                }
+         
 
                 //BACK_PROPAGATION
-                reward = DetermineReward(Root, winner);
                 SelectedNode.UpdateStats(reward);
             }
 
@@ -79,32 +103,26 @@ namespace GwentNAi.MctsMove
         }
 
         private static bool PlayersHavePassed(MCTSNode node)
-        {
-            if(node.Board.Leader1.HasPassed && node.Board.Leader2.HasPassed)
-            {
-                node.Board.SwapCards();
-                return true;
-            }
-            return false;
-        }
+         => (node.Board.Leader1.HasPassed && node.Board.Leader2.HasPassed);
+
 
         private static bool PlayerHasSwapped3Cards(MCTSNode node)
         {
-            if (node.Board.CurrentPlayerActions.SwapCards.CardSwaps != 3) return false;
-            for(int i = 1; i <= 3; i++) 
+            if (node.Board.CurrentPlayerActions.CardSwaps.CardSwaps != 3) return false;
+            for (int i = 1; i <= 3; i++)
             {
                 node = node.Parent;
                 if (node == null) return false;
-                if (node.Board.CurrentPlayerActions.SwapCards.CardSwaps != i) return false;
+                if (node.Board.CurrentPlayerActions.CardSwaps.CardSwaps != i) return false;
             }
             return true;
         }
 
-        
+
 
         private static double DetermineReward(MCTSNode rootNode, Winner winner)
         {
-            if(winner == Winner.Tie)
+            if (winner == Winner.Tie)
                 return (-0.2);
 
             DefaultLeader victoriousLeader = GetWinner(winner, rootNode.Board);
@@ -112,18 +130,18 @@ namespace GwentNAi.MctsMove
         }
 
         private static DefaultLeader GetWinner(Winner winner, GameBoard board)
-        {
-            return (winner == Winner.Leader1 ? board.Leader1 : board.Leader2);
-        }
+            => winner == Winner.Leader1 ? board.Leader1 : board.Leader2;
+
 
         private static GameBoard Execute(MCTSNode node, GameBoard board)
         {
             int totalNumberOfVisits = node.NumberOfVisits;
             MCTSNode controlNode = node;
-            while(!node.EndMove)
+            while (!node.EndMove)
             {
                 node = node.BestChild(totalNumberOfVisits);
-                if (controlNode == node) throw new CustomException("Unfinished Move Inner Error");
+                Logging.LogMove(node.Board, node.Move);
+                if (controlNode == node) break;
                 controlNode = node;
             }
 
@@ -134,10 +152,10 @@ namespace GwentNAi.MctsMove
             board.CurrentlyPlayingLeader = node.Board.GetCurrentLeader() == node.Board.Leader1 ? board.Leader1 : board.Leader2;
             board.CurrentPlayerBoard = node.Board.GetCurrentBoard() == node.Board.Leader1.Board ? board.Leader1.Board : board.Leader2.Board;
             board.CurrentPlayerActions.ClearImidiateActions();
-            if (board.CurrentPlayerActions.SwapCards.PlayersToSwap > 0)
-                board.CurrentPlayerActions.SwapCards.StopSwapping = true;
+            if (board.CurrentPlayerActions.CardSwaps.PlayersToSwap > 0)
+                board.CurrentPlayerActions.CardSwaps.StopSwapping = true;
             else
-                board.CurrentPlayerActions.SwapCards.Indexes.Clear();
+                board.CurrentPlayerActions.CardSwaps.Indexes.Clear();
 
             return board;
         }

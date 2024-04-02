@@ -7,7 +7,7 @@ using GwentNAi.GameSource.Cards.Syndicate;
  */
 namespace GwentNAi.GameSource.Decks.DeckSeeds
 {
-    public class MonsterDeck1 : Deck
+    public class MonsterDeck1 : DefaultDeck
     {
         public MonsterDeck1()
         {

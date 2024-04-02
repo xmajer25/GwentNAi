@@ -1,6 +1,5 @@
 ﻿using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards.IDefault;
-using GwentNAi.GameSource.Decks;
 
 namespace GwentNAi.GameSource.Cards.Neutral
 {
@@ -8,37 +7,36 @@ namespace GwentNAi.GameSource.Cards.Neutral
     {
         public OlgierVonEverec()
         {
-            currentValue = 8;
-            maxValue = 8;
-            shield = 0;
-            provisionValue = 8;
-            border = 1;
-            type = "unit";
-            faction = "neutral";
-            name = "OlgrierdVonEverec";
-            shortName = "Olgrierd";
-            descriptors = new List<string>() { "Human", "Cursed", "Bandit" };
-            timeToOrder = 1;
-            bleeding = 0;
+            CurrentValue = 8;
+            MaxValue = 8;
+            Shield = 0;
+            Border = 1;
+            Type = "unit";
+            Faction = "neutral";
+            Name = "OlgrierdVonEverec";
+            ShortName = "Olgrierd";
+            Descriptors = new List<string>() { "Human", "Cursed", "Bandit" };
+            TimeToOrder = 1;
+            Bleeding = 0;
         }
 
         public void Order(GameBoard board)
         {
             Cooldown(1);
             board.CurrentlyPlayingLeader.UseAbility();
-            if (currentValue < maxValue) currentValue++;
+            if (CurrentValue < MaxValue) CurrentValue++;
         }
 
         public void Cooldown(int cooldown)
         {
-            timeToOrder += (cooldown + 1);
+            TimeToOrder += (cooldown + 1);
         }
 
         public void StartTurnUpdate()
         {
-            if(timeToOrder > 0)
+            if (TimeToOrder > 0)
             {
-                timeToOrder--;
+                TimeToOrder--;
             }
         }
     }

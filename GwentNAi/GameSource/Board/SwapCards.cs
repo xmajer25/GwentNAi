@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GwentNAi.GameSource.Board
+﻿namespace GwentNAi.GameSource.Board
 {
     public class SwapCards : ICloneable
     {
@@ -25,10 +18,10 @@ namespace GwentNAi.GameSource.Board
         public int CardSwaps
         {
             get { return _cardSwaps; }
-            set 
+            set
             {
                 _cardSwaps = value;
-                if(_cardSwaps == 0)
+                if (_cardSwaps == 0)
                 {
                     Indexes.Clear();
                     PlayersToSwap--;
@@ -37,12 +30,12 @@ namespace GwentNAi.GameSource.Board
             }
         }
         private bool _stopSwapping = false;
-        public bool StopSwapping 
+        public bool StopSwapping
         {
             get { return _stopSwapping; }
-            set 
-            { 
-                if(_stopSwapping != value)
+            set
+            {
+                if (_stopSwapping != value)
                 {
                     Indexes.Clear();
                     CardSwaps = 3;
@@ -57,7 +50,7 @@ namespace GwentNAi.GameSource.Board
             SwapCards clonedSwapCards = new SwapCards()
             {
                 Indexes = new List<int>(Indexes),
-                PlayersToSwap = PlayersToSwap, 
+                PlayersToSwap = PlayersToSwap,
                 CardSwaps = CardSwaps,
                 StopSwapping = StopSwapping,
             };

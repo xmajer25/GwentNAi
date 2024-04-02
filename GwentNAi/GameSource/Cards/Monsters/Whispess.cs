@@ -1,13 +1,6 @@
 ﻿using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards.IDefault;
 using GwentNAi.GameSource.Cards.IExpand;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
@@ -16,18 +9,17 @@ namespace GwentNAi.GameSource.Cards.Monsters
         private int abilityDemage { get; set; } = 2;
         public Whispess()
         {
-            currentValue = 6;
-            maxValue = 6;
-            shield = 0;
-            provisionValue = 7;
-            border = 1;
-            type = "unit";
-            faction = "monster";
-            name = "Whispess";
-            shortName = "Whispess";
-            descriptors = new List<string>() { "Relict", "Crone" };
-            timeToOrder = -1;
-            bleeding = 0;
+            CurrentValue = 6;
+            MaxValue = 6;
+            Shield = 0;
+            Border = 1;
+            Type = "unit";
+            Faction = "monster";
+            Name = "Whispess";
+            ShortName = "Whispess";
+            Descriptors = new List<string>() { "Relict", "Crone" };
+            TimeToOrder = -1;
+            Bleeding = 0;
         }
 
         public void Deploy(GameBoard board)

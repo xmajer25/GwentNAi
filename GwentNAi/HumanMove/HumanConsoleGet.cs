@@ -32,8 +32,8 @@ namespace GwentNAi.HumanMove
 
         private static bool IsActionValid(string action, int[] maxActionId, bool canPass, bool canEnd, bool hasLeaderAbility)
         {
-            if(action == null) return false;
-            if(action == string.Empty) return false;
+            if (action == null) return false;
+            if (action == string.Empty) return false;
 
             if (action == "pass" && canPass) return true;
             else if (action == "pass" && !canPass) return false;
@@ -47,9 +47,9 @@ namespace GwentNAi.HumanMove
                 case 'p':
                     match = Regex.Match(action, IntPattern);
                     cardIndex = int.Parse(match.Value);
-       
+
                     if (cardIndex > maxActionId[0]) return false;
-                    if (action.Length > 3) return false; 
+                    if (action.Length > 3) return false;
                     if (!Char.IsDigit(action[1])) return false;
                     break;
                 case 'o':
@@ -61,8 +61,8 @@ namespace GwentNAi.HumanMove
                     if (!Char.IsDigit(action[1])) return false;
                     break;
                 case 'l':
-                    if(!hasLeaderAbility) return false;
-                    if(action.Length != 1) return false;
+                    if (!hasLeaderAbility) return false;
+                    if (action.Length != 1) return false;
                     break;
                 default:
                     return false;
@@ -91,12 +91,12 @@ namespace GwentNAi.HumanMove
                 return GetPositionFromWholeBoard(board);
             }
 
-            if(player != 0 && player != 1) return GetPositionFromWholeBoard(board);
+            if (player != 0 && player != 1) return GetPositionFromWholeBoard(board);
             if (row != 0 && row != 1) return GetPositionFromWholeBoard(board);
             if (!board[player][row].Contains(pos)) return GetPositionFromWholeBoard(board);
             ConsolePrint.ClearBottom();
 
-            return new int[] {player, row, pos };
+            return new int[] { player, row, pos };
         }
 
         public static int[] GetPositionForCard(List<List<int>> playIndexes)
@@ -121,7 +121,7 @@ namespace GwentNAi.HumanMove
                 return GetPositionForCard(playIndexes);
             }
 
-            if(row != 0 && row != 1) return GetPositionForCard(playIndexes);
+            if (row != 0 && row != 1) return GetPositionForCard(playIndexes);
             if (playIndexes[row].Count == 0) return GetPositionForCard(playIndexes);
             if (playIndexes[row].Max() < pos) return GetPositionForCard(playIndexes);
             ConsolePrint.ClearBottom();
@@ -149,7 +149,7 @@ namespace GwentNAi.HumanMove
                 return GetIndex(indexes);
             }
 
-            if(!indexes.Contains(index)) return GetIndex(indexes);
+            if (!indexes.Contains(index)) return GetIndex(indexes);
             ConsolePrint.ClearBottom();
             return index;
         }

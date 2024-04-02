@@ -1,10 +1,4 @@
 ﻿using GwentNAi.GameSource.Board;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GwentNAi.GameSource.AssistantClasses
 {
@@ -69,7 +63,7 @@ namespace GwentNAi.GameSource.AssistantClasses
 
         public static void DrawTie()
         {
-            for(int i = 0; i < 2; i++)
+            for (int i = 0; i < 2; i++)
             {
                 Console.ForegroundColor = (i == 0 ? ConsoleColor.DarkMagenta : ConsoleColor.DarkCyan);
 

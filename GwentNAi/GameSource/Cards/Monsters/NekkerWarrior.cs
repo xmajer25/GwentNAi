@@ -1,10 +1,5 @@
 ﻿using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards.IDefault;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
@@ -13,26 +8,25 @@ namespace GwentNAi.GameSource.Cards.Monsters
         private bool hasTriggeredThrive;
         public NekkerWarrior()
         {
-            currentValue = 7;
-            maxValue = 7;
-            shield = 0;
-            provisionValue = 4;
-            border = 0;
-            type = "unit";
-            faction = "monster";
-            name = "NekkerWarrior";
-            shortName = "Nekker:W";
-            descriptors = new List<string>() { "Ogroid", "Warrior" };
-            timeToOrder = 0;
-            bleeding = 0;
+            CurrentValue = 7;
+            MaxValue = 7;
+            Shield = 0;
+            Border = 0;
+            Type = "unit";
+            Faction = "monster";
+            Name = "NekkerWarrior";
+            ShortName = "Nekker:W";
+            Descriptors = new List<string>() { "Ogroid", "Warrior" };
+            TimeToOrder = 0;
+            Bleeding = 0;
         }
 
         public void Deploy(GameBoard board)
         {
-            hasTriggeredThrive = board.GetCurrentBoard()[0].Any(obj => obj is IThrive && obj.currentValue < currentValue);
-            if(!hasTriggeredThrive)
+            hasTriggeredThrive = board.GetCurrentBoard()[0].Any(obj => obj is IThrive && obj.CurrentValue < CurrentValue);
+            if (!hasTriggeredThrive)
             {
-                hasTriggeredThrive = board.GetCurrentBoard()[1].Any(obj => obj is IThrive && obj.currentValue < currentValue);
+                hasTriggeredThrive = board.GetCurrentBoard()[1].Any(obj => obj is IThrive && obj.CurrentValue < CurrentValue);
             }
             if (!hasTriggeredThrive)
             {
@@ -42,12 +36,12 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
         public void Thrive(int playedUnitValue)
         {
-            if(!hasTriggeredThrive)
+            if (!hasTriggeredThrive)
             {
-                if (playedUnitValue > currentValue)
+                if (playedUnitValue > CurrentValue)
                 {
-                    currentValue++;
-                    if (currentValue > maxValue) maxValue++;
+                    CurrentValue++;
+                    if (CurrentValue > MaxValue) MaxValue++;
 
                 }
             }

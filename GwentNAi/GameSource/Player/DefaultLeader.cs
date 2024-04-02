@@ -2,7 +2,6 @@
 using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards;
 using GwentNAi.GameSource.Cards.IDefault;
-using GwentNAi.GameSource.Cards.IExpand;
 using GwentNAi.GameSource.Decks;
 
 namespace GwentNAi.GameSource.Player
@@ -19,18 +18,22 @@ namespace GwentNAi.GameSource.Player
         public bool HasPassed { get; set; }
         public bool HasPlayedCard { get; set; }
         public bool HasUsedAbility { get; set; }
-        public Deck StartingDeck { get; set; } = new Deck();
-        public Deck HandDeck { get; set; } = new Deck();
-        public Deck GraveyardDeck { get; set; } = new Deck();
+        public DefaultDeck StartingDeck { get; set; } = new DefaultDeck();
+        public DefaultDeck Hand { get; set; } = new DefaultDeck();
+        public DefaultDeck Graveyard { get; set; } = new DefaultDeck();
 
         public List<List<DefaultCard>> Board { get; set; } = new List<List<DefaultCard>>(2) { new List<DefaultCard>(10), new List<DefaultCard>(10) };
 
-        private static Random Shuffler = new();
+        private static readonly Random Shuffler = new();
 
         public abstract object Clone();
 
         public abstract void Order(GameBoard board);
-        public abstract void Update();
+
+        //settings for mcts
+        public int Simulations { get; set; }
+        public int Iterations { get; set; }
+
 
         public void ShuffleStartingDeck()
         {
@@ -48,40 +51,51 @@ namespace GwentNAi.GameSource.Player
 
         public void DrawCards(int numberOfCards)
         {
-            for(int i = 0;  i < numberOfCards; i++)
+            for (int i = 0; i < numberOfCards; i++)
             {
-                if (HandDeck.Cards.Count >= 10) break;
+                if (Hand.Cards.Count >= 10) break;
                 if (StartingDeck.Cards.Count <= 0) break;
 
                 DefaultCard drawnCard = StartingDeck.Cards.First();
                 StartingDeck.Cards.RemoveAt(0);
-                HandDeck.Cards.Add(drawnCard);
+                Hand.Cards.Add(drawnCard);
             }
         }
 
         public void SwapCards(int index)
         {
-            DefaultCard handCard = HandDeck.Cards[index];
+            if (StartingDeck.Cards.Count == 0) return;
+            DefaultCard handCard = Hand.Cards[index];
             int swappedCardIndex = Shuffler.Next(0, StartingDeck.Cards.Count);
             DefaultCard deckCard = StartingDeck.Cards[swappedCardIndex];
 
-            HandDeck.Cards[index] = deckCard;
+            Hand.Cards[index] = deckCard;
             StartingDeck.Cards[swappedCardIndex] = handCard;
         }
 
         public void PlayCard(int CardInHandIndex, int RowIndex, int PosIndex, GameBoard board)
         {
+            //Check if PosIndex is correct
+            if (PosIndex > Board[RowIndex].Count) throw new Exception("Inner Error: index out of range");
+            if (PosIndex != 0 && Board[RowIndex][PosIndex - 1] == null) throw new Exception("Inner Error: insert out of order");
+
+            //Play card
             HasPlayedCard = true;
-            DefaultCard card = HandDeck.Cards[CardInHandIndex];
+            DefaultCard card = Hand.Cards[CardInHandIndex];
             Board[RowIndex].Insert(PosIndex, card);
-            HandDeck.Cards.RemoveAt(CardInHandIndex);
+
+            //Check if card was placed correctly
+            if (PosIndex != Board[RowIndex].IndexOf(card)) throw new Exception("Inner Error: Card placed in wrong position (PosIndex was too high)");
+
+            //Remove from hand
+            Hand.Cards.RemoveAt(CardInHandIndex);
 
             if (card is IDeploy DeployCard)
             {
                 DeployCard.Deploy(board);
                 board.RemoveDestroyedCards();
             }
-                
+
             RespondToDeployedCard(board, card);
         }
 
@@ -99,31 +113,44 @@ namespace GwentNAi.GameSource.Player
             RespondToDeployedCard(board, card);
         }
 
-        private void RespondToDeployedCard(GameBoard board, DefaultCard currentlyPlayedCard)
+        public void PlayCardByAbility(DefaultCard card, int RowIndex, int PosIndex, GameBoard board)
         {
-            foreach(var row in board.GetCurrentBoard())
+            Board[RowIndex].Insert(PosIndex, card);
+
+            if (card is IDeploy DeployCard)
             {
-                foreach(var card in row)
+                DeployCard.Deploy(board);
+                board.RemoveDestroyedCards();
+            }
+
+            RespondToDeployedCard(board, card);
+        }
+
+        private static void RespondToDeployedCard(GameBoard board, DefaultCard currentlyPlayedCard)
+        {
+            foreach (var row in board.GetCurrentBoard())
+            {
+                foreach (var card in row)
                 {
                     if (card == currentlyPlayedCard) continue;
-                    if (card is ICroneInteraction CroneInteractionCard && currentlyPlayedCard.descriptors.Contains("Crone")) CroneInteractionCard.RespondToCrone();
-                    if (card is IThrive ThriveCard) ThriveCard.Thrive(currentlyPlayedCard.currentValue);
+                    if (card is ICroneInteraction CroneInteractionCard && currentlyPlayedCard.Descriptors.Contains("Crone")) CroneInteractionCard.RespondToCrone();
+                    if (card is IThrive ThriveCard) ThriveCard.Thrive(currentlyPlayedCard.CurrentValue);
                 }
             }
-            foreach (var card in board.GetCurrentLeader().GraveyardDeck.Cards)
+            foreach (var card in board.GetCurrentLeader().Graveyard.Cards)
             {
                 if (card == currentlyPlayedCard) continue;
-                if (card is ICroneInteraction CroneInteractionCard && currentlyPlayedCard.descriptors.Contains("Crone")) CroneInteractionCard.RespondToCrone();
+                if (card is ICroneInteraction CroneInteractionCard && currentlyPlayedCard.Descriptors.Contains("Crone")) CroneInteractionCard.RespondToCrone();
             }
-            foreach (var card in board.GetCurrentLeader().HandDeck.Cards)
+            foreach (var card in board.GetCurrentLeader().Hand.Cards)
             {
                 if (card == currentlyPlayedCard) continue;
-                if (card is ICroneInteraction CroneInteractionCard && currentlyPlayedCard.descriptors.Contains("Crone")) CroneInteractionCard.RespondToCrone();
+                if (card is ICroneInteraction CroneInteractionCard && currentlyPlayedCard.Descriptors.Contains("Crone")) CroneInteractionCard.RespondToCrone();
             }
             foreach (var card in board.GetCurrentLeader().StartingDeck.Cards)
             {
                 if (card == currentlyPlayedCard) continue;
-                if (card is ICroneInteraction CroneInteractionCard && currentlyPlayedCard.descriptors.Contains("Crone")) CroneInteractionCard.RespondToCrone();
+                if (card is ICroneInteraction CroneInteractionCard && currentlyPlayedCard.Descriptors.Contains("Crone")) CroneInteractionCard.RespondToCrone();
             }
         }
 
@@ -132,7 +159,7 @@ namespace GwentNAi.GameSource.Player
             HasPassed = true;
         }
 
-        public void EndTurn()
+        public static void EndTurn()
         {
 
         }
@@ -142,9 +169,10 @@ namespace GwentNAi.GameSource.Player
             HasUsedAbility = true;
         }
 
-        public void PostPlayCardOrder(IPlayCardExpand obj , GameBoard board, int row, int column)
+        public void PostAbilitySettings()
         {
-            obj.PostPlayCardOrder(board, row, column);
+            AbilityCharges--;
+            UseAbility();
         }
     }
 }

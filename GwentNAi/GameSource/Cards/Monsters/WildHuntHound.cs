@@ -1,10 +1,5 @@
 ﻿using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards.IDefault;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
@@ -12,26 +7,25 @@ namespace GwentNAi.GameSource.Cards.Monsters
     {
         public WildHuntHound()
         {
-            currentValue = 3;
-            maxValue = 3;
-            shield = 0;
-            provisionValue = 4;
-            border = 0;
-            type = "unit";
-            faction = "monster";
-            name = "WildHuntHound";
-            shortName = "WH.Hound";
-            descriptors = new List<string>() { "Beast", "Wild Hunt"};
-            timeToOrder = -1;
-            bleeding = 0;
+            CurrentValue = 3;
+            MaxValue = 3;
+            Shield = 0;
+            Border = 0;
+            Type = "unit";
+            Faction = "monster";
+            Name = "WildHuntHound";
+            ShortName = "WH.Hound";
+            Descriptors = new List<string>() { "Beast", "Wild Hunt" };
+            TimeToOrder = -1;
+            Bleeding = 0;
         }
 
         public void EndTurnUpdate(GameBoard board)
         {
-            if(!IsDominant(board)) return;
+            if (!IsDominant(board)) return;
 
-            currentValue++;
-            if (currentValue >= maxValue) maxValue++;
+            CurrentValue++;
+            if (CurrentValue >= MaxValue) MaxValue++;
         }
 
         private bool IsDominant(GameBoard board)
@@ -40,18 +34,18 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
             DefaultCard currentMax = board.GetCurrentBoard()
                 .SelectMany(list => list)
-                .OrderByDescending(obj => obj.currentValue)
+                .OrderByDescending(obj => obj.CurrentValue)
                 .FirstOrDefault();
 
             DefaultCard enemieMax = enemiePlayerBoard
                 .SelectMany(list => list)
-                .OrderByDescending(obj => obj.currentValue)
+                .OrderByDescending(obj => obj.CurrentValue)
                 .FirstOrDefault();
 
             if (enemieMax == null) return true;
             if (currentMax != null)
             {
-                return currentMax.currentValue >= enemieMax.currentValue;
+                return currentMax.CurrentValue >= enemieMax.CurrentValue;
             }
             return true;
         }

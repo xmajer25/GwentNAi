@@ -2,10 +2,6 @@
 using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards;
 using GwentNAi.GameSource.Decks;
-using System;
-using System.Data;
-using System.Diagnostics;
-using System.Reflection;
 
 namespace GwentNAi.HumanMove
 {
@@ -55,18 +51,18 @@ namespace GwentNAi.HumanMove
 
             Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
             Console.Write("Possible leader ability actions (l):");
-            if(currentPlayerActions.LeaderActions != null)
+            if (currentPlayerActions.LeaderActions != null)
             {
                 Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
                 Console.Write("\t1.) Leader ability");
             }
 
-            if (currentPlayerActions.canPass)
+            if (currentPlayerActions.CanPass)
             {
                 Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
                 Console.Write("\tx.)pass");
             }
-            else if (currentPlayerActions.canEnd)
+            else if (currentPlayerActions.CanEnd)
             {
                 Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
                 Console.Write("\tx.)end");
@@ -80,11 +76,11 @@ namespace GwentNAi.HumanMove
         {
             Console.ForegroundColor = currentColor;
             int currentRow = 0;
-            Console.SetCursorPosition(0, windowSeparator +  1);
+            Console.SetCursorPosition(0, windowSeparator + 1);
             Console.Write("Enter position (row-pos):");
             foreach (var row in playIndexes)
             {
-                if(row.Count == 1)
+                if (row.Count == 1)
                 {
                     Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
                     Console.Write("Row " + currentRow + ":\n\t0\n");
@@ -96,7 +92,7 @@ namespace GwentNAi.HumanMove
                 foreach (var playIndex in row)
                 {
                     if (playIndex == row.Last()) break;
-                    Console.Write(playIndex + " - " + board[currentRow][playIndex].name + " - ");
+                    Console.Write(playIndex + " - " + board[currentRow][playIndex].Name + " - ");
                 }
                 if (row.Count != 0)
                 {
@@ -124,14 +120,14 @@ namespace GwentNAi.HumanMove
                 Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
                 if (enemieIndexes[i].Count == 0) continue;
 
-                for(int j = 0; j < enemieIndexes[i].Count; j++)
+                for (int j = 0; j < enemieIndexes[i].Count; j++)
                 {
                     Console.Write("\t" + enemieIndexes[i][j]);
                 }
 
             }
             Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
-            Console.ForegroundColor= ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         public static void ListAllExpand(List<List<List<int>>> cardIndexes)
@@ -164,7 +160,7 @@ namespace GwentNAi.HumanMove
             Console.ForegroundColor = ConsoleColor.White;
         }
 
-        public static void ListCards(List<int> cardIndexes, Deck hand, string msg)
+        public static void ListCards(List<int> cardIndexes, DefaultDeck hand, string msg)
         {
             Console.ForegroundColor = currentColor;
             Console.SetCursorPosition(0, windowSeparator + 1);
@@ -173,8 +169,8 @@ namespace GwentNAi.HumanMove
 
             foreach (int index in cardIndexes)
             {
-                Console.Write("\t" + index + ".)" + hand.Cards[index].name);
-                if(index == 5) Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
+                Console.Write("\t" + index + ".)" + hand.Cards[index].Name);
+                if (index == 5) Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);
             }
             Console.Write("\tx.) end");
             Console.SetCursorPosition(0, ConsolePrint.GetCursorY() + 1);

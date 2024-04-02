@@ -1,11 +1,6 @@
 ﻿using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards.IDefault;
 using GwentNAi.GameSource.Cards.IExpand;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
@@ -13,41 +8,46 @@ namespace GwentNAi.GameSource.Cards.Monsters
     {
         public Griffin()
         {
-            currentValue = 9;
-            maxValue = 9;
-            shield = 0;
-            provisionValue = 5;
-            border = 0;
-            type = "unit";
-            faction = "monster";
-            name = "Griffin";
-            shortName = "Griffin";
-            descriptors = new List<string>() { "Beast" };
-            timeToOrder = 0;
-            bleeding = 0;
+            CurrentValue = 9;
+            MaxValue = 9;
+            Shield = 0;
+            Border = 0;
+            Type = "unit";
+            Faction = "monster";
+            Name = "Griffin";
+            ShortName = "Griffin";
+            Descriptors = new List<string>() { "Beast" };
+            TimeToOrder = 0;
+            Bleeding = 0;
         }
         public void Deploy(GameBoard board)
         {
+            board.CurrentPlayerActions.ClearImidiateActions();
             List<List<DefaultCard>> AllyBoard = board.GetCurrentBoard();
-            bool isAllyPresent = false;
             int row = GetCurrentRow(AllyBoard);
-            
-            for (int card = 0; card < AllyBoard[row].Count; card++)
-            {
-                if (AllyBoard[row][card] == this)
-                {
-                    continue;
-                }
-                isAllyPresent = true;
-                board.CurrentPlayerActions.ImidiateActions[0][row].Add(card);
-            }
-            
-            if (!isAllyPresent)
+
+            //Destroy card if only griffin is in row
+            if (AllyBoard[row].Count == 1)
             {
                 board.CurrentPlayerActions.ClearImidiateActions();
-                this.TakeDemage(currentValue, true, board);
+                this.TakeDemage(CurrentValue, true, board);
                 return;
             }
+
+            //Fill possible card target options
+            for (int card = 0; card < AllyBoard[row].Count; card++)
+            {
+                if (!IsIndexCorrect(card, AllyBoard[row].Count)) throw new Exception("Inner Error: index out of range");
+                board.CurrentPlayerActions.ImidiateActions[0][row].Add(card);
+            }
+
+            //Remove this griffin from possible targets
+            board.CurrentPlayerActions.ImidiateActions[0][row].Remove(AllyBoard[row].IndexOf(this));
+        }
+
+        private bool IsIndexCorrect(int index, int maxIndex)
+        {
+            return index < maxIndex;
         }
 
         public int GetCurrentRow(List<List<DefaultCard>> AllyBoard)
@@ -59,7 +59,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
         public void PostPickAllyAbilitiy(GameBoard board, int row, int index)
         {
             DefaultCard DestroyedAlly = board.GetCurrentBoard()[row][index];
-            DestroyedAlly.TakeDemage(DestroyedAlly.currentValue, true, board);
+            DestroyedAlly.TakeDemage(DestroyedAlly.CurrentValue, true, board);
         }
     }
 }

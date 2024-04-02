@@ -1,10 +1,5 @@
 ﻿using GwentNAi.GameSource.Cards;
 using GwentNAi.GameSource.Cards.Monsters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GwentNAi.GameSource.CardRepository
 {
@@ -13,7 +8,7 @@ namespace GwentNAi.GameSource.CardRepository
         private readonly List<DefaultCard> Cards = new()
         {
             new AddaStriga(), new Brewess(), new Ghoul(), new Golyat(), new Griffin(), new IceGiant(),
-            new Katakan(), new Nekker(), new NekkerWarrior(), new OldSpeartip(), new OldSpeartipAsleep(), new Ozzrel(), 
+            new Katakan(), new Nekker(), new NekkerWarrior(), new OldSpeartip(), new OldSpeartipAsleep(), new Ozzrel(),
             new Protofleder(), new Weavess(), new Whispess(), new WildHuntHound(), new WildHuntRider(), new Wyvern()
         };
 
@@ -50,14 +45,14 @@ namespace GwentNAi.GameSource.CardRepository
         private bool IsCardAllowed(DefaultCard card)
         {
             int count;
-            CardCount.TryGetValue(card.name, out count);
+            CardCount.TryGetValue(card.Name, out count);
 
-            if (card.border == 1 && count >= 1)
+            if (card.Border == 1 && count >= 1)
             {
                 return false;
             }
 
-            if (card.border == 0 && count >= 2)
+            if (card.Border == 0 && count >= 2)
             {
                 return false;
             }
@@ -67,13 +62,13 @@ namespace GwentNAi.GameSource.CardRepository
 
         private void UpdateCardCount(DefaultCard card)
         {
-            if (CardCount.ContainsKey(card.name))
+            if (CardCount.ContainsKey(card.Name))
             {
-                CardCount[card.name]++;
+                CardCount[card.Name]++;
             }
             else
             {
-                CardCount.Add(card.name, 1);
+                CardCount.Add(card.Name, 1);
             }
         }
     }

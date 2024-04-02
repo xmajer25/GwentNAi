@@ -1,17 +1,12 @@
 ﻿using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards;
 using GwentNAi.GameSource.Decks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GwentNAi.GameSource.Player.Monsters
 {
     public class BloodScent : DefaultLeader
     {
-        public BloodScent() 
+        public BloodScent()
         {
             ProvisionValue = 15;
             LeaderName = "BloodScent";
@@ -24,6 +19,8 @@ namespace GwentNAi.GameSource.Player.Monsters
         {
             DefaultLeader clonedLeader = new BloodScent()
             {
+                Iterations = Iterations,
+                Simulations = Simulations,
                 ProvisionValue = ProvisionValue,
                 LeaderName = LeaderName,
                 LeaderFaction = LeaderFaction,
@@ -34,10 +31,14 @@ namespace GwentNAi.GameSource.Player.Monsters
                 HasPassed = HasPassed,
                 HasPlayedCard = HasPlayedCard,
                 HasUsedAbility = HasUsedAbility,
-                StartingDeck = (Deck)StartingDeck.Copy(),
-                HandDeck = (Deck)HandDeck.Copy(),
-                GraveyardDeck = (Deck)GraveyardDeck.Copy(),
-                Board = Board.Select(innerList => innerList.Select(card => (DefaultCard)card.Clone()).ToList()).ToList(),
+                StartingDeck = (DefaultDeck)StartingDeck.Copy(),
+                Hand = (DefaultDeck)Hand.Copy(),
+                Graveyard = (DefaultDeck)Graveyard.Copy(),
+                Board = Board
+                .Select(innerList => innerList
+                    .Select(card => (DefaultCard)card.Clone())  // Deep clone of each DefaultCard
+                    .ToList())
+                .ToList()
             };
 
             return clonedLeader;
@@ -45,13 +46,7 @@ namespace GwentNAi.GameSource.Player.Monsters
         public override void Order(GameBoard board)
         {
             if (AbilityCharges == 0) return;
-            AbilityCharges--;
-            Console.WriteLine("Current charges: " + AbilityCharges);
-        }
-
-        public override void Update()
-        {
-            throw new NotImplementedException();
+            PostAbilitySettings();
         }
     }
 }

@@ -1,28 +1,22 @@
 ﻿using GwentNAi.GameSource.Cards.IDefault;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
-    public class Drone :DefaultCard, IDoomed
+    public class Drone : DefaultCard, IDoomed
     {
-        public Drone() 
+        public Drone()
         {
-            currentValue = 1;
-            maxValue = 1;
-            shield = 0;
-            provisionValue = 0;
-            border = 0;
-            type = "unit";
-            faction = "monster";
-            name = "Drone";
-            shortName = "Drone";
-            descriptors = new List<string>() { "Insectoid", "Token" };
-            timeToOrder = -1;
-            bleeding = 0;
+            CurrentValue = 1;
+            MaxValue = 1;
+            Shield = 0;
+            Border = 0;
+            Type = "unit";
+            Faction = "monster";
+            Name = "Drone";
+            ShortName = "Drone";
+            Descriptors = new List<string>() { "Insectoid", "Token" };
+            TimeToOrder = -1;
+            Bleeding = 0;
         }
     }
 }

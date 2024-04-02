@@ -1,13 +1,6 @@
 ﻿using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards.IDefault;
 using GwentNAi.GameSource.Cards.IExpand;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
@@ -17,18 +10,17 @@ namespace GwentNAi.GameSource.Cards.Monsters
         private List<DefaultCard> graveYard = new List<DefaultCard>(25);
         public Ozzrel()
         {
-            currentValue = 1;
-            maxValue = 1;
-            shield = 0;
-            provisionValue = 8;
-            border = 1;
-            type = "unit";
-            faction = "monster";
-            name = "Ozzrel";
-            shortName = "Ozzrel";
-            descriptors = new List<string>() { "Necrophage" };
-            timeToOrder = 0;
-            bleeding = 0;
+            CurrentValue = 1;
+            MaxValue = 1;
+            Shield = 0;
+            Border = 1;
+            Type = "unit";
+            Faction = "monster";
+            Name = "Ozzrel";
+            ShortName = "Ozzrel";
+            Descriptors = new List<string>() { "Necrophage" };
+            TimeToOrder = 0;
+            Bleeding = 0;
         }
 
         public void Deploy(GameBoard board)
@@ -41,18 +33,18 @@ namespace GwentNAi.GameSource.Cards.Monsters
             if (isMelee)
             {
                 graveYard = (board.GetCurrentLeader() == board.Leader1
-                    ? board.Leader2.GraveyardDeck.Cards
-                    : board.Leader1.GraveyardDeck.Cards);
+                    ? board.Leader2.Graveyard.Cards
+                    : board.Leader1.Graveyard.Cards);
             }
             else
             {
-                graveYard = board.GetCurrentLeader().GraveyardDeck.Cards;
+                graveYard = board.GetCurrentLeader().Graveyard.Cards;
             }
 
-            for(int cardIndex = 0; cardIndex < graveYard.Count; cardIndex++)
+            for (int cardIndex = 0; cardIndex < graveYard.Count; cardIndex++)
             {
                 DefaultCard card = graveYard[cardIndex];
-                if (card.type == "unit")
+                if (card.Type == "unit")
                 {
                     graveYardIndexes.Add(cardIndex);
                 }
@@ -60,7 +52,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
 
 
-            if(graveYardIndexes.Count > 0)
+            if (graveYardIndexes.Count > 0)
             {
                 board.CurrentPlayerActions.ImidiateActions[0][0] = graveYardIndexes;
             }
@@ -75,11 +67,12 @@ namespace GwentNAi.GameSource.Cards.Monsters
             try
             {
                 DefaultCard consumedCard = graveYard[cardIndex];
-                currentValue += consumedCard.maxValue;
-                maxValue = maxValue - currentValue + consumedCard.maxValue;
+                CurrentValue += consumedCard.MaxValue;
+                MaxValue = MaxValue - CurrentValue + consumedCard.MaxValue;
                 graveYard.RemoveAt(cardIndex);
-            }catch(Exception ex) { }
-            
+            }
+            catch (Exception ex) { }
+
         }
 
         private int GetCurrentRow(GameBoard board)

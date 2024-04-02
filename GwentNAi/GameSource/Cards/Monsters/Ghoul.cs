@@ -1,11 +1,6 @@
 ﻿using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards.IDefault;
 using GwentNAi.GameSource.Cards.IExpand;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
@@ -13,31 +8,30 @@ namespace GwentNAi.GameSource.Cards.Monsters
     {
         public Ghoul()
         {
-            currentValue = 1;
-            maxValue = 1;
-            shield = 0;
-            provisionValue = 5;
-            border = 0;
-            type = "unit";
-            faction = "monster";
-            name = "Ghoul";
-            shortName = "Ghoul";
-            descriptors = new List<string>() { "Necrophage" };
-            timeToOrder = 0;
-            bleeding = 0;
+            CurrentValue = 1;
+            MaxValue = 1;
+            Shield = 0;
+            Border = 0;
+            Type = "unit";
+            Faction = "monster";
+            Name = "Ghoul";
+            ShortName = "Ghoul";
+            Descriptors = new List<string>() { "Necrophage" };
+            TimeToOrder = 0;
+            Bleeding = 0;
         }
 
         public void Deploy(GameBoard board)
         {
             if (!isMelee(board)) return;
 
-            List<DefaultCard> graveYard = board.GetCurrentLeader().GraveyardDeck.Cards;
+            List<DefaultCard> graveYard = board.GetCurrentLeader().Graveyard.Cards;
             List<int> graveYardIndexes = new List<int>();
 
-            for(int cardIndex = 0; cardIndex < graveYard.Count; cardIndex++)
+            for (int cardIndex = 0; cardIndex < graveYard.Count; cardIndex++)
             {
                 DefaultCard card = graveYard[cardIndex];
-                if (card.type == "unit" && card.border == 0)
+                if (card.Type == "unit" && card.Border == 0)
                 {
                     graveYardIndexes.Add(cardIndex);
                 }
@@ -48,10 +42,10 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
         public void postPickCardAbility(GameBoard board, int cardIndex)
         {
-            DefaultCard consumedCard = board.GetCurrentLeader().GraveyardDeck.Cards[cardIndex];
-            currentValue += consumedCard.maxValue;
-            maxValue = maxValue - currentValue + consumedCard.maxValue;
-            board.GetCurrentLeader().GraveyardDeck.Cards.RemoveAt(cardIndex);
+            DefaultCard consumedCard = board.GetCurrentLeader().Graveyard.Cards[cardIndex];
+            CurrentValue += consumedCard.MaxValue;
+            MaxValue = MaxValue - CurrentValue + consumedCard.MaxValue;
+            board.GetCurrentLeader().Graveyard.Cards.RemoveAt(cardIndex);
         }
 
         private bool isMelee(GameBoard board)

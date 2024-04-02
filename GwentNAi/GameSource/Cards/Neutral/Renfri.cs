@@ -1,9 +1,4 @@
 ﻿using GwentNAi.GameSource.Decks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GwentNAi.GameSource.Cards.Neutral
 {
@@ -11,21 +6,20 @@ namespace GwentNAi.GameSource.Cards.Neutral
     {
         public Renfri()
         {
-            currentValue = 5;
-            maxValue = 5;
-            shield = 0;
-            provisionValue = 14;
-            border = 1;
-            type = "unit";
-            faction = "neutral";
-            name = "Renfri";
-            shortName = "Renfri";
-            descriptors = new List<string>(){ "Human", "Cursed", "Bandit" };
-            timeToOrder = 0;
-            bleeding = 0;
+            CurrentValue = 5;
+            MaxValue = 5;
+            Shield = 0;
+            Border = 1;
+            Type = "unit";
+            Faction = "neutral";
+            Name = "Renfri";
+            ShortName = "Renfri";
+            Descriptors = new List<string>() { "Human", "Cursed", "Bandit" };
+            TimeToOrder = 0;
+            Bleeding = 0;
         }
 
-        public static void Deploy(Deck deck)
+        public static void Deploy(DefaultDeck deck)
         {
             throw new NotImplementedException();
         }

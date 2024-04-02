@@ -1,13 +1,6 @@
 ﻿using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards.IDefault;
 using GwentNAi.GameSource.Cards.IExpand;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
@@ -15,48 +8,40 @@ namespace GwentNAi.GameSource.Cards.Monsters
     {
         public Protofleder()
         {
-            currentValue = 4;
-            maxValue = 4;
-            shield = 0;
-            provisionValue = 9;
-            border = 1;
-            type = "unit";
-            faction = "monster";
-            name = "Protofleder";
-            shortName = "Protofl.";
-            descriptors = new List<string>() { "Vampire"};
-            timeToOrder = 0;
-            bleeding = 0;
+            CurrentValue = 4;
+            MaxValue = 4;
+            Shield = 0;
+            Border = 1;
+            Type = "unit";
+            Faction = "monster";
+            Name = "Protofleder";
+            ShortName = "Protofl.";
+            Descriptors = new List<string>() { "Vampire" };
+            TimeToOrder = 0;
+            Bleeding = 0;
         }
 
         public void Deploy(GameBoard board)
         {
             List<List<int>> enemieIndexes = new List<List<int>>(2) { new List<int>(10), new List<int>(10) };
             List<List<DefaultCard>> enemieBoard = board.GetEnemieBoard();
-            int currentRow = 0;
-            int currentIndex = 0;
 
-            foreach (var row in enemieBoard)
+            for (int i = 0; i < enemieBoard.Count; i++)
             {
-                foreach (var card in row)
+                for (int cardIndex = 0; cardIndex < enemieBoard[i].Count; cardIndex++)
                 {
-                    enemieIndexes[currentRow].Add(currentIndex);
-                    currentIndex++;
+                    board.CurrentPlayerActions.ImidiateActions[0][i].Add(cardIndex);
                 }
-                currentIndex = 0;
-                currentRow++;
             }
-
-            board.CurrentPlayerActions.ImidiateActions[0] = enemieIndexes;
         }
 
         public void postPickEnemieAbilitiy(GameBoard board, int row, int index)
         {
             List<List<DefaultCard>> enemieBoard = board.GetEnemieBoard();
-            enemieBoard[row][index].bleeding += 3;
-            
-            currentValue += enemieBoard[row][index].bleeding;
-            maxValue = maxValue - currentValue + enemieBoard[row][index].bleeding;
+            enemieBoard[row][index].Bleeding += 3;
+
+            CurrentValue += enemieBoard[row][index].Bleeding;
+            MaxValue = MaxValue - CurrentValue + enemieBoard[row][index].Bleeding;
         }
     }
 }

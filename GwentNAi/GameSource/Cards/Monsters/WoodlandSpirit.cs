@@ -1,11 +1,4 @@
 ﻿using GwentNAi.GameSource.Cards.IDefault;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
@@ -13,18 +6,17 @@ namespace GwentNAi.GameSource.Cards.Monsters
     {
         public WoodlandSpirit()
         {
-            currentValue = 9;
-            maxValue = 9;
-            shield = 0;
-            provisionValue = 0;
-            border = 0;
-            type = "unit";
-            faction = "monster";
-            name = "WoodlandSpirit";
-            shortName = "Woodland";
-            descriptors = new List<string>() { "Relict", "Token" };
-            timeToOrder = -1;
-            bleeding = 0;
+            CurrentValue = 9;
+            MaxValue = 9;
+            Shield = 0;
+            Border = 0;
+            Type = "unit";
+            Faction = "monster";
+            Name = "WoodlandSpirit";
+            ShortName = "Woodland";
+            Descriptors = new List<string>() { "Relict", "Token" };
+            TimeToOrder = -1;
+            Bleeding = 0;
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿using GwentNAi.GameSource.Player;
+﻿using GwentNAi.GameSource.Board;
+using GwentNAi.GameSource.Player;
+using GwentNAi.HumanMove;
+using GwentNAi.MctsMove;
 
 namespace GwentNAi.GameSource
 {
@@ -34,11 +37,58 @@ namespace GwentNAi.GameSource
                 else if (args[0] == "-p" || args[0] == "--player") player1 = 1;
                 else PrintWrongArgs();
             }
-            if(args.Length == 2)
+            if (args.Length == 2)
             {
                 if (args[1] == "-mcts") player2 = 0;
                 else if (args[1] == "-p" || args[1] == "--player") player2 = 1;
                 else PrintWrongArgs();
+            }
+        }
+
+        public static void HandleArguments(string[] args, ref Func<GameBoard, int> p1Move, ref Func<GameBoard, int> p2Move, DefaultLeader p1, DefaultLeader p2)
+        {
+            int p2Args = 1;
+            if (args[0] == "-h")
+            {
+                PrintHelp();
+                return;
+            }
+
+            if (args[0] == "-human")
+            {
+                p1Move = HumanPlayer.HumanMove;
+            }
+            else
+            {
+                p1Move = MCTSPlayer.MCTSMove;
+                p1.Simulations = int.Parse(args[1]);
+                p1.Iterations = int.Parse(args[2]);
+                p2Args = 3;
+            }
+
+            if (args[p2Args] == "-human")
+            {
+                p2Move = HumanPlayer.HumanMove;
+            }
+            else
+            {
+                p2Move = MCTSPlayer.MCTSMove;
+                p2.Simulations = int.Parse(args[p2Args + 1]);
+                p2.Iterations = int.Parse(args[p2Args + 2]);
+            }
+        }
+
+        public static void GetMctsSettings(int playerNum, string[] args, DefaultLeader mctsLeader)
+        {
+            if (playerNum == 0)
+            {
+                mctsLeader.Iterations = int.Parse(args[2]);
+                mctsLeader.Simulations = int.Parse(args[3]);
+            }
+            if (playerNum == 1)
+            {
+                mctsLeader.Iterations = int.Parse(args[2]);
+                mctsLeader.Simulations = int.Parse(args[3]);
             }
         }
 

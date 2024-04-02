@@ -14,8 +14,8 @@ namespace GwentNAi.HumanMove
 
             HumanConsolePrint.swapColor(board);
             int[] maxActionId = HumanConsolePrint.ListActions(actionContainer);
-            string action = HumanConsoleGet.GetHumanAction(maxActionId, actionContainer.canPass, actionContainer.canEnd, (actionContainer.LeaderActions != null));
-            if (HumanStringToAction.Convert(action, board) == -1) return -1; 
+            string action = HumanConsoleGet.GetHumanAction(maxActionId, actionContainer.CanPass, actionContainer.CanEnd, (actionContainer.LeaderActions != null));
+            if (HumanStringToAction.Convert(action, board) == -1) return -1;
             return 0;
         }
 
@@ -25,19 +25,19 @@ namespace GwentNAi.HumanMove
             int cardSwapped;
 
 
-            if (actionContainer.SwapCards.SwapAvailable)
+            if (actionContainer.CardSwaps.SwapAvailable)
             {
                 HumanConsolePrint.swapColor(board);
-                while(actionContainer.SwapCards.Indexes.Count != 0)
+                while (actionContainer.CardSwaps.Indexes.Count != 0)
                 {
-                    HumanConsolePrint.ListCards(actionContainer.SwapCards.Indexes, board.GetCurrentLeader().HandDeck, "Swap cards in hand");
-                    cardSwapped = HumanConsoleGet.GetIndex(actionContainer.SwapCards.Indexes);
+                    HumanConsolePrint.ListCards(actionContainer.CardSwaps.Indexes, board.GetCurrentLeader().Hand, "Swap cards in hand");
+                    cardSwapped = HumanConsoleGet.GetIndex(actionContainer.CardSwaps.Indexes);
                     if (cardSwapped == -1)
                     {
-                        actionContainer.SwapCards.StopSwapping = true;
+                        actionContainer.CardSwaps.StopSwapping = true;
                         continue;
                     }
-                    actionContainer.SwapCards.CardSwaps--;
+                    actionContainer.CardSwaps.CardSwaps--;
                     board.GetCurrentLeader().SwapCards(cardSwapped);
                 }
                 return -1;

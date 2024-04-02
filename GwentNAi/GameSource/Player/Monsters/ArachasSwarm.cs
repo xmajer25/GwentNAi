@@ -3,18 +3,12 @@ using GwentNAi.GameSource.Cards;
 using GwentNAi.GameSource.Cards.IExpand;
 using GwentNAi.GameSource.Cards.Monsters;
 using GwentNAi.GameSource.Decks;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GwentNAi.GameSource.Player.Monsters
 {
     public class ArachasSwarm : DefaultLeader, IPlayCardExpand
     {
-        public ArachasSwarm() 
+        public ArachasSwarm()
         {
             ProvisionValue = 15;
             LeaderName = "ArachasSwarm";
@@ -33,6 +27,8 @@ namespace GwentNAi.GameSource.Player.Monsters
         {
             DefaultLeader clonedLeader = new ArachasSwarm()
             {
+                Iterations = Iterations,
+                Simulations = Simulations,
                 ProvisionValue = ProvisionValue,
                 LeaderName = LeaderName,
                 LeaderFaction = LeaderFaction,
@@ -43,10 +39,14 @@ namespace GwentNAi.GameSource.Player.Monsters
                 HasPassed = HasPassed,
                 HasPlayedCard = HasPlayedCard,
                 HasUsedAbility = HasUsedAbility,
-                StartingDeck = (Deck)StartingDeck.Copy(),
-                HandDeck = (Deck)HandDeck.Copy(),
-                GraveyardDeck = (Deck)GraveyardDeck.Copy(),
-                Board = Board.Select(innerList => innerList.Select(card => (DefaultCard)card.Clone()).ToList()).ToList(),
+                StartingDeck = (DefaultDeck)StartingDeck.Copy(),
+                Hand = (DefaultDeck)Hand.Copy(),
+                Graveyard = (DefaultDeck)Graveyard.Copy(),
+                Board = Board
+                .Select(innerList => innerList
+                    .Select(card => (DefaultCard)card.Clone())  // Deep clone of each DefaultCard
+                    .ToList())
+                .ToList()
             };
 
             return clonedLeader;
@@ -79,12 +79,7 @@ namespace GwentNAi.GameSource.Player.Monsters
         {
             DefaultCard playedCard = new Drone();
             board.GetCurrentBoard()[row].Insert(column, playedCard);
-            AbilityCharges--;
-        }
-
-        public override void Update()
-        {
-            throw new NotImplementedException();
+            PostAbilitySettings();
         }
     }
 }

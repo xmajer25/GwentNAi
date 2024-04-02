@@ -6,9 +6,9 @@ namespace GwentNAi.GameSource.Player
 {
     public static class StringToPlayerConvertor
     {
-        public static DefaultLeader Convert(string ?PlayerName)
+        public static DefaultLeader Convert(string? PlayerName)
         {
-            switch(PlayerName)
+            switch (PlayerName)
             {
                 case "ArachasSwarm":
                 case "arachasswarm":

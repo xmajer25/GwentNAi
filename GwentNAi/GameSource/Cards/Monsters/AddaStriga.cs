@@ -1,13 +1,6 @@
 ﻿using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards.IExpand;
 using GwentNAi.GameSource.Player;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
@@ -15,18 +8,17 @@ namespace GwentNAi.GameSource.Cards.Monsters
     {
         public AddaStriga()
         {
-            currentValue = 6;
-            maxValue = 6;
-            shield = 0;
-            provisionValue = 9;
-            border = 1;
-            type = "unit";
-            faction = "monster";
-            name = "Adda:Striga";
-            shortName = "Adda";
-            descriptors = new List<string>() { "Beast", "Cursed" };
-            timeToOrder = 0;
-            bleeding = 0;
+            CurrentValue = 6;
+            MaxValue = 6;
+            Shield = 0;
+            Border = 1;
+            Type = "unit";
+            Faction = "monster";
+            Name = "Adda:Striga";
+            ShortName = "Adda";
+            Descriptors = new List<string>() { "Beast", "Cursed" };
+            TimeToOrder = 0;
+            Bleeding = 0;
         }
         public void Order(GameBoard board)
         {
@@ -39,10 +31,10 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
             foreach (var row in board.Leader1.Board)
             {
-                for(int currentIndex = 0; currentIndex < row.Count; currentIndex++)
+                for (int currentIndex = 0; currentIndex < row.Count; currentIndex++)
                 {
                     var card = row[currentIndex];
-                    if (card.currentValue < this.currentValue && card.descriptors.Contains("Token"))
+                    if (card.CurrentValue < this.CurrentValue && card.Descriptors.Contains("Token"))
                     {
                         board.CurrentPlayerActions.ImidiateActions[0][currentRow].Add(currentIndex);
                     }
@@ -50,14 +42,14 @@ namespace GwentNAi.GameSource.Cards.Monsters
                 currentRow++;
             }
 
-            currentRow =  0;
+            currentRow = 0;
 
             foreach (var row in board.Leader2.Board)
             {
                 for (int currentIndex = 0; currentIndex < row.Count; currentIndex++)
                 {
                     var card = row[currentIndex];
-                    if (card.currentValue < this.currentValue && card.descriptors.Contains("Token"))
+                    if (card.CurrentValue < this.CurrentValue && card.Descriptors.Contains("Token"))
                     {
                         board.CurrentPlayerActions.ImidiateActions[1][currentRow].Add(currentIndex);
                     }
@@ -74,10 +66,10 @@ namespace GwentNAi.GameSource.Cards.Monsters
             if (targetedLeader == board.GetCurrentLeader()) multiplier = 2;
             DefaultCard consumedCard = targetedBoard[row][index];
 
-            currentValue += consumedCard.currentValue * multiplier;
-            maxValue += consumedCard.currentValue * multiplier;
-            consumedCard.TakeDemage(consumedCard.currentValue, true, board);
-            timeToOrder--;
+            CurrentValue += consumedCard.CurrentValue * multiplier;
+            MaxValue += consumedCard.CurrentValue * multiplier;
+            consumedCard.TakeDemage(consumedCard.CurrentValue, true, board);
+            TimeToOrder--;
             board.GetCurrentLeader().UseAbility();
         }
     }

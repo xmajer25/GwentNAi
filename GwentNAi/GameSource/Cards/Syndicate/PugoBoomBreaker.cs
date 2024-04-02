@@ -1,12 +1,5 @@
 ﻿using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards.IDefault;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace GwentNAi.GameSource.Cards.Syndicate
 {
@@ -14,18 +7,17 @@ namespace GwentNAi.GameSource.Cards.Syndicate
     {
         public PugoBoomBreaker()
         {
-            currentValue = 11;
-            maxValue = 11;
-            shield = 0;
-            provisionValue = 7;
-            border = 1;
-            type = "unit";
-            faction = "neutral";
-            name = "Pugo Boom-Breaker";
-            shortName = "PugoBoom";
-            descriptors = new List<string>() { "ogroid", "cutups" };
-            timeToOrder = 1;
-            bleeding = 0;
+            CurrentValue = 11;
+            MaxValue = 11;
+            Shield = 0;
+            Border = 1;
+            Type = "unit";
+            Faction = "neutral";
+            Name = "Pugo Boom-Breaker";
+            ShortName = "PugoBoom";
+            Descriptors = new List<string>() { "ogroid", "cutups" };
+            TimeToOrder = 1;
+            Bleeding = 0;
         }
 
         public void Deploy(GameBoard board)

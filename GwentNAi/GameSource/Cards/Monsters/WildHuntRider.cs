@@ -1,10 +1,5 @@
 ﻿using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards.IDefault;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
@@ -12,18 +7,17 @@ namespace GwentNAi.GameSource.Cards.Monsters
     {
         public WildHuntRider()
         {
-            currentValue = 4;
-            maxValue = 4;
-            shield = 0;
-            provisionValue = 5;
-            border = 0;
-            type = "unit";
-            faction = "monster";
-            name = "WildHuntRider";
-            shortName = "WH.Rider";
-            descriptors = new List<string>() { "Elf", "Wild Hunt", "Warrior" };
-            timeToOrder = -1;
-            bleeding = 0;
+            CurrentValue = 4;
+            MaxValue = 4;
+            Shield = 0;
+            Border = 0;
+            Type = "unit";
+            Faction = "monster";
+            Name = "WildHuntRider";
+            ShortName = "WH.Rider";
+            Descriptors = new List<string>() { "Elf", "Wild Hunt", "Warrior" };
+            TimeToOrder = -1;
+            Bleeding = 0;
         }
 
         public void Deploy(GameBoard board)
@@ -38,8 +32,8 @@ namespace GwentNAi.GameSource.Cards.Monsters
                 thisIndex = board.GetCurrentBoard()[1].IndexOf((DefaultCard)this);
                 thisRow = 1;
             }
-            
-            for(int i = 0; i < numberOfCopies; i++)
+
+            for (int i = 0; i < numberOfCopies; i++)
             {
                 if (board.GetCurrentBoard()[thisRow].Count != 9)
                 {
@@ -62,18 +56,18 @@ namespace GwentNAi.GameSource.Cards.Monsters
             List<List<DefaultCard>> enemiePlayerBoard = board.GetEnemieBoard();
             DefaultCard currentMax = board.GetCurrentBoard()
                 .SelectMany(list => list)
-                .OrderByDescending(obj => obj.currentValue)
+                .OrderByDescending(obj => obj.CurrentValue)
                 .FirstOrDefault();
 
             DefaultCard enemieMax = enemiePlayerBoard
                 .SelectMany(list => list)
-                .OrderByDescending(obj => obj.currentValue)
+                .OrderByDescending(obj => obj.CurrentValue)
                 .FirstOrDefault();
 
             if (enemieMax == null) return true;
-            if(currentMax != null)
+            if (currentMax != null)
             {
-                return currentMax.currentValue >= enemieMax.currentValue;
+                return currentMax.CurrentValue >= enemieMax.CurrentValue;
             }
             return true;
         }

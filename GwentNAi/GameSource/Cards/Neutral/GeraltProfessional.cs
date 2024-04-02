@@ -8,18 +8,17 @@ namespace GwentNAi.GameSource.Cards.Neutral
     {
         public GeraltProfessional()
         {
-            currentValue = 3;
-            maxValue = 3;
-            shield = 0;
-            provisionValue = 11;
-            border = 1;
-            type = "unit";
-            faction = "neutral";
-            name = "GeraltProfessional";
-            shortName = "Geralt:P";
-            descriptors = new List<string>() { "Witcher" };
-            timeToOrder = 1;
-            bleeding = 0;
+            CurrentValue = 3;
+            MaxValue = 3;
+            Shield = 0;
+            Border = 1;
+            Type = "unit";
+            Faction = "neutral";
+            Name = "GeraltProfessional";
+            ShortName = "Geralt:P";
+            Descriptors = new List<string>() { "Witcher" };
+            TimeToOrder = 1;
+            Bleeding = 0;
         }
 
         public void Order(GameBoard board)
@@ -35,9 +34,9 @@ namespace GwentNAi.GameSource.Cards.Neutral
             int currentRow = 0;
             int currentIndex = 0;
 
-            foreach(var row in enemieBoard)
+            foreach (var row in enemieBoard)
             {
-                foreach(var card in row)
+                foreach (var card in row)
                 {
                     enemieIndexes[currentRow].Add(currentIndex);
                     currentIndex++;
@@ -52,17 +51,17 @@ namespace GwentNAi.GameSource.Cards.Neutral
         public void postPickEnemieOrder(GameBoard board, int row, int index)
         {
             List<List<DefaultCard>> enemieBoard = (board.CurrentPlayerBoard == board.Leader1.Board ? board.Leader2.Board : board.Leader1.Board);
-            if (enemieBoard[row][index].currentValue % 3 == 0) enemieBoard[row][index].TakeDemage(enemieBoard[row][index].currentValue, false, board);
+            if (enemieBoard[row][index].CurrentValue % 3 == 0) enemieBoard[row][index].TakeDemage(enemieBoard[row][index].CurrentValue, false, board);
             else enemieBoard[row][index].TakeDemage(3, false, board);
-            timeToOrder--;
+            TimeToOrder--;
             board.CurrentlyPlayingLeader.UseAbility();
         }
 
         public void StartTurnUpdate()
         {
-            if (timeToOrder > 0)
+            if (TimeToOrder > 0)
             {
-                timeToOrder--;
+                TimeToOrder--;
             }
         }
     }

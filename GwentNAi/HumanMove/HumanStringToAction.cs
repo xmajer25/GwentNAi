@@ -28,7 +28,7 @@ namespace GwentNAi.HumanMove
                     cardIndex = int.Parse(match.Value) - 1;
                     actionCard = board.CurrentPlayerActions.PlayCardActions[cardIndex].ActionCard;
 
-                    actionCard.PlaySelfExpand(board);
+                    actionCard.GetPlacementOptions(board);
 
                     HumanConsolePrint.ListPositionsForCard(board.CurrentPlayerBoard, board.CurrentPlayerActions.ImidiateActions[0]);
                     cardPos = HumanConsoleGet.GetPositionForCard(board.CurrentPlayerActions.ImidiateActions[0]);
@@ -47,14 +47,14 @@ namespace GwentNAi.HumanMove
                             board.CurrentPlayerActions.ClearImidiateActions();
                             PickEnemiesCard.postPickEnemieAbilitiy(board, cardPos[0], cardPos[1]);
                         }
-                        else if(actionCard is IDeployExpandPickAlly PickAllyCard)
+                        else if (actionCard is IDeployExpandPickAlly PickAllyCard)
                         {
                             HumanConsolePrint.ListEnemieExpand(board.CurrentPlayerActions.ImidiateActions[0]);
                             cardPos = HumanConsoleGet.GetPositionForCard(board.CurrentPlayerActions.ImidiateActions[0]);
                             board.CurrentPlayerActions.ClearImidiateActions();
                             PickAllyCard.PostPickAllyAbilitiy(board, cardPos[0], cardPos[1]);
                         }
-                        else if(actionCard is IDeployExpandPickCard PickCardCard)
+                        else if (actionCard is IDeployExpandPickCard PickCardCard)
                         {
                             HumanConsolePrint.ListCardsSimple(board.CurrentPlayerActions.ImidiateActions[0][0]);
                             int index = HumanConsoleGet.GetIndex(board.CurrentPlayerActions.ImidiateActions[0][0]);
@@ -81,22 +81,22 @@ namespace GwentNAi.HumanMove
                             cardPos = HumanConsoleGet.GetPositionForCard(board.CurrentPlayerActions.ImidiateActions[0]);
                             board.CurrentPlayerActions.ClearImidiateActions();
                             PickEnemieCard.postPickEnemieOrder(board, cardPos[0], cardPos[1]);
-                        }   
-                        else if(actionCard is IOrderExpandPickAll PickAllCard)
+                        }
+                        else if (actionCard is IOrderExpandPickAll PickAllCard)
                         {
                             HumanConsolePrint.ListAllExpand(board.CurrentPlayerActions.ImidiateActions);
                             cardPos = HumanConsoleGet.GetPositionFromWholeBoard(board.CurrentPlayerActions.ImidiateActions);
                             board.CurrentPlayerActions.ClearImidiateActions();
                             PickAllCard.postPickAllOrder(board, cardPos[0], cardPos[1], cardPos[2]);
                         }
-                        else if(actionCard is IOrderExpandPickAlly PickAllyCard)
+                        else if (actionCard is IOrderExpandPickAlly PickAllyCard)
                         {
                             HumanConsolePrint.ListEnemieExpand(board.CurrentPlayerActions.ImidiateActions[0]);
                             cardPos = HumanConsoleGet.GetPositionForCard(board.CurrentPlayerActions.ImidiateActions[0]);
                             board.CurrentPlayerActions.ClearImidiateActions();
                             PickAllyCard.PostPickAllyOrder(board, cardPos[0], cardPos[1]);
                         }
-                        else if(actionCard is IPlayCardExpand PlayCardCard)
+                        else if (actionCard is IPlayCardExpand PlayCardCard)
                         {
                             HumanConsolePrint.ListPositionsForCard(board.CurrentPlayerBoard, board.CurrentPlayerActions.ImidiateActions[0]);
                             cardPos = HumanConsoleGet.GetPositionForCard(board.CurrentPlayerActions.ImidiateActions[0]);
@@ -107,15 +107,14 @@ namespace GwentNAi.HumanMove
                     break;
                 case 'l':
                     board.CurrentPlayerActions.LeaderActions(board);
-                    board.GetCurrentLeader().UseAbility();
                     while (board.CurrentPlayerActions.AreImidiateActionsFull())
                     {
-                        if(board.GetCurrentLeader() is IPlayCardExpand)
+                        if (board.GetCurrentLeader() is IPlayCardExpand leader)
                         {
                             HumanConsolePrint.ListPositionsForCard(board.CurrentPlayerBoard, board.CurrentPlayerActions.ImidiateActions[0]);
                             cardPos = HumanConsoleGet.GetPositionForCard(board.CurrentPlayerActions.ImidiateActions[0]);
                             board.CurrentPlayerActions.ClearImidiateActions();
-                            board.GetCurrentLeader().PostPlayCardOrder((IPlayCardExpand)board.GetCurrentLeader(), board, cardPos[0], cardPos[1]);
+                            leader.PostPlayCardOrder(board, cardPos[0], cardPos[1]);
                         }
                     }
                     break;

@@ -2,7 +2,6 @@
 using GwentNAi.GameSource.Cards;
 using GwentNAi.GameSource.Cards.IDefault;
 using System.Reflection;
-using System;
 using System.Text;
 
 namespace GwentNAi.GameSource.AssistantClasses
@@ -12,25 +11,25 @@ namespace GwentNAi.GameSource.AssistantClasses
         static public readonly int windowHeight = 60;
         static public readonly int windowWidth = 200;
         static public readonly int windowSeparator = 37;
-        
+
 
         public static void UpdateBoard(GameBoard board)
         {
             ClearTop();
             Console.ForegroundColor = ConsoleColor.White;
-            
-            UpdatePoints(board.PointSumP1, board.PointSumP2);
-            UpdateGraveyard(board.Leader1.GraveyardDeck.Cards.Count, board.Leader2.GraveyardDeck.Cards.Count);
-            UpdateDeck(board.Leader1.StartingDeck.Cards.Count, board.Leader2.StartingDeck.Cards.Count);
-            UpdateHand(board.Leader1.HandDeck.Cards.Count, board.Leader2.HandDeck.Cards.Count);
 
-            int rowIndex = 0; 
+            UpdatePoints(board.PointSumP1, board.PointSumP2);
+            UpdateGraveyard(board.Leader1.Graveyard.Cards.Count, board.Leader2.Graveyard.Cards.Count);
+            UpdateDeck(board.Leader1.StartingDeck.Cards.Count, board.Leader2.StartingDeck.Cards.Count);
+            UpdateHand(board.Leader1.Hand.Cards.Count, board.Leader2.Hand.Cards.Count);
+
+            int rowIndex = 0;
             int colIndex;
 
-            foreach(var row in board.Leader1.Board)
+            foreach (var row in board.Leader1.Board)
             {
                 colIndex = 5 - (row.Count / 2);
-                foreach(var card in row)
+                foreach (var card in row)
                 {
                     DrawCard(card, 0, rowIndex, colIndex);
                     colIndex++;
@@ -59,21 +58,21 @@ namespace GwentNAi.GameSource.AssistantClasses
             Console.Write("┎────────┒");
 
             Console.SetCursorPosition(36 + (index * 15), 6 * playerRow + 1 + offSet);
-            Console.Write(card.currentValue);
+            Console.Write(card.CurrentValue);
 
-            if(card.bleeding > 0)
+            if (card.Bleeding > 0)
             {
                 Console.SetCursorPosition(36 + (index * 15), 6 * playerRow + 1 + offSet + 1);
-                Console.Write("(-" + card.bleeding + ")");
+                Console.Write("(-" + card.Bleeding + ")");
             }
-            if(card.shield > 0)
+            if (card.Shield > 0)
             {
                 Console.SetCursorPosition(43 + (index * 15), 6 * playerRow + 1 + offSet);
-                Console.Write(card.shield);
+                Console.Write(card.Shield);
             }
 
             Console.SetCursorPosition(36 + (index * 15), 6 * playerRow + 3 + offSet);
-            Console.Write(card.shortName);
+            Console.Write(card.ShortName);
 
             for (int j = 1; j <= 4; j++)
             {
@@ -96,13 +95,13 @@ namespace GwentNAi.GameSource.AssistantClasses
 
         private static void DrawBoardBorders()
         {
-      
+
             Console.SetCursorPosition(25, 18);
             Console.Write(new String('-', windowWidth - 25));
-   
+
             Console.SetCursorPosition(25, 19);
             Console.Write(new String('-', windowWidth - 25));
-            
+
             for (int i = 0; i < windowSeparator; i++)
             {
                 Console.SetCursorPosition(25, i);
@@ -114,7 +113,7 @@ namespace GwentNAi.GameSource.AssistantClasses
 
         private static void DrawGraveyardBorder()
         {
-            for(int i = 0; i < 2; i++)
+            for (int i = 0; i < 2; i++)
             {
                 Console.SetCursorPosition(46, 0 + 33 * i);
                 Console.Write("Graveyard");
@@ -245,12 +244,12 @@ namespace GwentNAi.GameSource.AssistantClasses
             Console.SetCursorPosition(0, windowSeparator);
             Console.WriteLine(new String('#', windowWidth));
         }
-    
+
 
         public static void ClearBottom()
         {
             Console.SetCursorPosition(0, windowSeparator + 1);
-            for(int i = windowSeparator + 1; i < windowHeight - 1; i++)
+            for (int i = windowSeparator + 1; i < windowHeight - 1; i++)
             {
                 Console.SetCursorPosition(0, i);
                 Console.WriteLine(new String(' ', windowWidth));
@@ -260,14 +259,14 @@ namespace GwentNAi.GameSource.AssistantClasses
         }
 
 
-        public static void ClearTop() 
+        public static void ClearTop()
         {
-            for(int i = 6; i < 18; i++)
+            for (int i = 6; i < 18; i++)
             {
                 Console.SetCursorPosition(26, i);
                 Console.WriteLine(new String(' ', windowWidth - 17 - 25));
             }
-            for(int i  = 20; i < windowSeparator - 5; i++)
+            for (int i = 20; i < windowSeparator - 5; i++)
             {
                 Console.SetCursorPosition(26, i);
                 Console.WriteLine(new String(' ', windowWidth - 17 - 25));

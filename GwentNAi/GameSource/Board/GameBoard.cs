@@ -4,7 +4,6 @@ using GwentNAi.GameSource.CustomExceptions;
 using GwentNAi.GameSource.Player;
 using System.Data;
 using System.Reflection;
-using System.Transactions;
 
 namespace GwentNAi.GameSource.Board
 {
@@ -39,13 +38,12 @@ namespace GwentNAi.GameSource.Board
                 CurrentPlayerActions = (ActionContainer)CurrentPlayerActions.Clone()
 
             };
-            clonedBoard.CurrentPlayerActions.GetAllActions(clonedBoard.GetCurrentBoard(), clonedBoard.GetCurrentLeader().HandDeck, clonedBoard.GetCurrentLeader());
             return clonedBoard;
         }
 
         public List<List<DefaultCard>> GetCurrentBoard()
         {
-            if(CurrentPlayerBoard != Leader1.Board && CurrentPlayerBoard != Leader2.Board)
+            if (CurrentPlayerBoard != Leader1.Board && CurrentPlayerBoard != Leader2.Board)
             {
                 throw new CustomException("GetCurrentBoard Inner Error");
             }
@@ -59,7 +57,7 @@ namespace GwentNAi.GameSource.Board
 
         public DefaultLeader GetCurrentLeader()
         {
-            if(CurrentlyPlayingLeader != Leader1 && CurrentlyPlayingLeader != Leader2)
+            if (CurrentlyPlayingLeader != Leader1 && CurrentlyPlayingLeader != Leader2)
             {
                 throw new CustomException("GetCurrentLeader Inner Error");
             }
@@ -95,7 +93,7 @@ namespace GwentNAi.GameSource.Board
             {
                 foreach (var card in row.ToList())
                 {
-                    if(card.bleeding > 0) EvaluateBleeding(card);
+                    if (card.Bleeding > 0) EvaluateBleeding(card);
                     if (card is ITimer TimerCard && Leader1 == GetCurrentLeader()) TimerCard.Timer(this);
                     if (card is IEndTurnUpdate UpdateCard && Leader1 == GetCurrentLeader()) UpdateCard.EndTurnUpdate(this);
                 }
@@ -105,7 +103,7 @@ namespace GwentNAi.GameSource.Board
             {
                 foreach (var card in row.ToList())
                 {
-                    if (card.bleeding > 0) EvaluateBleeding(card);
+                    if (card.Bleeding > 0) EvaluateBleeding(card);
                     if (card is ITimer TimerCard && Leader2 == GetCurrentLeader()) TimerCard.Timer(this);
                     if (card is IEndTurnUpdate UpdateCard && Leader2 == GetCurrentLeader()) UpdateCard.EndTurnUpdate(this);
                 }
@@ -131,12 +129,12 @@ namespace GwentNAi.GameSource.Board
             Leader2.DrawCards(numberOfCards);
         }
 
-        public void SwapCards()
+        public void GetSwapCards()
         {
-            CurrentPlayerActions.SwapCards.Indexes.Clear();
-            for (int i = 0; i < GetCurrentLeader().HandDeck.Cards.Count; i++)
+            CurrentPlayerActions.CardSwaps.Indexes.Clear();
+            for (int i = 0; i < GetCurrentLeader().Hand.Cards.Count; i++)
             {
-                CurrentPlayerActions.SwapCards.Indexes.Add(i);
+                CurrentPlayerActions.CardSwaps.Indexes.Add(i);
             }
         }
 
@@ -145,9 +143,9 @@ namespace GwentNAi.GameSource.Board
         //clear row and then make row equal to the list with resiliant cards
         public void RemoveCardsAtRoundEnd()
         {
-            foreach(var row in Leader1.Board)
+            foreach (var row in Leader1.Board)
                 row.Clear();
-            
+
             foreach (var row in Leader2.Board)
                 row.Clear();
         }
@@ -156,13 +154,13 @@ namespace GwentNAi.GameSource.Board
         {
             Leader1.Board.ToList().ForEach(row =>
             {
-                row.Where(card => card.currentValue <= 0).ToList().ForEach(card =>
+                row.Where(card => card.CurrentValue <= 0).ToList().ForEach(card =>
                 {
                     Type cardType = card.GetType();
                     DefaultCard graveyardInstance = (DefaultCard)Activator.CreateInstance(cardType);
 
                     if (!(card is IDoomed))
-                        Leader1.GraveyardDeck.Cards.Add(graveyardInstance);
+                        Leader1.Graveyard.Cards.Add(graveyardInstance);
                     if (card is IDeathwish DeathWishAbility)
                         DeathWishAbility.DeathwishAbility(this);
 
@@ -172,13 +170,13 @@ namespace GwentNAi.GameSource.Board
 
             Leader2.Board.ToList().ForEach(row =>
             {
-                row.Where(card => card.currentValue <= 0).ToList().ForEach(card =>
+                row.Where(card => card.CurrentValue <= 0).ToList().ForEach(card =>
                 {
                     Type cardType = card.GetType();
                     DefaultCard graveyardInstance = (DefaultCard)Activator.CreateInstance(cardType);
 
                     if (!(card is IDoomed))
-                        Leader2.GraveyardDeck.Cards.Add(graveyardInstance);
+                        Leader2.Graveyard.Cards.Add(graveyardInstance);
                     if (card is IDeathwish DeathWishCard)
                         DeathWishCard.DeathwishAbility(this);
 
@@ -186,16 +184,16 @@ namespace GwentNAi.GameSource.Board
                 });
             });
         }
-        
+
         public void EvaluateBleeding(DefaultCard bleedingCard)
         {
-            bleedingCard.bleeding--;
+            bleedingCard.Bleeding--;
             bleedingCard.TakeDemage(1, false, this);
-            foreach(var row in Leader1.Board)
+            foreach (var row in Leader1.Board)
             {
-                foreach(var card in row)
+                foreach (var card in row)
                 {
-                    if(card is IBleedingInteraction BleedCard)
+                    if (card is IBleedingInteraction BleedCard)
                     {
                         BleedCard.RespondToBleeding();
                     }
@@ -217,8 +215,8 @@ namespace GwentNAi.GameSource.Board
         {
             PointSumP1 = PointSumP2 = 0;
 
-            PointSumP1 = Leader1.Board.Sum(row => row.Sum(obj => obj.currentValue));
-            PointSumP2 = Leader2.Board.Sum(row => row.Sum(obj => obj.currentValue));
+            PointSumP1 = Leader1.Board.Sum(row => row.Sum(obj => obj.CurrentValue));
+            PointSumP2 = Leader2.Board.Sum(row => row.Sum(obj => obj.CurrentValue));
         }
 
         private void UpdateCPCards()
@@ -230,7 +228,7 @@ namespace GwentNAi.GameSource.Board
                     if (card is IUpdate updateCard)
                     {
                         MethodInfo methodInfo = card.GetType().GetMethod("StartTurnUpdate");
-                        if(methodInfo != null)
+                        if (methodInfo != null)
                         {
                             updateCard.StartTurnUpdate();
                         }
@@ -250,6 +248,6 @@ namespace GwentNAi.GameSource.Board
             CurrentlyPlayingLeader.HasUsedAbility = false;
         }
 
-        
+
     }
 }

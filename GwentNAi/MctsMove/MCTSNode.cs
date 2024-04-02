@@ -1,10 +1,5 @@
 ﻿using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.CardRepository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GwentNAi.MctsMove
 {
@@ -22,7 +17,7 @@ namespace GwentNAi.MctsMove
         public bool IsTerminal => Board.Leader1.Victories == 2 || Board.Leader2.Victories == 2;
         public MonsterCards EnemieCards { get; set; }
 
-        public MCTSNode(MCTSNode? parent, GameBoard board) 
+        public MCTSNode(MCTSNode? parent, GameBoard board)
         {
             Parent = parent;
             Children = new List<MCTSNode>();
@@ -42,12 +37,12 @@ namespace GwentNAi.MctsMove
                 EndMove = EndMove,
                 Move = Move,
                 NumberOfVisits = NumberOfVisits,
-                Reward = Reward, 
+                Reward = Reward,
                 EnemieCards = (MonsterCards)EnemieCards.Clone(),
             };
 
             return clonedNode;
-        }            
+        }
 
         public void UpdateStats(double reward)
         {
@@ -73,13 +68,13 @@ namespace GwentNAi.MctsMove
 
         public MCTSNode Selection(int TotalVisits)
         {
-            MCTSNode selectedNode =  BestChild(TotalVisits);
+            MCTSNode selectedNode = BestChild(TotalVisits);
             if (selectedNode.IsLeaf) return selectedNode;
 
-            while(selectedNode.AllChildrenExplored)
+            while (selectedNode.AllChildrenExplored)
             {
                 selectedNode = selectedNode.BestChild(TotalVisits);
-                if(selectedNode.IsLeaf) return selectedNode;
+                if (selectedNode.IsLeaf) return selectedNode;
             }
             return selectedNode;
         }
@@ -105,7 +100,7 @@ namespace GwentNAi.MctsMove
 
         private double GetUCB1Value(int TotalVisits)
         {
-            if(NumberOfVisits == 0)
+            if (NumberOfVisits == 0)
             {
                 return double.MaxValue;
             }

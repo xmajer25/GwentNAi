@@ -1,10 +1,8 @@
 ﻿using GwentNAi.GameSource.Cards.Monsters;
-using GwentNAi.GameSource.Cards.Neutral;
-using GwentNAi.GameSource.Cards.Syndicate;
 
 namespace GwentNAi.GameSource.Decks.DeckSeeds
 {
-    public class TestDeck : Deck
+    public class TestDeck : DefaultDeck
     {
         public TestDeck()
         {

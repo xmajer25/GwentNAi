@@ -5,7 +5,7 @@ namespace GwentNAi.GameSource.Decks
 {
     public static class StringToDeckConvertor
     {
-        public static Deck Convert(string ?Deck)
+        public static DefaultDeck Convert(string? Deck)
         {
             switch (Deck)
             {

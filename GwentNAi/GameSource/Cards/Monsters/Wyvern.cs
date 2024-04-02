@@ -1,11 +1,6 @@
 ﻿using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards.IDefault;
 using GwentNAi.GameSource.Cards.IExpand;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
@@ -13,18 +8,17 @@ namespace GwentNAi.GameSource.Cards.Monsters
     {
         public Wyvern()
         {
-            currentValue = 3;
-            maxValue = 3;
-            shield = 0;
-            provisionValue = 5;
-            border = 0;
-            type = "unit";
-            faction = "monster";
-            name = "Wyvern";
-            shortName = "Wyvern";
-            descriptors = new List<string>() { "Beast" };
-            timeToOrder = -1;
-            bleeding = 0;
+            CurrentValue = 3;
+            MaxValue = 3;
+            Shield = 0;
+            Border = 0;
+            Type = "unit";
+            Faction = "monster";
+            Name = "Wyvern";
+            ShortName = "Wyvern";
+            Descriptors = new List<string>() { "Beast" };
+            TimeToOrder = -1;
+            Bleeding = 0;
         }
 
         public void Deploy(GameBoard board)
@@ -36,7 +30,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
                 for (int currentIndex = 0; currentIndex < enemieBoard[currentRow].Count; currentIndex++)
                 {
                     board.CurrentPlayerActions.ImidiateActions[0][currentRow].Add(currentIndex);
-                }  
+                }
             }
         }
 
@@ -48,10 +42,10 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
         public void Thrive(int playedUnitValue)
         {
-            if(playedUnitValue > currentValue)
+            if (playedUnitValue > CurrentValue)
             {
-                currentValue++;
-                if (currentValue > maxValue) maxValue++;
+                CurrentValue++;
+                if (CurrentValue > MaxValue) MaxValue++;
 
             }
         }

@@ -1,11 +1,6 @@
 ﻿using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards.IDefault;
 using GwentNAi.GameSource.Cards.IExpand;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
@@ -13,27 +8,27 @@ namespace GwentNAi.GameSource.Cards.Monsters
     {
         public Katakan()
         {
-            currentValue = 5;
-            maxValue = 5;
-            shield = 0;
-            provisionValue = 9;
-            border = 1;
-            type = "unit";
-            faction = "monster";
-            name = "Katakan";
-            shortName = "Katakan";
-            descriptors = new List<string>() { "Vampire"};
-            timeToOrder = 0;
-            bleeding = 0;
+            CurrentValue = 5;
+            MaxValue = 5;
+            Shield = 0;
+            Border = 1;
+            Type = "unit";
+            Faction = "monster";
+            Name = "Katakan";
+            ShortName = "Katakan";
+            Descriptors = new List<string>() { "Vampire" };
+            TimeToOrder = 0;
+            Bleeding = 0;
         }
 
         public void Order(GameBoard board)
         {
+            if (TimeToOrder != 0) return;
             PlayCardExpand(board);
         }
         public void Cooldown(int cooldown)
         {
-            timeToOrder += (cooldown + 1);
+            TimeToOrder += (cooldown + 1);
         }
 
         public void PlayCardExpand(GameBoard board)
@@ -72,17 +67,17 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
         void IUpdate.StartTurnUpdate()
         {
-            if (timeToOrder > 0)
+            if (TimeToOrder > 0)
             {
-                timeToOrder--;
+                TimeToOrder--;
             }
         }
 
         public void RespondToBleeding()
         {
-            if(timeToOrder > 0)
+            if (TimeToOrder > 0)
             {
-                timeToOrder--;
+                TimeToOrder--;
             }
         }
     }

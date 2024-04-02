@@ -1,19 +1,13 @@
 ﻿using GwentNAi.GameSource.AssistantClasses;
 using GwentNAi.GameSource.Board;
-using GwentNAi.GameSource.Cards.Neutral;
 using GwentNAi.GameSource.Decks;
 using GwentNAi.GameSource.Player;
-using GwentNAi.HumanMove;
-using GwentNAi.MctsMove;
 
 
 namespace GwentNAi.GameSource
 {
     public class Program
     {
-        private static int player1 = 0;
-        private static int player2 = 0;
-
         private static GameBoard board = new();
         private static Func<GameBoard, int> player1Move = (GameBoard board) => 0;
         private static Func<GameBoard, int> player2Move = (GameBoard board) => 0;
@@ -21,40 +15,45 @@ namespace GwentNAi.GameSource
 
         static void Main(string[] args)
         {
-            ArgumentHandler.ArgHandler(args, ref player1, ref player2);
+            Logging.ClearFile();
             ConsolePrint.Init();
             ConsolePrint.DrawStaticElements();
-
-            PlayMethodSetting();
             (board.Leader1, board.Leader2) = LeaderSetting();
+
+            ArgumentHandler.HandleArguments(args, ref player1Move, ref player2Move, board.Leader1, board.Leader2);
+            
+            
             DeckSetting();
             DetermineStartingPlayer();
             board.ShufflerBothDecks();
             board.DrawBothHands(10);
             ConsolePrint.UpdateBoard(board);
 
+
             //game
             while (board.Leader1.Victories != 2 && board.Leader2.Victories != 2)
             {
-                board.CurrentPlayerActions.SwapCards.PlayersToSwap = 2;
+                board.CurrentPlayerActions.CardSwaps.PlayersToSwap = 2;
                 while (board.Leader1.HasPassed == false || board.Leader2.HasPassed == false)
                 {
-                    if (board.CurrentPlayerActions.SwapCards.PlayersToSwap != 0) board.SwapCards();
-                    
+                    if (board.CurrentPlayerActions.CardSwaps.PlayersToSwap != 0) board.GetSwapCards();
 
-                    
+
+
                     int moveOutcome = 0;
+                    Logging.LogCards(board);
                     //move
                     while (moveOutcome == 0)
                     {
                         if (board.CurrentlyPlayingLeader.HasPassed) break;
 
-                        board.CurrentPlayerActions.GetAllActions(board.GetCurrentBoard(), board.GetCurrentLeader().HandDeck, board.GetCurrentLeader());
+                        board.CurrentPlayerActions.GetAllActions(board.GetCurrentBoard(), board.GetCurrentLeader().Hand, board.GetCurrentLeader());
                         moveOutcome = (board.GetCurrentLeader() == board.Leader1 ? player1Move(board) : player2Move(board));
                         board.MoveUpdate();
                         ConsolePrint.UpdateBoard(board);
                     }
                     board.TurnUpdate();
+                    Logging.SeparateTurnLogs();
                     ConsolePrint.UpdateBoard(board);
                 }
                 DetermineRoundWinner();
@@ -63,22 +62,27 @@ namespace GwentNAi.GameSource
                 ConsolePrint.UpdateBoard(board);
             }
             DetermineGameWinner();
+
             Console.ReadLine();
         }
 
+
         static private void DetermineGameWinner()
         {
-            if(board.Leader1.Victories == board.Leader2.Victories)
+            if (board.Leader1.Victories == board.Leader2.Victories)
             {
+                Logging.LogVictory(0, board.PointSumP1, board.PointSumP2, "Game");
                 Drawings.DrawTie();
             }
-            else if(board.Leader1.Victories >= board.Leader2.Victories)
+            else if (board.Leader1.Victories >= board.Leader2.Victories)
             {
+                Logging.LogVictory(1, board.PointSumP1, board.PointSumP2, "Game");
                 Drawings.DrawVictory(0);
                 Drawings.DrawDefeat(1);
             }
             else
             {
+                Logging.LogVictory(2, board.PointSumP1, board.PointSumP2, "Game");
                 Drawings.DrawDefeat(0);
                 Drawings.DrawVictory(1);
             }
@@ -88,27 +92,21 @@ namespace GwentNAi.GameSource
         {
             if (board.PointSumP1 == board.PointSumP2)
             {
+                Logging.LogVictory(0, board.PointSumP1, board.PointSumP2, "Turn");
                 board.Leader1.Victories++;
                 board.Leader2.Victories++;
             }
             else if (board.PointSumP1 > board.PointSumP2)
             {
+                Logging.LogVictory(1, board.PointSumP1, board.PointSumP2, "Turn");
                 board.Leader1.Victories++;
             }
             else
             {
+                Logging.LogVictory(2, board.PointSumP1, board.PointSumP2, "Turn");
                 board.Leader2.Victories++;
             }
             Drawings.DrawCrown(board);
-        }
-
-        static private void PlayMethodSetting()
-        {
-            if (player1 == 0) player1Move = MCTSPlayer.MCTSMove;
-            if (player1 == 1) player1Move = HumanPlayer.HumanMove;
-
-            if (player2 == 0) player2Move = MCTSPlayer.MCTSMove;
-            if (player2 == 1) player2Move = HumanPlayer.HumanMove;
         }
 
         static private (DefaultLeader leader1, DefaultLeader leader2) LeaderSetting()

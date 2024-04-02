@@ -1,10 +1,5 @@
 ﻿using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards.IDefault;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
@@ -12,18 +7,17 @@ namespace GwentNAi.GameSource.Cards.Monsters
     {
         public Nekker()
         {
-            currentValue = 1;
-            maxValue = 1;
-            shield = 0;
-            provisionValue = 4;
-            border = 0;
-            type = "unit";
-            faction = "monster";
-            name = "Nekker";
-            shortName = "Nekker";
-            descriptors = new List<string>() { "Ogroid" };
-            timeToOrder = 0;
-            bleeding = 0;
+            CurrentValue = 1;
+            MaxValue = 1;
+            Shield = 0;
+            Border = 0;
+            Type = "unit";
+            Faction = "monster";
+            Name = "Nekker";
+            ShortName = "Nekker";
+            Descriptors = new List<string>() { "Ogroid" };
+            TimeToOrder = 0;
+            Bleeding = 0;
         }
 
         public void Deploy(GameBoard board)
@@ -45,10 +39,10 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
         public void Thrive(int playedUnitValue)
         {
-            if (playedUnitValue > currentValue)
+            if (playedUnitValue > CurrentValue)
             {
-                currentValue++;
-                if (currentValue > maxValue) maxValue++;
+                CurrentValue++;
+                if (CurrentValue > MaxValue) MaxValue++;
 
             }
         }
