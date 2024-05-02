@@ -2,6 +2,10 @@
 
 namespace GwentNAi.GameSource.AssistantClasses
 {
+    /*
+     * Class containing drawings for the game
+     * Drawings include : Victory, Defeat, Tie, Crowns to show the winning player, Leader drawing to show the selected faction
+     */
     public static class Drawings
     {
         static public readonly int windowWidth = 200;

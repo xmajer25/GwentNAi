@@ -22,7 +22,6 @@ namespace GwentNAi.GameSource.Cards
         public object Clone()
         {
             DefaultCard clonedInstance = (DefaultCard)base.MemberwiseClone();
-
             // Deep clone for List<string> properties
             clonedInstance.Descriptors = new List<string>(Descriptors);
             if (clonedInstance.Name != this.Name) throw new Exception("Inner error: incorect name cloned");
@@ -61,11 +60,6 @@ namespace GwentNAi.GameSource.Cards
             Shield -= damage;
             if (Shield < 0) Shield = 0;
             if (_excessDamage > 0) CurrentValue -= _excessDamage;
-        }
-
-        public void PostPlayCardOrder(GameBoard board, int row, int column)
-        {
-            throw new NotImplementedException();
         }
     }
 }

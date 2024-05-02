@@ -1,6 +1,7 @@
 ﻿using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards;
 using GwentNAi.GameSource.Cards.IExpand;
+using System.Diagnostics;
 
 namespace GwentNAi.MctsMove
 {
@@ -135,7 +136,7 @@ namespace GwentNAi.MctsMove
                                             clonedDeployBoard.RemoveDestroyedCards();
                                         }
 
-                                        parent.AppendChild(clonedDeployBoard, false, "Playing (epEnemie)card " + playCard.Name + " to" + row + "-" + index + " targeting: " + deployRow + "-" + deployIndex);
+                                        parent.AppendChild(clonedDeployBoard, false, "Playing (epEnemie)card " + playCard.Name + " to " + row + "-" + index + " targeting: " + deployRow + "-" + deployIndex);
                                     }
                                 }
                             }
@@ -162,7 +163,7 @@ namespace GwentNAi.MctsMove
                                             clonedDeployBoard.RemoveDestroyedCards();
                                         }
 
-                                        parent.AppendChild(clonedDeployBoard, false, "Playing (epAlly)card " + playCard.Name + " to" + row + "-" + index + " targeting: " + deployRow + "-" + deployIndex);
+                                        parent.AppendChild(clonedDeployBoard, false, "Playing (epAlly)card " + playCard.Name + " to " + row + "-" + index + " targeting: " + deployRow + "-" + deployIndex);
                                     }
                                 }
                             }
@@ -184,7 +185,7 @@ namespace GwentNAi.MctsMove
                                         clonedDeployBoard.RemoveDestroyedCards();
                                     }
 
-                                    parent.AppendChild(clonedDeployBoard, false, "Playing (epCard)card " + playCard.Name + " to" + row + "-" + index + " targeting: " + deployIndex);
+                                    parent.AppendChild(clonedDeployBoard, false, "Playing (epCard)card " + playCard.Name + " to " + row + "-" + index + " targeting: " + deployIndex);
                                 }
                             }
 
@@ -194,7 +195,7 @@ namespace GwentNAi.MctsMove
                         else
                         {
                             clonedBoard.CurrentPlayerActions.PlayCardActions.Clear();
-                            parent.AppendChild(clonedBoard, false, "Playing card " + playCard.Name + " to" + row + "-" + index);
+                            parent.AppendChild(clonedBoard, false, "Playing card " + playCard.Name + " to " + row + "-" + index);
                         }
                     }
                 }
@@ -227,7 +228,6 @@ namespace GwentNAi.MctsMove
             //Return if player will not be able to pass or end turn
             if (parent.Board.GetCurrentLeader().Hand.Cards.Count == 0 && !parent.Board.GetCurrentLeader().HasPlayedCard) return;
 
-
             for (int cardIndex = 0; cardIndex < parent.Board.CurrentPlayerActions.OrderActions.Count; cardIndex++)
             {
 
@@ -239,7 +239,6 @@ namespace GwentNAi.MctsMove
                 {
                     orderCard.Order(clonedBoard);
                 }
-
                 if ((actionCard is IOrderExpandPickAll ||
                     actionCard is IOrderExpandPickEnemie ||
                     actionCard is IOrderExpandPickAlly ||
@@ -269,13 +268,13 @@ namespace GwentNAi.MctsMove
 
                                 if (actionCard is IOrderExpandPickEnemie pEC)
                                 {
-                                    pEC.postPickEnemieOrder(childBoard, deployRow, deployIndex);
+                                    pEC.PostPickEnemieOrder(childBoard, deployRow, deployIndex);
                                     childBoard.RemoveDestroyedCards();
                                 }
 
 
                                 childBoard.CurrentPlayerActions.OrderActions.RemoveAt(cardIndex);
-                                parent.AppendChild(childBoard, false, "Order pick enemie by: " + actionCard.Name + "targeting: " + deployRow + "-" + deployIndex);
+                                parent.AppendChild(childBoard, false, "Order pick enemie by: " + actionCard.Name + " targeting: " + deployRow + "-" + deployIndex);
                             }
                         }
                     }
@@ -301,7 +300,7 @@ namespace GwentNAi.MctsMove
 
 
                                 childBoard.CurrentPlayerActions.OrderActions.RemoveAt(cardIndex);
-                                parent.AppendChild(childBoard, false, "Order pick ally by: " + actionCard.Name + "targeting: " + deployRow + "-" + deployIndex);
+                                parent.AppendChild(childBoard, false, "Order pick ally by: " + actionCard.Name + " targeting: " + deployRow + "-" + deployIndex);
                             }
                         }
                     }
@@ -323,13 +322,13 @@ namespace GwentNAi.MctsMove
 
                                     if (actionCard is IOrderExpandPickAll pAC)
                                     {
-                                        pAC.postPickAllOrder(childBoard, orderPlayer, deployRow, deployIndex);
+                                        pAC.PostPickAllOrder(childBoard, orderPlayer, deployRow, deployIndex);
                                         childBoard.RemoveDestroyedCards();
                                     }
 
 
                                     childBoard.CurrentPlayerActions.OrderActions.RemoveAt(cardIndex);
-                                    parent.AppendChild(childBoard, false, "Order pick all by: " + actionCard.Name + "targeting: " + orderPlayer + "-" + deployRow + "-" + deployIndex);
+                                    parent.AppendChild(childBoard, false, "Order pick all by: " + actionCard.Name + " targeting: " + orderPlayer + "-" + deployRow + "-" + deployIndex);
                                 }
                             }
 
@@ -358,7 +357,7 @@ namespace GwentNAi.MctsMove
 
 
                                 childBoard.CurrentPlayerActions.OrderActions.RemoveAt(cardIndex);
-                                parent.AppendChild(childBoard, false, "Order play card by: " + actionCard.Name + "targeting: " + deployRow + "-" + deployIndex);
+                                parent.AppendChild(childBoard, false, "Order play card by: " + actionCard.Name + " targeting: " + deployRow + "-" + deployIndex);
                             }
                         }
                     }
@@ -378,7 +377,6 @@ namespace GwentNAi.MctsMove
             parent.Board.CurrentPlayerActions.ClearImidiateActions();
             parent.Board.CurrentPlayerActions.LeaderActions(parent.Board);
 
-            //carefull -> so that leader ability playCard methods dont act like they are play from hand...HasPlayedCard is not set to true :)
             if (parent.Board.CurrentPlayerActions.AreImidiateActionsFull())
             {
                 for (int row = 0; row < MAX_ROWS; row++)

@@ -248,6 +248,18 @@ namespace GwentNAi.GameSource.Board
             CurrentlyPlayingLeader.HasUsedAbility = false;
         }
 
+        public bool BoardIsFull()
+        {
+            bool p1BoardFull = Leader1.Board[0].Count == 9 && Leader1.Board[1].Count == 9;
+            bool p2BoardFull = Leader2.Board[0].Count == 9 && Leader2.Board[1].Count == 9;
+
+            return p1BoardFull && p2BoardFull;
+        }
+        
+        public bool CurrentBoardIsOneFromFull()
+        {
+            return GetCurrentBoard()[0].Count + GetCurrentBoard()[1].Count == 17;
+        }
 
     }
 }

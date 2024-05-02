@@ -23,10 +23,10 @@ namespace GwentNAi.GameSource.Cards.Neutral
 
         public void Order(GameBoard board)
         {
-            pickEnemie(board);
+            PickEnemie(board);
         }
 
-        public void pickEnemie(GameBoard board)
+        public void PickEnemie(GameBoard board)
         {
             List<List<int>> enemieIndexes = new List<List<int>>(2) { new List<int>(10), new List<int>(10) };
             List<List<DefaultCard>> enemieBoard;
@@ -48,7 +48,7 @@ namespace GwentNAi.GameSource.Cards.Neutral
             board.CurrentPlayerActions.ImidiateActions[0] = enemieIndexes;
         }
 
-        public void postPickEnemieOrder(GameBoard board, int row, int index)
+        public void PostPickEnemieOrder(GameBoard board, int row, int index)
         {
             List<List<DefaultCard>> enemieBoard = (board.CurrentPlayerBoard == board.Leader1.Board ? board.Leader2.Board : board.Leader1.Board);
             if (enemieBoard[row][index].CurrentValue % 3 == 0) enemieBoard[row][index].TakeDemage(enemieBoard[row][index].CurrentValue, false, board);

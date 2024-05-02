@@ -11,7 +11,7 @@ namespace GwentNAi.MctsMove
         public string? Move { get; set; }
         public GameBoard Board { get; set; }
         public int NumberOfVisits { get; set; }
-        public double Reward { get; set; }
+        private double Reward { get; set; }
         public bool IsLeaf => Children == null || Children.Count == 0;
         public bool AllChildrenExplored => Children.All(child => child.NumberOfVisits > 0);
         public bool IsTerminal => Board.Leader1.Victories == 2 || Board.Leader2.Victories == 2;

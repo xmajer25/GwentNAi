@@ -24,8 +24,10 @@ namespace GwentNAi.GameSource
             
             
             DeckSetting();
-            DetermineStartingPlayer();
-            board.ShufflerBothDecks();
+            board.CurrentlyPlayingLeader = board.Leader2;
+            board.CurrentPlayerBoard = board.Leader2.Board;
+            //DetermineStartingPlayer();
+            //board.ShufflerBothDecks();
             board.DrawBothHands(10);
             ConsolePrint.UpdateBoard(board);
 

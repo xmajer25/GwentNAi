@@ -4,7 +4,7 @@ namespace GwentNAi.GameSource.Cards.IExpand
 {
     public interface IOrderExpandPickEnemie
     {
-        public void pickEnemie(GameBoard board);
-        public void postPickEnemieOrder(GameBoard board, int row, int index);
+        public void PickEnemie(GameBoard board);
+        public void PostPickEnemieOrder(GameBoard board, int row, int index);
     }
 }

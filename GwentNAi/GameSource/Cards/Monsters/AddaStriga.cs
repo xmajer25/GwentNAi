@@ -22,10 +22,10 @@ namespace GwentNAi.GameSource.Cards.Monsters
         }
         public void Order(GameBoard board)
         {
-            pickAll(board);
+            PickAll(board);
         }
 
-        public void pickAll(GameBoard board)
+        public void PickAll(GameBoard board)
         {
             int currentRow = 0;
 
@@ -58,7 +58,7 @@ namespace GwentNAi.GameSource.Cards.Monsters
             }
         }
 
-        void IOrderExpandPickAll.postPickAllOrder(GameBoard board, int player, int row, int index)
+        void IOrderExpandPickAll.PostPickAllOrder(GameBoard board, int player, int row, int index)
         {
             int multiplier = 1;
             List<List<DefaultCard>> targetedBoard = (player == 0 ? board.Leader1.Board : board.Leader2.Board);

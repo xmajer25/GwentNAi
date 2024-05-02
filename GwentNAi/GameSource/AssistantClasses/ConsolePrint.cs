@@ -6,6 +6,12 @@ using System.Text;
 
 namespace GwentNAi.GameSource.AssistantClasses
 {
+    /**
+     * Static class for console printing
+     * Draws static elements (borders, drawings)
+     * Draws dynamic elements (points, card amount)
+     * Writes prompts at the start of game (asking for leader ability, asking for deck)
+     */
     public static class ConsolePrint
     {
         static public readonly int windowHeight = 60;
@@ -13,6 +19,10 @@ namespace GwentNAi.GameSource.AssistantClasses
         static public readonly int windowSeparator = 37;
 
 
+        /***
+         * Updates the upper part of screen
+         * Changing displayed content to current game state
+         */
         public static void UpdateBoard(GameBoard board)
         {
             ClearTop();
@@ -49,6 +59,13 @@ namespace GwentNAi.GameSource.AssistantClasses
             }
         }
 
+        /**
+         * Draws a single card on a specific position
+         * 
+         * DefaultCard card : gives information about the card
+         * int player : used to determine wheater top or bottom part of the board should be used
+         * int row, int index : positions
+         */
         private static void DrawCard(DefaultCard card, int player, int row, int index)
         {
             int playerRow = (row + 2 * player) + 1;
@@ -93,6 +110,8 @@ namespace GwentNAi.GameSource.AssistantClasses
             Console.Write("┖────────┚");
         }
 
+        /**
+         */
         private static void DrawBoardBorders()
         {
 
@@ -111,6 +130,8 @@ namespace GwentNAi.GameSource.AssistantClasses
             }
         }
 
+        /**
+         */
         private static void DrawGraveyardBorder()
         {
             for (int i = 0; i < 2; i++)
@@ -126,6 +147,9 @@ namespace GwentNAi.GameSource.AssistantClasses
             }
         }
 
+        /**
+         * Updates card amount displayed in the graveyard
+         */
         private static void UpdateGraveyard(int p1GraveyardCount, int p2GraveyardCount)
         {
             Console.SetCursorPosition(50, 2);
@@ -135,6 +159,8 @@ namespace GwentNAi.GameSource.AssistantClasses
             Console.Write(p2GraveyardCount);
         }
 
+        /**
+         */
         private static void DrawDeckBorder()
         {
             for (int i = 0; i < 2; i++)
@@ -150,6 +176,9 @@ namespace GwentNAi.GameSource.AssistantClasses
             }
         }
 
+        /**
+         * Updates card amount displayed in the deck
+         */
         private static void UpdateDeck(int p1DeckCount, int p2DeckCount)
         {
             Console.SetCursorPosition(149, 2);
@@ -159,6 +188,8 @@ namespace GwentNAi.GameSource.AssistantClasses
             Console.Write(p2DeckCount);
         }
 
+        /**
+         */
         private static void DrawHandBorder()
         {
             for (int i = 0; i < 2; i++)
@@ -174,6 +205,9 @@ namespace GwentNAi.GameSource.AssistantClasses
             }
         }
 
+        /**
+         * Updates card amount displayed in hand
+         */
         private static void UpdateHand(int p1HandCount, int p2HandCount)
         {
             Console.SetCursorPosition(103, 2);
@@ -183,6 +217,9 @@ namespace GwentNAi.GameSource.AssistantClasses
             Console.Write(p2HandCount);
         }
 
+        /**
+         * Updates the total points for both players
+         */
         private static void UpdatePoints(int player1Points, int player2Points)
         {
             string p1StringPoints = player1Points.ToString();
@@ -194,6 +231,8 @@ namespace GwentNAi.GameSource.AssistantClasses
             Console.Write(player2Points);
         }
 
+        /**
+         */
         private static void DrawPointBoxes()
         {
             for (int i = 0; i < 2; i++)
@@ -209,6 +248,9 @@ namespace GwentNAi.GameSource.AssistantClasses
             Console.ForegroundColor = ConsoleColor.White;
         }
 
+        /*
+         * Draws leader picture depending on the faction used by the player
+         */
         public static void DrawLeader(int playerNum, string leaderFaction)
         {
             Console.ForegroundColor = (playerNum == 0 ? ConsoleColor.DarkMagenta : ConsoleColor.DarkCyan);
@@ -221,6 +263,9 @@ namespace GwentNAi.GameSource.AssistantClasses
             Console.ForegroundColor = ConsoleColor.White;
         }
 
+        /**
+         * Draws all the elements of the UI that do not change
+         */
         public static void DrawStaticElements()
         {
             DrawSeparator();
@@ -231,6 +276,9 @@ namespace GwentNAi.GameSource.AssistantClasses
             DrawHandBorder();
         }
 
+        /**
+         * Console initializer
+         */
         public static void Init()
         {
             Console.SetBufferSize(windowWidth, windowHeight);
@@ -239,13 +287,18 @@ namespace GwentNAi.GameSource.AssistantClasses
             Console.Clear();
         }
 
+        /**
+         * Draws separator between main board and user input part
+         */
         private static void DrawSeparator()
         {
             Console.SetCursorPosition(0, windowSeparator);
             Console.WriteLine(new String('#', windowWidth));
         }
 
-
+        /**
+         * Clears bottom part - user input part
+         */
         public static void ClearBottom()
         {
             Console.SetCursorPosition(0, windowSeparator + 1);
@@ -258,7 +311,9 @@ namespace GwentNAi.GameSource.AssistantClasses
             Console.Write(new String(' ', windowWidth));
         }
 
-
+        /*
+         * Clears top part - main board part
+         */
         public static void ClearTop()
         {
             for (int i = 6; i < 18; i++)
@@ -294,6 +349,10 @@ namespace GwentNAi.GameSource.AssistantClasses
             Console.Write("   ");
         }
 
+        /*
+         * Writes an indicator for a user input
+         * -Leader ability selection
+         */
         public static void AskForLeaderAbility(int choosingPlayerNumber)
         {
             Console.SetCursorPosition(0, windowSeparator + 1);
@@ -301,13 +360,20 @@ namespace GwentNAi.GameSource.AssistantClasses
             Console.WriteLine("1.) ArachasSwarm\t2.) BloodScent\t3.)ForceOfNature");
         }
 
+        /*
+         * Writes an indicator for a user input
+         * -Deck selection
+         */
         public static void AskForDeck(int choosingPlayerNumber)
         {
             Console.SetCursorPosition(0, windowSeparator + 1);
             Console.WriteLine("Select Deck for Player #" + choosingPlayerNumber);
             Console.WriteLine("1.) TestDeck\t2.)MonsterDeck1");
         }
-
+        
+        /**
+         * Returns cursor Y position
+         */
         public static int GetCursorY()
         {
             int Ypos;

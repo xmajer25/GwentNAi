@@ -1,4 +1,5 @@
 ﻿using GwentNAi.GameSource.Cards.Monsters;
+using GwentNAi.GameSource.Cards.Neutral;
 using GwentNAi.GameSource.Cards.Syndicate;
 /**
  * used deck:
@@ -13,11 +14,11 @@ namespace GwentNAi.GameSource.Decks.DeckSeeds
         {
             Cards = new()
             {
-                new AddaStriga(), new Katakan(), new Protofleder(), new Ozzrel(), new Golyat(),
-                new PugoBoomBreaker(), new Whispess(), new Brewess(), new Weavess(), new OldSpeartipAsleep(),
+                new AddaStriga(), new Protofleder(), new Ozzrel(), new Golyat(),
+                new PugoBoomBreaker(), new Whispess(), new Weavess(), new OldSpeartipAsleep(),
                 new Griffin(), new Griffin(), new IceGiant(), new IceGiant(), new WildHuntRider(),
                 new WildHuntRider(), new Wyvern(), new Wyvern(), new Ghoul(), new Ghoul(),
-                new NekkerWarrior(),  new NekkerWarrior(), new WildHuntHound(), new Nekker(), new Nekker()
+                new NekkerWarrior(),  new NekkerWarrior(), new WildHuntHound(), new Nekker(), new Nekker(), new GeraltOfRivia(), new GeraltOfRivia()
             };
             Name = "Monster Deck 1";
         }

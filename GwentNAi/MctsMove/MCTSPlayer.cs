@@ -9,13 +9,17 @@ namespace GwentNAi.MctsMove
 {
     public static class MCTSPlayer
     {
+        private static readonly Stopwatch stopwatch = new();
+
         public static int MCTSMove(GameBoard board)
         {
+            stopwatch.Start();
+
             int Iterations = board.GetCurrentLeader().Iterations;
             int Simulations = board.GetCurrentLeader().Simulations;
 
             GameBoard clonedBoard = (GameBoard)board.Clone();
-            MCTSNode Root = new MCTSNode(null, clonedBoard);
+            MCTSNode Root = new(null, clonedBoard);
             Winner winner;
             double reward;
 
@@ -96,6 +100,9 @@ namespace GwentNAi.MctsMove
                 //BACK_PROPAGATION
                 SelectedNode.UpdateStats(reward);
             }
+            stopwatch.Stop();
+            Logging.LogTimeSpent(stopwatch.ElapsedMilliseconds);
+            stopwatch.Reset();
 
             //MODIFY BOARD WITH BEST MOVE AND RETURN
             board = Execute(Root, board);

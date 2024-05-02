@@ -80,14 +80,14 @@ namespace GwentNAi.HumanMove
                             HumanConsolePrint.ListEnemieExpand(board.CurrentPlayerActions.ImidiateActions[0]);
                             cardPos = HumanConsoleGet.GetPositionForCard(board.CurrentPlayerActions.ImidiateActions[0]);
                             board.CurrentPlayerActions.ClearImidiateActions();
-                            PickEnemieCard.postPickEnemieOrder(board, cardPos[0], cardPos[1]);
+                            PickEnemieCard.PostPickEnemieOrder(board, cardPos[0], cardPos[1]);
                         }
                         else if (actionCard is IOrderExpandPickAll PickAllCard)
                         {
                             HumanConsolePrint.ListAllExpand(board.CurrentPlayerActions.ImidiateActions);
                             cardPos = HumanConsoleGet.GetPositionFromWholeBoard(board.CurrentPlayerActions.ImidiateActions);
                             board.CurrentPlayerActions.ClearImidiateActions();
-                            PickAllCard.postPickAllOrder(board, cardPos[0], cardPos[1], cardPos[2]);
+                            PickAllCard.PostPickAllOrder(board, cardPos[0], cardPos[1], cardPos[2]);
                         }
                         else if (actionCard is IOrderExpandPickAlly PickAllyCard)
                         {

@@ -2,6 +2,7 @@
 using GwentNAi.GameSource.Cards.IDefault;
 using GwentNAi.GameSource.Decks;
 using GwentNAi.GameSource.Player;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace GwentNAi.GameSource.Board
@@ -135,7 +136,7 @@ namespace GwentNAi.GameSource.Board
             }
         }
 
-        private void GetOrderActions(List<List<DefaultCard>> CurrentPlayerBoard)
+        public void GetOrderActions(List<List<DefaultCard>> CurrentPlayerBoard)
         {
             foreach (var row in CurrentPlayerBoard)
             {

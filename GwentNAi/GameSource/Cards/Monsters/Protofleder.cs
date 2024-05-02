@@ -23,7 +23,6 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
         public void Deploy(GameBoard board)
         {
-            List<List<int>> enemieIndexes = new List<List<int>>(2) { new List<int>(10), new List<int>(10) };
             List<List<DefaultCard>> enemieBoard = board.GetEnemieBoard();
 
             for (int i = 0; i < enemieBoard.Count; i++)

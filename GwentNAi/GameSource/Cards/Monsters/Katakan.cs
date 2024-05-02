@@ -61,11 +61,12 @@ namespace GwentNAi.GameSource.Cards.Monsters
         {
             DefaultCard playedCard = new Ekimmara();
             board.GetCurrentBoard()[row].Insert(column, playedCard);
-            Cooldown(4);
+            Katakan card = GetSelf(board);
+            if (card != null) card.Cooldown(4);
             board.GetCurrentLeader().UseAbility();
         }
 
-        void IUpdate.StartTurnUpdate()
+        public void StartTurnUpdate()
         {
             if (TimeToOrder > 0)
             {
@@ -79,6 +80,18 @@ namespace GwentNAi.GameSource.Cards.Monsters
             {
                 TimeToOrder--;
             }
+        }
+
+        private Katakan GetSelf(GameBoard board)
+        {
+            foreach(var row in  board.GetCurrentBoard())
+            {
+                foreach(DefaultCard card in  row)
+                {
+                    if(card == this) return card as Katakan;
+                }
+            }
+            return null;
         }
     }
 }

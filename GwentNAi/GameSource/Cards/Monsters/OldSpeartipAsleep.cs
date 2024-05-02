@@ -23,10 +23,16 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
         public override void TakeDemage(int damage, bool lethal, GameBoard board)
         {
+            if(lethal)
+            {
+                CurrentValue = 0;
+                return; 
+            }
+
             int _excessDamage = Shield - damage;
             Shield -= damage;
             if (Shield < 0) Shield = 0;
-            CurrentValue -= _excessDamage;
+            CurrentValue += _excessDamage; // _excessDamage is a negative number
 
             Transform(board, false);
         }

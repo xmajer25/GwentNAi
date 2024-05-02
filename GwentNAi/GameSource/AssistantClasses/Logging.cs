@@ -1,19 +1,20 @@
 ﻿using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GwentNAi.GameSource.AssistantClasses
 {
+    /*
+     * Static class for logging game progress
+     * Logging for each move: graveyard, hand, deck, board, move made, time spent for the move (ai only)
+     * Logging for round end: winning player, points of both player
+     */
     public static class Logging
     {
         private static readonly string fileName = "..\\GameLogs.txt";
 
+        /*
+         * Clears file
+         */
         public static void ClearFile()
         {
             using (StreamWriter sw = new(fileName))
@@ -21,9 +22,15 @@ namespace GwentNAi.GameSource.AssistantClasses
             }
         }
 
+        /*
+         * Returns spacing for text so it alligns
+         */
         private static string GetSpacing(string firstWord)
             => new String(' ', 50 - firstWord.Length);
 
+        /*
+         * Writes a separator for logs after each turn
+         */
         public static void SeparateTurnLogs()
         {
             using (StreamWriter sw = new(fileName, true))
@@ -34,6 +41,9 @@ namespace GwentNAi.GameSource.AssistantClasses
             }
         }
 
+        /*
+         * Writes the move made in current round
+         */
         public static void LogMove(GameBoard board, string move)
         {
             string leader = board.GetCurrentLeader() == board.Leader1 ? "Leader1" : "Leader2";
@@ -43,6 +53,9 @@ namespace GwentNAi.GameSource.AssistantClasses
             }
         }
 
+        /*
+         * Logging victorious player and points of both players
+         */
         public static void LogVictory(int gameResult, int l1Points, int l2Points, string typeOfWin)
         {
             using (StreamWriter sw = new(fileName, true))
@@ -71,6 +84,9 @@ namespace GwentNAi.GameSource.AssistantClasses
             }
         }
 
+        /*
+         * Logging all the cards in hand, graveyard, and deck for both players
+         */
         public static void LogCards(GameBoard board)
         {
             List<DefaultCard> L1StartingCards = board.Leader1.StartingDeck.Cards;
@@ -113,6 +129,9 @@ namespace GwentNAi.GameSource.AssistantClasses
             LogGameBoard(board);
         }
 
+        /*
+         * Logging the gameboard content
+         */
         private static void LogGameBoard(GameBoard board)
         {
             using (StreamWriter sw = new(fileName, true))
@@ -141,6 +160,20 @@ namespace GwentNAi.GameSource.AssistantClasses
                     }
                     sw.WriteLine();
                 }
+                sw.WriteLine();
+            }
+        }
+
+        /*
+         * Logging time spent on a move
+         * Only used on AI for experiments
+         */
+        public static void LogTimeSpent(double time)
+        {
+            using (StreamWriter sw = new(fileName, true))
+            {
+                sw.WriteLine();
+                sw.WriteLine("\t\tTimeSpent (ms): " + time);
                 sw.WriteLine();
             }
         }
