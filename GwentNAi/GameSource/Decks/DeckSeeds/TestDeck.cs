@@ -4,6 +4,9 @@ namespace GwentNAi.GameSource.Decks.DeckSeeds
 {
     public class TestDeck : DefaultDeck
     {
+        /*
+         * Child class for defing a deck used for gameplay
+         */
         public TestDeck()
         {
             Cards = new()

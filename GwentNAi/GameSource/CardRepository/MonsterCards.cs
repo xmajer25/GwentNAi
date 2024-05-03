@@ -3,8 +3,16 @@ using GwentNAi.GameSource.Cards.Monsters;
 
 namespace GwentNAi.GameSource.CardRepository
 {
+    /*
+     * Class holding information about cards played by players
+     * Has a list of all the possible cards held by the player,
+     * and a dictionary for counting the ammount of times each card has been played
+     */
     public class MonsterCards : ICloneable
     {
+        /*
+         * All of the monster cards implemented
+         */
         private readonly List<DefaultCard> Cards = new()
         {
             new AddaStriga(), new Brewess(), new Ghoul(), new Golyat(), new Griffin(), new IceGiant(),
@@ -12,12 +20,22 @@ namespace GwentNAi.GameSource.CardRepository
             new Protofleder(), new Weavess(), new Whispess(), new WildHuntHound(), new WildHuntRider(), new Wyvern()
         };
 
+        /*
+         * Dictionary used for counting cards for MCTS random enemie play
+         */
         private readonly Dictionary<string, int> CardCount = new Dictionary<string, int>();
 
+        /*
+         * Initialize new MonsterCards object with new Dictionary
+         */
         public MonsterCards()
         {
             CardCount = new Dictionary<string, int>();
         }
+
+        /*
+         * Creates a deep clone of this object
+         */
         public object Clone()
         {
             var clonedMonsterCards = new MonsterCards();
@@ -28,6 +46,10 @@ namespace GwentNAi.GameSource.CardRepository
 
             return clonedMonsterCards;
         }
+
+        /*
+         * Returns a random card from all the possible monster cards
+         */
         public DefaultCard GetRandomCard()
         {
             Random random = new Random();
@@ -42,6 +64,12 @@ namespace GwentNAi.GameSource.CardRepository
             return Cards[randomIndex];
         }
 
+        /*
+         * Takes a card and checks if it has been used
+         * (one time for golden border, twice for brown border)
+         * returns true if card can be used
+         * Used for getting random cards for enemie in MCTS
+         */
         private bool IsCardAllowed(DefaultCard card)
         {
             int count;
@@ -60,6 +88,10 @@ namespace GwentNAi.GameSource.CardRepository
             return true;
         }
 
+        /*
+         * When a random card is selected,
+         * Either update its count or add a new counter
+         */
         private void UpdateCardCount(DefaultCard card)
         {
             if (CardCount.ContainsKey(card.Name))

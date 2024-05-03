@@ -4,8 +4,14 @@ using GwentNAi.GameSource.Decks;
 
 namespace GwentNAi.GameSource.Player.Monsters
 {
+    /*
+     * Child class of DefautlLeader for defining new leader ability
+     */
     public class BloodScent : DefaultLeader
     {
+        /*
+         * Initialize information about specific leader ability
+         */
         public BloodScent()
         {
             ProvisionValue = 15;
@@ -15,6 +21,9 @@ namespace GwentNAi.GameSource.Player.Monsters
             HasPassed = false;
         }
 
+        /*
+         * Creates a deep clone of this object
+         */
         public override object Clone()
         {
             DefaultLeader clonedLeader = new BloodScent()
@@ -43,6 +52,10 @@ namespace GwentNAi.GameSource.Player.Monsters
 
             return clonedLeader;
         }
+
+        /*
+         * Executes order if charged
+         */
         public override void Order(GameBoard board)
         {
             if (AbilityCharges == 0) return;

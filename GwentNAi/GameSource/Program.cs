@@ -15,27 +15,28 @@ namespace GwentNAi.GameSource
 
         static void Main(string[] args)
         {
+            //Initialize logs and console
             Logging.ClearFile();
             ConsolePrint.Init();
             ConsolePrint.DrawStaticElements();
             (board.Leader1, board.Leader2) = LeaderSetting();
 
+            //Handle program arguments
             ArgumentHandler.HandleArguments(args, ref player1Move, ref player2Move, board.Leader1, board.Leader2);
             
-            
+            //Prepare the game
             DeckSetting();
-            board.CurrentlyPlayingLeader = board.Leader2;
-            board.CurrentPlayerBoard = board.Leader2.Board;
-            //DetermineStartingPlayer();
-            //board.ShufflerBothDecks();
+            DetermineStartingPlayer();
+            board.ShufflerBothDecks();
             board.DrawBothHands(10);
             ConsolePrint.UpdateBoard(board);
 
 
-            //game
+            //>>>GAME LOOP
             while (board.Leader1.Victories != 2 && board.Leader2.Victories != 2)
             {
                 board.CurrentPlayerActions.CardSwaps.PlayersToSwap = 2;
+                //>>>TURN LOOP
                 while (board.Leader1.HasPassed == false || board.Leader2.HasPassed == false)
                 {
                     if (board.CurrentPlayerActions.CardSwaps.PlayersToSwap != 0) board.GetSwapCards();
@@ -44,7 +45,7 @@ namespace GwentNAi.GameSource
 
                     int moveOutcome = 0;
                     Logging.LogCards(board);
-                    //move
+                    //>>>MOVE LOOP
                     while (moveOutcome == 0)
                     {
                         if (board.CurrentlyPlayingLeader.HasPassed) break;
@@ -68,7 +69,10 @@ namespace GwentNAi.GameSource
             Console.ReadLine();
         }
 
-
+        /*
+         * End of the game method
+         * -> logs and draws victory
+         */
         static private void DetermineGameWinner()
         {
             if (board.Leader1.Victories == board.Leader2.Victories)
@@ -90,6 +94,9 @@ namespace GwentNAi.GameSource
             }
         }
 
+        /*
+         * At the end of round gives victory points to the winner
+         */
         static private void DetermineRoundWinner()
         {
             if (board.PointSumP1 == board.PointSumP2)
@@ -111,6 +118,10 @@ namespace GwentNAi.GameSource
             Drawings.DrawCrown(board);
         }
 
+        /*
+         * Method pre-game
+         * Setting leader abilities for both players
+         */
         static private (DefaultLeader leader1, DefaultLeader leader2) LeaderSetting()
         {
             ConsolePrint.AskForLeaderAbility(1);
@@ -126,6 +137,10 @@ namespace GwentNAi.GameSource
             return (leader1, leader2);
         }
 
+        /*
+         * Method pre-game
+         * Setting decks used for both players
+         */
         static private void DeckSetting()
         {
             ConsolePrint.AskForDeck(1);
@@ -137,6 +152,9 @@ namespace GwentNAi.GameSource
             ConsolePrint.ClearBottom();
         }
 
+        /*
+         * Coin flip to get starting player
+         */
         static private void DetermineStartingPlayer()
         {
             Random coinFlip = new Random();

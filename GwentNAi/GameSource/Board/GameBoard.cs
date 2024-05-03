@@ -7,6 +7,11 @@ using System.Reflection;
 
 namespace GwentNAi.GameSource.Board
 {
+    /*
+     * Classed used to represent the game board
+     * References to both leaders and their parts of the board
+     * Methods for updating this board and retrieving information from it
+     */
     public class GameBoard : ICloneable
     {
         public DefaultLeader? Leader1 { get; set; }
@@ -21,6 +26,9 @@ namespace GwentNAi.GameSource.Board
 
         public ActionContainer CurrentPlayerActions { get; set; } = new();
 
+        /*
+         * Creates a deep clone of current board
+         */
         public object Clone()
         {
             DefaultLeader oldLeader1 = Leader1;
@@ -41,6 +49,9 @@ namespace GwentNAi.GameSource.Board
             return clonedBoard;
         }
 
+        /*
+         * Returns board of the current player
+         */
         public List<List<DefaultCard>> GetCurrentBoard()
         {
             if (CurrentPlayerBoard != Leader1.Board && CurrentPlayerBoard != Leader2.Board)
@@ -50,11 +61,17 @@ namespace GwentNAi.GameSource.Board
             return CurrentPlayerBoard == Leader1.Board ? Leader1.Board : Leader2.Board;
         }
 
+        /*
+         * Returns board of the enemie player
+         */
         public List<List<DefaultCard>> GetEnemieBoard()
         {
             return CurrentPlayerBoard == Leader1.Board ? Leader2.Board : Leader1.Board;
         }
 
+        /*
+         * Returns currently playing leader
+         */
         public DefaultLeader GetCurrentLeader()
         {
             if (CurrentlyPlayingLeader != Leader1 && CurrentlyPlayingLeader != Leader2)
@@ -64,11 +81,18 @@ namespace GwentNAi.GameSource.Board
             return CurrentlyPlayingLeader == Leader1 ? Leader1 : Leader2;
         }
 
+        /*
+         * Returns enemie leader
+         */
         public DefaultLeader GetEnemieLeader()
         {
             return CurrentlyPlayingLeader == Leader1 ? Leader2 : Leader1;
         }
 
+        /*
+         * An update after each move
+         * only used on human player
+         */
         public void MoveUpdate()
         {
             RemoveDestroyedCards();
@@ -76,6 +100,10 @@ namespace GwentNAi.GameSource.Board
             if (GetCurrentLeader().AbilityCharges <= 0) CurrentPlayerActions.LeaderActions = null;
         }
 
+        /*
+         * An update after each turn
+         * turn: when player passes or ends turn
+         */
         public void TurnUpdate()
         {
             EndTurnCardsUpdate();
@@ -85,6 +113,10 @@ namespace GwentNAi.GameSource.Board
             UpdateCPCards();
         }
 
+        /*
+         * Updates all cards that have a trigger at the end of the turn
+         * so far: bleeding, timer, special end turn update
+         */
         public void EndTurnCardsUpdate()
         {
 
@@ -109,6 +141,10 @@ namespace GwentNAi.GameSource.Board
                 }
             }
         }
+
+        /*
+         * Resets board at the start of new round
+         */
         public void ResetBoard()
         {
             Leader1.HasPassed = false;
@@ -117,18 +153,28 @@ namespace GwentNAi.GameSource.Board
             UpdatePoints();
         }
 
+        /*
+         * Shuffle cards in hand for both players
+         * (start of the game)
+         */
         public void ShufflerBothDecks()
         {
             Leader1.ShuffleStartingDeck();
             Leader2.ShuffleStartingDeck();
         }
 
+        /*
+         * Places n cards from deck into hand for both players
+         */
         public void DrawBothHands(int numberOfCards)
         {
             Leader1.DrawCards(numberOfCards);
             Leader2.DrawCards(numberOfCards);
         }
 
+        /*
+         * Fills in options for swaping cards at the start of a round
+         */
         public void GetSwapCards()
         {
             CurrentPlayerActions.CardSwaps.Indexes.Clear();
@@ -138,9 +184,9 @@ namespace GwentNAi.GameSource.Board
             }
         }
 
-        //When we get to resiliant cards...
-        //Create list that will hold them
-        //clear row and then make row equal to the list with resiliant cards
+        /*
+         * Clears all cards placed on the board
+         */
         public void RemoveCardsAtRoundEnd()
         {
             foreach (var row in Leader1.Board)
@@ -150,6 +196,9 @@ namespace GwentNAi.GameSource.Board
                 row.Clear();
         }
 
+        /*
+         * Removes all cards on the board with health less than or equal to zero
+         */
         public void RemoveDestroyedCards()
         {
             Leader1.Board.ToList().ForEach(row =>
@@ -185,6 +234,11 @@ namespace GwentNAi.GameSource.Board
             });
         }
 
+        /*
+         * Methods takes a bleeding card as an argument
+         * take 1 damage and remove 1 bleeding point
+         * Trigger all cards that respond to bleeding
+         */
         public void EvaluateBleeding(DefaultCard bleedingCard)
         {
             bleedingCard.Bleeding--;
@@ -211,6 +265,10 @@ namespace GwentNAi.GameSource.Board
             }
         }
 
+        /*
+         * Counts up all the points on board for both players
+         * Updates PointSum for both players
+         */
         private void UpdatePoints()
         {
             PointSumP1 = PointSumP2 = 0;
@@ -219,6 +277,9 @@ namespace GwentNAi.GameSource.Board
             PointSumP2 = Leader2.Board.Sum(row => row.Sum(obj => obj.CurrentValue));
         }
 
+        /*
+         * Triggers all the card methods for updating at the start of a turn
+         */
         private void UpdateCPCards()
         {
             foreach (var row in GetCurrentLeader().Board)
@@ -237,17 +298,21 @@ namespace GwentNAi.GameSource.Board
             }
         }
 
+        /*
+         * At the end of each turn swap players
+         */
         private void SwapPlayers()
         {
             CurrentlyPlayingLeader = GetEnemieLeader();
             CurrentPlayerBoard = GetEnemieBoard();
 
-            if (CurrentlyPlayingLeader.Board != CurrentPlayerBoard) throw new CustomException("Inner Error -> Swap Failed");
-
             CurrentlyPlayingLeader.HasPlayedCard = false;
             CurrentlyPlayingLeader.HasUsedAbility = false;
         }
 
+        /*
+         * Returns ture if there is no more space on the board
+         */
         public bool BoardIsFull()
         {
             bool p1BoardFull = Leader1.Board[0].Count == 9 && Leader1.Board[1].Count == 9;
@@ -256,6 +321,9 @@ namespace GwentNAi.GameSource.Board
             return p1BoardFull && p2BoardFull;
         }
         
+        /*
+         * Returns true if there is only one space left on the board (of one player)
+         */
         public bool CurrentBoardIsOneFromFull()
         {
             return GetCurrentBoard()[0].Count + GetCurrentBoard()[1].Count == 17;

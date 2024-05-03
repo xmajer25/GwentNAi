@@ -3,8 +3,14 @@ using GwentNAi.GameSource.Cards.IDefault;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
+    /*
+     * Child class of a DefaultCard implementign a specific card
+     */
     public class Nekker : DefaultCard, IDeploy, IThrive
     {
+        /*
+         * Initialize information about specific card 
+         */
         public Nekker()
         {
             CurrentValue = 1;
@@ -20,6 +26,9 @@ namespace GwentNAi.GameSource.Cards.Monsters
             Bleeding = 0;
         }
 
+        /*
+         * Summon a copy of this card on the board
+         */
         public void Deploy(GameBoard board)
         {
             List<List<DefaultCard>> currentBoard = board.GetCurrentBoard();
@@ -37,6 +46,11 @@ namespace GwentNAi.GameSource.Cards.Monsters
             }
         }
 
+
+        /*
+         * When a card with higher value is played on current board->
+         * increment this card's value
+         */
         public void Thrive(int playedUnitValue)
         {
             if (playedUnitValue > CurrentValue)

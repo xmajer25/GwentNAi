@@ -26,15 +26,25 @@ namespace GwentNAi.GameSource.Player
 
         private static readonly Random Shuffler = new();
 
+        /*
+         * Overridable method for creating deep clones of leaders
+         */
         public abstract object Clone();
 
+        /*
+         * Overridable method for using leader ability
+         */
         public abstract void Order(GameBoard board);
+
 
         //settings for mcts
         public int Simulations { get; set; }
         public int Iterations { get; set; }
 
 
+        /*
+         * Shuffles cards in StartingDeck randomly
+         */
         public void ShuffleStartingDeck()
         {
             int n = StartingDeck.Cards.Count;
@@ -49,6 +59,9 @@ namespace GwentNAi.GameSource.Player
             }
         }
 
+        /*
+         * Moves n Cards from Deck into hand
+         */
         public void DrawCards(int numberOfCards)
         {
             for (int i = 0; i < numberOfCards; i++)
@@ -62,6 +75,9 @@ namespace GwentNAi.GameSource.Player
             }
         }
 
+        /*
+         * Swap a card in hand with a random card from deck
+         */
         public void SwapCards(int index)
         {
             if (StartingDeck.Cards.Count == 0) return;
@@ -73,23 +89,20 @@ namespace GwentNAi.GameSource.Player
             StartingDeck.Cards[swappedCardIndex] = handCard;
         }
 
+        /*
+         * Method for playing a card from hand on a board
+         */
         public void PlayCard(int CardInHandIndex, int RowIndex, int PosIndex, GameBoard board)
         {
-            //Check if PosIndex is correct
-            if (PosIndex > Board[RowIndex].Count) throw new Exception("Inner Error: index out of range");
-            if (PosIndex != 0 && Board[RowIndex][PosIndex - 1] == null) throw new Exception("Inner Error: insert out of order");
-
             //Play card
             HasPlayedCard = true;
             DefaultCard card = Hand.Cards[CardInHandIndex];
             Board[RowIndex].Insert(PosIndex, card);
 
-            //Check if card was placed correctly
-            if (PosIndex != Board[RowIndex].IndexOf(card)) throw new Exception("Inner Error: Card placed in wrong position (PosIndex was too high)");
-
             //Remove from hand
             Hand.Cards.RemoveAt(CardInHandIndex);
 
+            //Trigger deploy ability of card
             if (card is IDeploy DeployCard)
             {
                 DeployCard.Deploy(board);
@@ -99,6 +112,9 @@ namespace GwentNAi.GameSource.Player
             RespondToDeployedCard(board, card);
         }
 
+        /*
+         * Method for playing a card with the card taken as argument
+         */
         public void PlayCard(DefaultCard card, int RowIndex, int PosIndex, GameBoard board)
         {
             HasPlayedCard = true;
@@ -113,6 +129,11 @@ namespace GwentNAi.GameSource.Player
             RespondToDeployedCard(board, card);
         }
 
+        /*
+         * Method for playing a card 
+         * Special for the it doesn't count as leader playing a card
+         * (could be from an ability or so..)
+         */
         public void PlayCardByAbility(DefaultCard card, int RowIndex, int PosIndex, GameBoard board)
         {
             Board[RowIndex].Insert(PosIndex, card);
@@ -126,6 +147,9 @@ namespace GwentNAi.GameSource.Player
             RespondToDeployedCard(board, card);
         }
 
+        /*
+         * Triggers all cards responding to us playing a card on the board
+         */
         private static void RespondToDeployedCard(GameBoard board, DefaultCard currentlyPlayedCard)
         {
             foreach (var row in board.GetCurrentBoard())
@@ -154,21 +178,35 @@ namespace GwentNAi.GameSource.Player
             }
         }
 
+        /*
+         * Leader passed the turn
+         */
         public void Pass()
         {
             HasPassed = true;
         }
 
+        /*
+         * Leader ended their turn
+         * can not be null
+         */
         public static void EndTurn()
         {
 
         }
 
+        /*
+         * Sets true after using an order or leader ability
+         * -> can not pass if true
+         */
         public void UseAbility()
         {
             HasUsedAbility = true;
         }
 
+        /*
+         * Changes information about leader after using leader ability
+         */
         public void PostAbilitySettings()
         {
             AbilityCharges--;

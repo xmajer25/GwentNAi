@@ -3,9 +3,16 @@ using GwentNAi.GameSource.Cards.IDefault;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
+    /*
+     * Child class of a DefaultCard implementign a specific card
+     */
     public class OldSpeartipAsleep : DefaultCard, ITimer
     {
         private int timer = 3;
+        
+        /*
+         * Initialize information about specific card 
+         */
         public OldSpeartipAsleep()
         {
             CurrentValue = 6;
@@ -21,6 +28,10 @@ namespace GwentNAi.GameSource.Cards.Monsters
             Bleeding = 0;
         }
 
+        /*
+         * overriden method for taking damage
+         * when unit takes damage -> transforms into old speartip
+         */
         public override void TakeDemage(int damage, bool lethal, GameBoard board)
         {
             if(lethal)
@@ -32,17 +43,28 @@ namespace GwentNAi.GameSource.Cards.Monsters
             int _excessDamage = Shield - damage;
             Shield -= damage;
             if (Shield < 0) Shield = 0;
-            CurrentValue += _excessDamage; // _excessDamage is a negative number
+            if(_excessDamage < 0)
+            {
+                CurrentValue += _excessDamage; // _excessDamage is a negative number
+            }
+            
 
             Transform(board, false);
         }
 
+        /*
+         * Timer update with each turn
+         * when 0 transform
+         */
         public void Timer(GameBoard board)
         {
             if (timer == 0) Transform(board, true);
             else timer--;
         }
 
+        /*
+         * Transforms into onldSpeartip if that card is in deck
+         */
         private void Transform(GameBoard board, bool byTimer)
         {
             for (int i = 0; i < board.Leader1.Board.Count; i++)
@@ -85,6 +107,9 @@ namespace GwentNAi.GameSource.Cards.Monsters
             }
         }
 
+        /*
+         * Returns Old Speartip if in Deck
+         */
         private OldSpeartip GetOldSpeartip(List<DefaultCard> Deck)
         {
             foreach (var card in Deck)

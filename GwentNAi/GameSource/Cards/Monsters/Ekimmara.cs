@@ -2,8 +2,14 @@
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
+    /*
+     * Child class of a DefaultCard implementign a specific card
+     */
     public class Ekimmara : DefaultCard, IDoomed
     {
+        /*
+         * Initialize information about specific card 
+         */
         public Ekimmara()
         {
             CurrentValue = 3;

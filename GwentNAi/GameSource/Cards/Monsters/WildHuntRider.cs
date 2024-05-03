@@ -3,8 +3,14 @@ using GwentNAi.GameSource.Cards.IDefault;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
+    /*
+     * Child class of a DefaultCard implementign a specific card
+     */
     public class WildHuntRider : DefaultCard, IDeploy
     {
+        /*
+         * Initialize information about specific card 
+         */
         public WildHuntRider()
         {
             CurrentValue = 4;
@@ -20,6 +26,10 @@ namespace GwentNAi.GameSource.Cards.Monsters
             Bleeding = 0;
         }
 
+        /*
+         * Executes ability on deploy
+         * Summons all copies of this card if leader is dominating
+         */
         public void Deploy(GameBoard board)
         {
             if (!IsDominant(board)) return;
@@ -43,6 +53,9 @@ namespace GwentNAi.GameSource.Cards.Monsters
             }
         }
 
+        /*
+         * Returns the number of cards of the same type in our starting deck
+         */
         private int GetNumberOfCopies(GameBoard board)
         {
             int count = board.GetCurrentLeader().StartingDeck.Cards.OfType<WildHuntRider>().Count();
@@ -51,6 +64,9 @@ namespace GwentNAi.GameSource.Cards.Monsters
             return count;
         }
 
+        /*
+         * Returns true if the leader of this card has the card with highest value
+         */
         private bool IsDominant(GameBoard board)
         {
             List<List<DefaultCard>> enemiePlayerBoard = board.GetEnemieBoard();

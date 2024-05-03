@@ -9,8 +9,14 @@ using System.Threading.Tasks;
 
 namespace GwentNAi.GameSource.Cards.Neutral
 {
+    /*
+     * Child class of a DefaultCard implementign a specific card
+     */
     public class GeraltOfRivia : DefaultCard, IDeploy, IDeployExpandPickEnemies
     {
+        /*
+         * Initialize information about specific card 
+         */
         public GeraltOfRivia()
         {
             CurrentValue = 3;
@@ -26,6 +32,10 @@ namespace GwentNAi.GameSource.Cards.Neutral
             Bleeding = 0;
         }
 
+        /*
+         * Fills imidiate actions with deploy targets
+         * (all enemie cards with value above 9)
+         */
         public void Deploy(GameBoard board)
         {
             List<List<DefaultCard>> enemieBoard = board.GetEnemieBoard();
@@ -39,6 +49,10 @@ namespace GwentNAi.GameSource.Cards.Neutral
             }
         }
 
+        /*
+         * Executes deploy ability
+         * Destroys selected card
+         */
         public void postPickEnemieAbilitiy(GameBoard board, int row, int index)
         {
             List<List<DefaultCard>> enemieBoard = board.GetEnemieBoard();

@@ -4,8 +4,14 @@ using GwentNAi.GameSource.Cards.IExpand;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
+    /*
+     * Child class of a DefaultCard implementign a specific card
+     */
     public class Ghoul : DefaultCard, IDeploy, IDeployExpandPickCard
     {
+        /*
+         * Initialize information about specific card 
+         */
         public Ghoul()
         {
             CurrentValue = 1;
@@ -21,6 +27,11 @@ namespace GwentNAi.GameSource.Cards.Monsters
             Bleeding = 0;
         }
 
+        /*
+         * On deploy (if melee row):
+         * fills imidiate actions with possible targets
+         * (Graveyard units without border)
+         */
         public void Deploy(GameBoard board)
         {
             if (!isMelee(board)) return;
@@ -40,6 +51,10 @@ namespace GwentNAi.GameSource.Cards.Monsters
             board.CurrentPlayerActions.ImidiateActions[0][0] = graveYardIndexes;
         }
 
+        /*
+         * Executes deploy
+         * Consumes targeted card from graveyard
+         */
         public void postPickCardAbility(GameBoard board, int cardIndex)
         {
             DefaultCard consumedCard = board.GetCurrentLeader().Graveyard.Cards[cardIndex];
@@ -48,6 +63,9 @@ namespace GwentNAi.GameSource.Cards.Monsters
             board.GetCurrentLeader().Graveyard.Cards.RemoveAt(cardIndex);
         }
 
+        /*
+         * Returns true if card is placed in the front row
+         */
         private bool isMelee(GameBoard board)
         {
             int meleeRow = (board.GetCurrentLeader() == board.Leader1 ? 1 : 0);

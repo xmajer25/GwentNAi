@@ -4,8 +4,14 @@ using GwentNAi.GameSource.Cards.IExpand;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
+    /*
+     * Child class of a DefaultCard implementign a specific card
+     */
     public class Protofleder : DefaultCard, IDeploy, IDeployExpandPickEnemies
     {
+        /*
+         * Initialize information about specific card 
+         */
         public Protofleder()
         {
             CurrentValue = 4;
@@ -21,6 +27,10 @@ namespace GwentNAi.GameSource.Cards.Monsters
             Bleeding = 0;
         }
 
+        /*
+         * Fill imidiate actions with possible targets for deploy abiltiy
+         * (all the cards played on enemie board)
+         */
         public void Deploy(GameBoard board)
         {
             List<List<DefaultCard>> enemieBoard = board.GetEnemieBoard();
@@ -34,6 +44,10 @@ namespace GwentNAi.GameSource.Cards.Monsters
             }
         }
 
+        /*
+         * Execute deploy ability
+         * Bleed enemye card for 3
+         */
         public void postPickEnemieAbilitiy(GameBoard board, int row, int index)
         {
             List<List<DefaultCard>> enemieBoard = board.GetEnemieBoard();

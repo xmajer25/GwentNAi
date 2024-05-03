@@ -4,8 +4,14 @@ using GwentNAi.GameSource.Player;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
+    /*
+     * Child class of a DefaultCard implementign a specific card
+     */
     public class AddaStriga : DefaultCard, IOrder, IOrderExpandPickAll
     {
+        /*
+         * Initialize information about specific card 
+         */
         public AddaStriga()
         {
             CurrentValue = 6;
@@ -20,11 +26,19 @@ namespace GwentNAi.GameSource.Cards.Monsters
             TimeToOrder = 0;
             Bleeding = 0;
         }
+
+        /*
+         * Implementing IOrder
+         */
         public void Order(GameBoard board)
         {
             PickAll(board);
         }
 
+        /*
+         * Fills imidiate actions with all of the possible targets for ability
+         * (From both boards, all cards with less health and 'Token' descriptor)
+         */
         public void PickAll(GameBoard board)
         {
             int currentRow = 0;
@@ -58,9 +72,14 @@ namespace GwentNAi.GameSource.Cards.Monsters
             }
         }
 
+        /*
+         * Executes order
+         * Consumes a unit targeted by row-index
+         */
         void IOrderExpandPickAll.PostPickAllOrder(GameBoard board, int player, int row, int index)
         {
             int multiplier = 1;
+
             List<List<DefaultCard>> targetedBoard = (player == 0 ? board.Leader1.Board : board.Leader2.Board);
             DefaultLeader targetedLeader = (player == 0 ? board.Leader1 : board.Leader2);
             if (targetedLeader == board.GetCurrentLeader()) multiplier = 2;

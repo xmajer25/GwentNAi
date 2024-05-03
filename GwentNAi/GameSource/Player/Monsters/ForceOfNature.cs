@@ -6,8 +6,14 @@ using GwentNAi.GameSource.Decks;
 
 namespace GwentNAi.GameSource.Player.Monsters
 {
+    /*
+     * Child class of DefautlLeader for defining new leader ability
+     */
     public class ForceOfNature : DefaultLeader, IPlayCardExpand
     {
+        /*
+         * Initialize information about specific leader ability
+         */
         public ForceOfNature()
         {
             ProvisionValue = 15;
@@ -17,6 +23,9 @@ namespace GwentNAi.GameSource.Player.Monsters
             HasPassed = false;
         }
 
+        /*
+         * Creates a deep clone of this object
+         */
         public override object Clone()
         {
             DefaultLeader clonedLeader = new ForceOfNature()
@@ -46,6 +55,9 @@ namespace GwentNAi.GameSource.Player.Monsters
             return clonedLeader;
         }
 
+        /*
+         * Executes order if charged
+         */
         public override void Order(GameBoard board)
         {
             if (AbilityCharges == 0) return;
@@ -53,7 +65,10 @@ namespace GwentNAi.GameSource.Player.Monsters
         }
 
 
-
+        /*
+         * Fills imidiate actions with ability targets
+         * (all card placements on our board)
+         */
         public void PlayCardExpand(GameBoard board)
         {
             int currentRow = 0;
@@ -73,6 +88,10 @@ namespace GwentNAi.GameSource.Player.Monsters
             }
         }
 
+        /*
+         * Executes leader ability
+         * (summons WoodlandSpirit)
+         */
         public void PostPlayCardOrder(GameBoard board, int row, int column)
         {
             DefaultCard playedCard = new WoodlandSpirit();

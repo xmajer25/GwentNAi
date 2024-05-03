@@ -4,10 +4,17 @@ using GwentNAi.GameSource.Cards.IExpand;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
+    /*
+     * Child class of a DefaultCard implementign a specific card
+     */
     public class Ozzrel : DefaultCard, IDeploy, IDeployExpandPickCard
     {
         private bool isMelee;
         private List<DefaultCard> graveYard = new List<DefaultCard>(25);
+
+        /*
+         * Initialize information about specific card 
+         */
         public Ozzrel()
         {
             CurrentValue = 1;
@@ -23,6 +30,12 @@ namespace GwentNAi.GameSource.Cards.Monsters
             Bleeding = 0;
         }
 
+        /*
+         * Deploy ability
+         * Depending on row number this unit is in,
+         * select a graveyard (ally, opponent)
+         * fill imidiate actions with possible targets from this graveyard
+         */
         public void Deploy(GameBoard board)
         {
             int meleeRow = (board.GetCurrentLeader() == board.Leader1 ? 1 : 0);
@@ -62,6 +75,9 @@ namespace GwentNAi.GameSource.Cards.Monsters
             }
         }
 
+        /*
+         * Consumes a card from graveyard 
+         */
         public void postPickCardAbility(GameBoard board, int cardIndex)
         {
             try
@@ -75,6 +91,9 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
         }
 
+        /*
+         * Returns row number of this card
+         */
         private int GetCurrentRow(GameBoard board)
         {
             int isInRow = board.GetCurrentBoard()[0].IndexOf(this);

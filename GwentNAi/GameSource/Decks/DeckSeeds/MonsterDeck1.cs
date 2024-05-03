@@ -8,6 +8,9 @@ using GwentNAi.GameSource.Cards.Syndicate;
  */
 namespace GwentNAi.GameSource.Decks.DeckSeeds
 {
+    /*
+     * Child class for defing a deck used for gameplay
+     */
     public class MonsterDeck1 : DefaultDeck
     {
         public MonsterDeck1()

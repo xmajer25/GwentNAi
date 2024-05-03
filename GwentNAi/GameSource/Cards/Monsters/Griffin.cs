@@ -4,8 +4,14 @@ using GwentNAi.GameSource.Cards.IExpand;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
+    /*
+     * Child class of a DefaultCard implementign a specific card
+     */
     public class Griffin : DefaultCard, IDeploy, IDeployExpandPickAlly
     {
+        /*
+         * Initialize information about specific card 
+         */
         public Griffin()
         {
             CurrentValue = 9;
@@ -20,6 +26,12 @@ namespace GwentNAi.GameSource.Cards.Monsters
             TimeToOrder = 0;
             Bleeding = 0;
         }
+
+        /*
+         * On deploy:
+         * Fill imidiate actions with possible targets ->
+         * all allied card on the same row as this
+         */
         public void Deploy(GameBoard board)
         {
             board.CurrentPlayerActions.ClearImidiateActions();
@@ -37,7 +49,6 @@ namespace GwentNAi.GameSource.Cards.Monsters
             //Fill possible card target options
             for (int card = 0; card < AllyBoard[row].Count; card++)
             {
-                if (!IsIndexCorrect(card, AllyBoard[row].Count)) throw new Exception("Inner Error: index out of range");
                 board.CurrentPlayerActions.ImidiateActions[0][row].Add(card);
             }
 
@@ -45,17 +56,19 @@ namespace GwentNAi.GameSource.Cards.Monsters
             board.CurrentPlayerActions.ImidiateActions[0][row].Remove(AllyBoard[row].IndexOf(this));
         }
 
-        private bool IsIndexCorrect(int index, int maxIndex)
-        {
-            return index < maxIndex;
-        }
-
+        /*
+         * Returns row number of this card
+         */
         public int GetCurrentRow(List<List<DefaultCard>> AllyBoard)
         {
             int isInRow = AllyBoard[0].IndexOf(this);
             return (isInRow == -1) ? 1 : 0;
         }
 
+        /*
+         * Executes deploy:
+         * Destroys allied card on row-index
+         */
         public void PostPickAllyAbilitiy(GameBoard board, int row, int index)
         {
             DefaultCard DestroyedAlly = board.GetCurrentBoard()[row][index];

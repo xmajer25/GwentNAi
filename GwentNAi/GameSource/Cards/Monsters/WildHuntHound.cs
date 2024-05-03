@@ -3,8 +3,14 @@ using GwentNAi.GameSource.Cards.IDefault;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
+    /*
+     * Child class of a DefaultCard implementign a specific card
+     */
     public class WildHuntHound : DefaultCard, IEndTurnUpdate
     {
+        /*
+         * Initialize information about specific card 
+         */
         public WildHuntHound()
         {
             CurrentValue = 3;
@@ -20,6 +26,10 @@ namespace GwentNAi.GameSource.Cards.Monsters
             Bleeding = 0;
         }
 
+        /*
+         * Update at the end of a turn
+         * increments current value if this card's leader is dominating
+         */
         public void EndTurnUpdate(GameBoard board)
         {
             if (!IsDominant(board)) return;
@@ -28,6 +38,9 @@ namespace GwentNAi.GameSource.Cards.Monsters
             if (CurrentValue >= MaxValue) MaxValue++;
         }
 
+        /*
+         * Returns true if the leader of this card has the card with highest value
+         */
         private bool IsDominant(GameBoard board)
         {
             List<List<DefaultCard>> enemiePlayerBoard = board.GetEnemieBoard();

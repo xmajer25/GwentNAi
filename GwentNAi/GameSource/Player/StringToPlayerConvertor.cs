@@ -4,6 +4,9 @@ using GwentNAi.GameSource.Player.Monsters;
 
 namespace GwentNAi.GameSource.Player
 {
+    /*
+     * Converter from user input into a leader object
+     */
     public static class StringToPlayerConvertor
     {
         public static DefaultLeader Convert(string? PlayerName)

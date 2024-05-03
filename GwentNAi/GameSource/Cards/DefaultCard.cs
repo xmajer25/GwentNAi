@@ -4,6 +4,10 @@ using GwentNAi.GameSource.Cards.IExpand;
 
 namespace GwentNAi.GameSource.Cards
 {
+    /*
+     * Parent class for all of the specific cards
+     * Contains few general methods and attributes for defining a card
+     */
     public class DefaultCard : IPlaySelfExpand, ICloneable
     {
         public virtual int CurrentValue { get; set; }
@@ -19,6 +23,9 @@ namespace GwentNAi.GameSource.Cards
 
         public int TimeToOrder { get; set; }
 
+        /*
+         * Creates a deep clone of a card
+         */
         public object Clone()
         {
             DefaultCard clonedInstance = (DefaultCard)base.MemberwiseClone();
@@ -28,6 +35,9 @@ namespace GwentNAi.GameSource.Cards
             return clonedInstance;
         }
 
+        /*
+         * Fills imidiate actions with possible card placements 
+         */
         public virtual void GetPlacementOptions(GameBoard board)
         {
             List<List<DefaultCard>> CPboard = board.GetCurrentBoard();
@@ -42,13 +52,13 @@ namespace GwentNAi.GameSource.Cards
                 }
                 //CLEAR IF ROW IS FULL
                 if (board.CurrentPlayerActions.ImidiateActions[0][row].Count == 10) board.CurrentPlayerActions.ImidiateActions[0][row].Clear();
-                if (board.CurrentPlayerActions.ImidiateActions[0][row].Any(index => index > CPboard[row].Count)) throw new Exception();
-                if (board.CurrentPlayerActions.ImidiateActions[0][row].Count - 1 > CPboard[row].Count) throw new Exception("Inner Error: index out of range added");
-
             }
 
         }
 
+        /*
+         * Method for taking damage
+         */
         public virtual void TakeDemage(int damage, bool lethal, GameBoard board)
         {
             if (lethal)

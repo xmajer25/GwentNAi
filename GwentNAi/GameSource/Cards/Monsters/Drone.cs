@@ -2,8 +2,14 @@
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
+    /*
+     * Child class of a DefaultCard implementign a specific card
+     */
     public class Drone : DefaultCard, IDoomed
     {
+        /*
+         * Initialize information about specific card 
+         */
         public Drone()
         {
             CurrentValue = 1;

@@ -2,8 +2,14 @@
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
+    /*
+     * Child class of a DefaultCard implementign a specific card
+     */
     public class WoodlandSpirit : DefaultCard, IDoomed
     {
+        /*
+         * Initialize information about specific card 
+         */
         public WoodlandSpirit()
         {
             CurrentValue = 9;

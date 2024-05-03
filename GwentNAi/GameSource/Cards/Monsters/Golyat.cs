@@ -4,8 +4,14 @@ using GwentNAi.GameSource.Player;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
+    /*
+     * Child class of a DefaultCard implementign a specific card
+     */
     public class Golyat : DefaultCard, IDeathwish
     {
+        /*
+         * Initialize information about specific card 
+         */
         public Golyat()
         {
             CurrentValue = 12;
@@ -21,6 +27,10 @@ namespace GwentNAi.GameSource.Cards.Monsters
             Bleeding = 0;
         }
 
+        /*
+         * Triggers when card is destroyed
+         * Plays the highest value unit on the enemie board
+         */
         public void DeathwishAbility(GameBoard board)
         {
             int row = GetRow(board);
@@ -45,6 +55,9 @@ namespace GwentNAi.GameSource.Cards.Monsters
 
         }
 
+        /*
+         * Returns row number of this card
+         */
         private int GetRow(GameBoard board)
         {
             int foundRow = 0;

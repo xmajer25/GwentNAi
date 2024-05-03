@@ -1,7 +1,13 @@
 ﻿namespace GwentNAi.GameSource.Cards.Monsters
 {
+    /*
+     * Child class of a DefaultCard implementign a specific card
+     */
     public class OldSpeartip : DefaultCard
     {
+        /*
+         * Initialize information about specific card 
+         */
         public OldSpeartip()
         {
             CurrentValue = 12;

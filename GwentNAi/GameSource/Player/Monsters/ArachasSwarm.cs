@@ -6,8 +6,14 @@ using GwentNAi.GameSource.Decks;
 
 namespace GwentNAi.GameSource.Player.Monsters
 {
+    /*
+     * Child class of DefautlLeader for defining new leader ability
+     */
     public class ArachasSwarm : DefaultLeader, IPlayCardExpand
     {
+        /*
+         * Initialize information about specific leader ability
+         */
         public ArachasSwarm()
         {
             ProvisionValue = 15;
@@ -17,12 +23,18 @@ namespace GwentNAi.GameSource.Player.Monsters
             HasPassed = false;
         }
 
+        /*
+         * Call order if ability can be used
+         */
         public override void Order(GameBoard board)
         {
             if (AbilityCharges == 0) return;
             PlayCardExpand(board);
         }
-
+        
+        /*
+         * Creates a deep clone of this object
+         */
         public override object Clone()
         {
             DefaultLeader clonedLeader = new ArachasSwarm()
@@ -52,6 +64,10 @@ namespace GwentNAi.GameSource.Player.Monsters
             return clonedLeader;
         }
 
+        /*
+         * Fills imidiate actions with leader ability targets
+         * (possible card placements on our board)
+         */
         public void PlayCardExpand(GameBoard board)
         {
             List<List<DefaultCard>> CPboard = board.GetCurrentBoard();
@@ -75,6 +91,10 @@ namespace GwentNAi.GameSource.Player.Monsters
             board.CurrentPlayerActions.ImidiateActions[0] = possibleIndexes;
         }
 
+        /*
+         * Executes leader ability
+         * (summons a Drone on row-index)
+         */
         public void PostPlayCardOrder(GameBoard board, int row, int column)
         {
             DefaultCard playedCard = new Drone();

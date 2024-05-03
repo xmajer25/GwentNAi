@@ -4,9 +4,16 @@ using GwentNAi.GameSource.Cards.IExpand;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
+    /*
+     * Child class of a DefaultCard implementign a specific card
+     */
     public class Weavess : DefaultCard, IDeploy, IDeployExpandPickAlly, ICroneInteraction
     {
         int boost = 2;
+
+        /*
+         * Initialize information about specific card 
+         */
         public Weavess()
         {
             CurrentValue = 6;
@@ -22,6 +29,10 @@ namespace GwentNAi.GameSource.Cards.Monsters
             Bleeding = 0;
         }
 
+        /*
+         * Fills imidiate actions with deploy targets
+         * (All allied cards)
+         */
         public void Deploy(GameBoard board)
         {
             List<List<DefaultCard>> allyBoard = board.GetCurrentBoard();
@@ -36,15 +47,13 @@ namespace GwentNAi.GameSource.Cards.Monsters
                 //Remove position of this card
                 int WeavessPosition = allyBoard[row].IndexOf(this);
                 if (WeavessPosition != -1) board.CurrentPlayerActions.ImidiateActions[0][row].RemoveAt(WeavessPosition);
-
-                //Check correctness
-                if (board.CurrentPlayerActions.ImidiateActions[0][row].Contains(allyBoard[row].Count))
-                {
-                    throw new Exception("Inner Error: Outside of range position added");
-                }
             }
         }
 
+        /*
+         * Executes deploy ability
+         * (boosts allied unit by 'boost' value)
+         */
         public void PostPickAllyAbilitiy(GameBoard board, int row, int index)
         {
             DefaultCard boostedCard = board.GetCurrentBoard()[row][index];
@@ -52,6 +61,10 @@ namespace GwentNAi.GameSource.Cards.Monsters
             boostedCard.MaxValue += boost;
         }
 
+        /*
+         * Triggered by a crone card played on the board
+         * -> increments the boost value by 2
+         */
         public void RespondToCrone()
         {
             boost += 2;

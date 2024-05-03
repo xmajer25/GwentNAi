@@ -1,11 +1,18 @@
 ﻿using GwentNAi.GameSource.Board;
 using GwentNAi.GameSource.Cards.IDefault;
 using GwentNAi.GameSource.Cards.IExpand;
+using System.Numerics;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
+    /*
+     * Child class of a DefaultCard implementign a specific card
+     */
     public class Wyvern : DefaultCard, IDeploy, IDeployExpandPickEnemies, IThrive
     {
+        /*
+         * Initialize information about specific card 
+         */
         public Wyvern()
         {
             CurrentValue = 3;
@@ -21,6 +28,10 @@ namespace GwentNAi.GameSource.Cards.Monsters
             Bleeding = 0;
         }
 
+        /*
+         * Fills imidiate actions with targets for deploy abilty
+         * (all the cards on enemie board)
+         */
         public void Deploy(GameBoard board)
         {
             List<List<DefaultCard>> enemieBoard = board.GetEnemieBoard();
@@ -34,12 +45,20 @@ namespace GwentNAi.GameSource.Cards.Monsters
             }
         }
 
+        /*
+         * Executes deploy ability
+         * Deals 2 damage to an enemie card
+         */
         public void postPickEnemieAbilitiy(GameBoard board, int row, int index)
         {
             List<List<DefaultCard>> enemieBoard = board.GetEnemieBoard();
             enemieBoard[row][index].TakeDemage(2, false, board);
         }
 
+        /*
+         * When a card with higher value is played on current board->
+         * increment this card's value
+         */
         public void Thrive(int playedUnitValue)
         {
             if (playedUnitValue > CurrentValue)

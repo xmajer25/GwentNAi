@@ -4,9 +4,16 @@ using GwentNAi.GameSource.Cards.IExpand;
 
 namespace GwentNAi.GameSource.Cards.Monsters
 {
+    /*
+     * Child class of a DefaultCard implementign a specific card
+     */
     public class Brewess : DefaultCard, ICroneInteraction, IOrder, IOrderExpandPickAlly, ICharge
     {
         public int charge = 1;
+
+        /*
+         * Initialize information about specific card 
+         */
         public Brewess()
         {
             CurrentValue = 6;
@@ -22,6 +29,10 @@ namespace GwentNAi.GameSource.Cards.Monsters
             Bleeding = 0;
         }
 
+        /*
+         * If charged, fills imidiate actions with possible targets
+         * (all the cards on current board except this)
+         */
         public void Order(GameBoard board)
         {
             if (charge <= 0) return;
@@ -37,6 +48,10 @@ namespace GwentNAi.GameSource.Cards.Monsters
             }
         }
 
+        /*
+         * Executes order
+         * Consumes a cards targeted by row-index
+         */
         public void PostPickAllyOrder(GameBoard board, int row, int index)
         {
             DefaultCard consumedCard = board.GetCurrentBoard()[row][index];
@@ -47,6 +62,9 @@ namespace GwentNAi.GameSource.Cards.Monsters
             board.GetCurrentLeader().UseAbility();
         }
 
+        /*
+         * When a Crone card is played -> charges are incremented
+         */
         public void RespondToCrone()
         {
             charge++;

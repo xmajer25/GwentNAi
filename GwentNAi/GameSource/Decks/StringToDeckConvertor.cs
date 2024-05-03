@@ -3,6 +3,9 @@ using GwentNAi.GameSource.Decks.DeckSeeds;
 
 namespace GwentNAi.GameSource.Decks
 {
+    /*
+     * Converter from user input to deck objects
+     */
     public static class StringToDeckConvertor
     {
         public static DefaultDeck Convert(string? Deck)

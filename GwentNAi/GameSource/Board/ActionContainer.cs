@@ -7,6 +7,11 @@ using System.Reflection;
 
 namespace GwentNAi.GameSource.Board
 {
+    /**
+     * ActionContainer is a class for each board
+     * contains possible actions for current player
+     * methods for obtaining possible actions and getting information about them
+     */
     public class ActionContainer : ICloneable
     {
         public List<PossibleAction> OrderActions = new();
@@ -23,6 +28,10 @@ namespace GwentNAi.GameSource.Board
         public bool CanPass { get; set; }
         public bool CanEnd { get; set; }
 
+        /**
+         * from Interface ICloneable
+         * creates a deep clone of this object
+         */
         public object Clone()
         {
             ActionContainer clonedActionContainer = new ActionContainer()
@@ -48,6 +57,9 @@ namespace GwentNAi.GameSource.Board
             return clonedActionContainer;
         }
 
+        /**
+         * Returns true if two imidiate actions are the same
+         */
         private static bool AreImidiateActionsEqual(List<List<List<int>>> list1, List<List<List<int>>> list2)
         {
             if (list1.Count != list2.Count)
@@ -80,7 +92,10 @@ namespace GwentNAi.GameSource.Board
             return true;
         }
 
-
+        /*
+         * Clears imidiate actions
+         * only clears rows in the multi-dimensional list to keep the structure
+         */
         public void ClearImidiateActions()
         {
             foreach (var player in ImidiateActions)
@@ -93,6 +108,9 @@ namespace GwentNAi.GameSource.Board
             if (AreImidiateActionsFull()) throw new Exception("Inner Error: bad clear");
         }
 
+        /*
+         * Returns true if there is at least one imidiate action
+         */
         public bool AreImidiateActionsFull()
         {
             if (ImidiateActions[0][0].Count > 0) return true;
@@ -102,7 +120,10 @@ namespace GwentNAi.GameSource.Board
             return false;
         }
 
-
+        /*
+         * Function for obtaining all of the possible action
+         * This includes: orders, playing cards, leader action, passing or ending turn
+         */
         public void GetAllActions(List<List<DefaultCard>> CurrentPlayerBoard, DefaultDeck CurrentPlayerHand, DefaultLeader Leader)
         {
             OrderActions.Clear();
@@ -114,6 +135,10 @@ namespace GwentNAi.GameSource.Board
             GetPassOrEndTurn(Leader);
         }
 
+        /*
+         * Gets reference to a method of passing or ending turn
+         * Pass possible if leader has not played card nor used ability
+         */
         public void GetPassOrEndTurn(DefaultLeader Leader)
         {
             if (Leader.HasPlayedCard == false && Leader.HasUsedAbility == false)
@@ -136,6 +161,10 @@ namespace GwentNAi.GameSource.Board
             }
         }
 
+        /*
+         * Searches board of current player to find all the cards
+         * that can allow order
+         */
         public void GetOrderActions(List<List<DefaultCard>> CurrentPlayerBoard)
         {
             foreach (var row in CurrentPlayerBoard)
@@ -160,6 +189,9 @@ namespace GwentNAi.GameSource.Board
             }
         }
 
+        /*
+         * Get options for playing cards
+         */
         public void GetPlayActions(DefaultDeck CurrentPlayerHand)
         {
             PlayCardActions.Clear();
@@ -175,6 +207,10 @@ namespace GwentNAi.GameSource.Board
             }
         }
 
+        /*
+         * Gets leader ability if charges are left
+         * else null
+         */
         public void GetLeaderAction(DefaultLeader Leader)
         {
             if (Leader.AbilityCharges != 0)
