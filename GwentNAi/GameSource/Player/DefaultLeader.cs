@@ -6,6 +6,11 @@ using GwentNAi.GameSource.Decks;
 
 namespace GwentNAi.GameSource.Player
 {
+    /*
+     * Parent class for all of the specific leader abilities
+     * Contains methods general for all leaders
+     * Methods for altering, and getting infromation from cards in hand...
+     */
     public abstract class DefaultLeader : ICloneable
     {
         public int ProvisionValue { get; set; }

@@ -4,9 +4,19 @@ using System.Text.RegularExpressions;
 
 namespace GwentNAi.HumanMove
 {
+    /*
+     * Static class for obtaining information from human player
+     * Methods for reading and checking console input,
+     * and tranfering it to returnable variables
+     */
     public static class HumanConsoleGet
     {
         static readonly string IntPattern = @"\d+";
+
+        /*
+         * Method for reading action of choice
+         * Reads until a valid action has been input
+         */
         public static string GetHumanAction(int[] maxActionId, bool canPass, bool canEnd, bool hasLeaderAbility)
         {
             Console.ForegroundColor = HumanConsolePrint.currentColor;
@@ -30,6 +40,11 @@ namespace GwentNAi.HumanMove
             return action;
         }
 
+        /*
+         * Checking inserted action
+         * valid: pass, end, px, ox, l...where x is a number
+         * Returns true if action is valid
+         */
         private static bool IsActionValid(string action, int[] maxActionId, bool canPass, bool canEnd, bool hasLeaderAbility)
         {
             if (action == null) return false;
@@ -46,17 +61,21 @@ namespace GwentNAi.HumanMove
             {
                 case 'p':
                     match = Regex.Match(action, IntPattern);
+                    if (match.Success == false) return false;
                     cardIndex = int.Parse(match.Value);
 
                     if (cardIndex > maxActionId[0]) return false;
+                    if (cardIndex <= 0) return false;
                     if (action.Length > 3) return false;
                     if (!Char.IsDigit(action[1])) return false;
                     break;
                 case 'o':
                     match = Regex.Match(action, IntPattern);
+                    if(match.Success == false) return false;
                     cardIndex = int.Parse(match.Value);
 
                     if (cardIndex > maxActionId[1]) return false;
+                    if (cardIndex <= 0) return false;
                     if (action.Length != 2) return false;
                     if (!Char.IsDigit(action[1])) return false;
                     break;
@@ -70,6 +89,12 @@ namespace GwentNAi.HumanMove
             return true;
         }
 
+
+        /*
+         * Method for obtaining indexes for actions from whole board
+         * Called after an action needs aditional information about who to target
+         * Returns indexes in format: player-row-column
+         */
         public static int[] GetPositionFromWholeBoard(List<List<List<int>>> board)
         {
             int player, row, pos;
@@ -99,6 +124,11 @@ namespace GwentNAi.HumanMove
             return new int[] { player, row, pos };
         }
 
+        /*
+         * Method for obtaining indexes for actions from one side of the board (eiter player's 1 or player's 2)
+         * Called after an action needs aditional information about who to target
+         * Returns indexes in format: row-column
+         */
         public static int[] GetPositionForCard(List<List<int>> playIndexes)
         {
             int row, pos;
@@ -128,6 +158,12 @@ namespace GwentNAi.HumanMove
             return new int[] { row, pos };
         }
 
+
+        /*
+         * Method for obtaining a index from list of possibilities for an action
+         * Called after an action needs aditional information about who to target
+         * Returns indexes of a card
+         */
         public static int GetIndex(List<int> indexes)
         {
             Console.ForegroundColor = HumanConsolePrint.currentColor;
@@ -146,10 +182,16 @@ namespace GwentNAi.HumanMove
             }
             catch
             {
+                Console.SetCursorPosition(0, ConsolePrint.GetCursorY());
                 return GetIndex(indexes);
             }
 
-            if (!indexes.Contains(index)) return GetIndex(indexes);
+            if (!indexes.Contains(index))
+            {
+                Console.SetCursorPosition(0, ConsolePrint.GetCursorY());
+                return GetIndex(indexes);
+            }
+                
             ConsolePrint.ClearBottom();
             return index;
         }

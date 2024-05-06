@@ -4,14 +4,19 @@ using GwentNAi.GameSource.Player;
 
 namespace GwentNAi.MctsMove
 {
+    /*
+     * Static class contains methods for generating random moves
+     * Methods executed during simulations and enemies expansion
+     */
     public static class MCTSRandomMove
     {
         private static Random Random = new();
-        public static void PlayRandomMove(MCTSNode node)
-        {
-            if (PlayRandomCard(node) == -1) return;
-        }
 
+        /*
+         * Play random card for enemie player on random position
+         * Selects a random card from all of the cards available
+         * Returns moves played in form of string
+         */
         public static string PlayRandomEnemieMove(MCTSNode node)
         {
             GameBoard board = node.Board;
@@ -52,20 +57,26 @@ namespace GwentNAi.MctsMove
             return "Enemie playing card -> " + enemieCard.Name;
         }
 
-        private static int PlayRandomCard(MCTSNode node)
+        /*
+         * Plays random card from our hand on random position
+         * Returns -1 if passing (no cards, full board..)
+         * Returns 0 if card was played
+         */
+        public static int PlayRandomCard(MCTSNode node)
         {
             ActionContainer possibleActions = node.Board.CurrentPlayerActions;
             DefaultLeader leader = node.Board.GetCurrentLeader();
             GameBoard board = node.Board;
-
             int randomCardIndex, randomIndex, randomRow;
 
+            //PASS IF BOARD FULL OR NO CARDS
             if (possibleActions.PlayCardActions.Count == 0 || node.Board.BoardIsFull())
             {
                 node.Board.CurrentPlayerActions.PassOrEndTurn();
                 return -1;
             }
 
+            //PASS IF ENEMIE PASSED AND WE ARE WINNING
             int ourPointSum = (board.GetCurrentLeader() == board.Leader1 ? board.PointSumP1 : board.PointSumP2);
             int enemiePointSum = (board.GetCurrentLeader() == board.Leader1 ? board.PointSumP2 : board.PointSumP1);
             if (board.GetEnemieLeader().HasPassed && ourPointSum > enemiePointSum)
@@ -73,6 +84,8 @@ namespace GwentNAi.MctsMove
                 board.CurrentPlayerActions.PassOrEndTurn();
                 return -1;
             }
+
+            //PLAY RONDOM
             randomCardIndex = Random.Next(0, possibleActions.PlayCardActions.Count);
             leader.Hand.Cards[randomCardIndex].GetPlacementOptions(node.Board);
 
@@ -89,6 +102,11 @@ namespace GwentNAi.MctsMove
             return 0;
         }
 
+        /*
+         * For random gameplay, cards need to be played on random indexes
+         * From ImidiateActions selects random row-column
+         * Returns random position
+         */
         private static (int, int) GetRandomRowAndIndexFromImidiateActions(ActionContainer actions)
         {
             int randomIndex, randomRow;

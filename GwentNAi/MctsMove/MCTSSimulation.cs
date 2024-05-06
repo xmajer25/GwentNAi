@@ -4,8 +4,16 @@ using GwentNAi.MctsMove.Enums;
 
 namespace GwentNAi.MctsMove
 {
+    /*
+     * Static class containing methods for MCTS simulation
+     */
     public static class MCTSSimulation
     {
+        /*
+         * Simulates rest of the game randomly
+         * Random moves are executed on a clonedNode
+         * Returns Enum to determine game winner
+         */
         public static Winner Simulation(MCTSNode node)
         {
             MCTSNode clonedNode = (MCTSNode)node.Clone();
@@ -27,7 +35,7 @@ namespace GwentNAi.MctsMove
                 if (!clonedNode.Board.GetCurrentLeader().HasPassed)
                 {
                     clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.GetCurrentBoard(), clonedNode.Board.GetCurrentLeader().Hand, clonedNode.Board.GetCurrentLeader());
-                    MCTSRandomMove.PlayRandomMove(clonedNode);
+                    MCTSRandomMove.PlayRandomCard(clonedNode);
                 }
             }
 
@@ -36,6 +44,12 @@ namespace GwentNAi.MctsMove
             return Winner.Leader2;
         }
 
+        /*
+         * Simulation starting with our turn
+         * (special case after swapping -> no need to swap enemie)
+         * Random moves are executed on a clonedNode
+         * Returns Enum to determine winner
+         */
         public static Winner OurTurnSimulation(MCTSNode node)
         {
             MCTSNode clonedNode = (MCTSNode)node.Clone();
@@ -48,7 +62,7 @@ namespace GwentNAi.MctsMove
                 if (!clonedNode.Board.GetCurrentLeader().HasPassed)
                 {
                     clonedNode.Board.CurrentPlayerActions.GetAllActions(clonedNode.Board.GetCurrentBoard(), clonedNode.Board.GetCurrentLeader().Hand, clonedNode.Board.GetCurrentLeader());
-                    MCTSRandomMove.PlayRandomMove(clonedNode);
+                    MCTSRandomMove.PlayRandomCard(clonedNode);
                 }
 
                 clonedNode.Board.TurnUpdate();
@@ -68,6 +82,9 @@ namespace GwentNAi.MctsMove
             return Winner.Leader2;
         }
 
+        /*
+         * Resets board if both players have passed during the simulation
+         */
         private static void OnPlayersPass(MCTSNode node)
         {
             GameBoard board = node.Board;
@@ -80,6 +97,10 @@ namespace GwentNAi.MctsMove
             }
         }
 
+        /*
+         * Called after both players passed during simulation
+         * Increments victories counter
+         */
         static public void DetermineRoundWinner(GameBoard board)
         {
             if (board.PointSumP1 == board.PointSumP2)

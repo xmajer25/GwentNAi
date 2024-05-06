@@ -373,11 +373,18 @@ namespace GwentNAi.GameSource.AssistantClasses
         
         /**
          * Returns cursor Y position
+         * If Y bellow window -> clear user input part of the window
          */
         public static int GetCursorY()
         {
             int Ypos;
             (_, Ypos) = Console.GetCursorPosition();
+            if(Ypos >= windowHeight - 1)
+            {
+                ClearBottom();
+                Console.SetCursorPosition(0, ConsolePrint.windowSeparator + 1);
+                return ConsolePrint.windowSeparator + 1;
+            }
             return Ypos;
         }
     }

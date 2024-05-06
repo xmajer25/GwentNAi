@@ -7,10 +7,20 @@ using System.Diagnostics;
 
 namespace GwentNAi.MctsMove
 {
+    /*
+     * Classing holding main logic for MCTS
+     * Calling methods for selection, expansion, simulation, back-propagation
+     * 
+     */
     public static class MCTSPlayer
     {
+        //used to analyze time taken on a turn
         private static readonly Stopwatch stopwatch = new();
 
+        /*
+         * Main loop of mcts
+         * Copy all data to main board at the end
+         */
         public static int MCTSMove(GameBoard board)
         {
             stopwatch.Start();
@@ -28,6 +38,8 @@ namespace GwentNAi.MctsMove
                 //SELECTION
                 MCTSNode SelectedNode = Root.Selection(Root.NumberOfVisits);
 
+                //RESET BOARD IF PLAYERS PASSED
+                //creates new node into the tree to not corrupt data when copying to main board
                 if (PlayersHavePassed(SelectedNode))
                 {
                     MCTSNode newRoundBoard = (MCTSNode)SelectedNode.Clone();
@@ -41,7 +53,7 @@ namespace GwentNAi.MctsMove
                     SelectedNode = SelectedNode.Children.First();
                 }
 
-                //Special case - need to swap cards
+                //SPECIAL CASE SWAP CARDS
                 if (SelectedNode.Board.CurrentPlayerActions.CardSwaps.SwapAvailable || PlayerHasSwapped3Cards(SelectedNode))
                 {
                     //EXPANSION
@@ -100,6 +112,8 @@ namespace GwentNAi.MctsMove
                 //BACK_PROPAGATION
                 SelectedNode.UpdateStats(reward);
             }
+
+
             stopwatch.Stop();
             Logging.LogTimeSpent(stopwatch.ElapsedMilliseconds);
             stopwatch.Reset();
@@ -109,10 +123,16 @@ namespace GwentNAi.MctsMove
             return -1;
         }
 
+        /*
+         * Returns true if both players passed the round
+         */
         private static bool PlayersHavePassed(MCTSNode node)
          => (node.Board.Leader1.HasPassed && node.Board.Leader2.HasPassed);
 
-
+        /*
+         * Returns true if player has swapped 3 cards
+         * (after 3 swaps player needs to stop swapping)
+         */
         private static bool PlayerHasSwapped3Cards(MCTSNode node)
         {
             if (node.Board.CurrentPlayerActions.CardSwaps.CardSwaps != 3) return false;
@@ -125,8 +145,9 @@ namespace GwentNAi.MctsMove
             return true;
         }
 
-
-
+        /*
+         * Returns reward depending on game result
+         */
         private static double DetermineReward(MCTSNode rootNode, Winner winner)
         {
             if (winner == Winner.Tie)
@@ -136,10 +157,18 @@ namespace GwentNAi.MctsMove
             return (rootNode.Board.GetCurrentLeader() == victoriousLeader ? 1 : (-1));
         }
 
+        /*
+         * Returns reference to a leader depending on who won
+         */
         private static DefaultLeader GetWinner(Winner winner, GameBoard board)
             => winner == Winner.Leader1 ? board.Leader1 : board.Leader2;
 
 
+        /*
+         * Copy data from MCTS to main board
+         * Traverse tree to best node where we end turn,
+         * copy data on the board and return it
+         */
         private static GameBoard Execute(MCTSNode node, GameBoard board)
         {
             int totalNumberOfVisits = node.NumberOfVisits;
