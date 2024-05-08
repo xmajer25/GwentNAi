@@ -11,9 +11,9 @@ namespace GwentNAi.GameSource.Decks.DeckSeeds
     /*
      * Child class for defing a deck used for gameplay
      */
-    public class MonsterDeck1 : DefaultDeck
+    public class SeedDeck1 : DefaultDeck
     {
-        public MonsterDeck1()
+        public SeedDeck1()
         {
             Cards = new()
             {
@@ -23,7 +23,27 @@ namespace GwentNAi.GameSource.Decks.DeckSeeds
                 new WildHuntRider(), new Wyvern(), new Wyvern(), new Ghoul(), new Ghoul(),
                 new NekkerWarrior(),  new NekkerWarrior(), new WildHuntHound(), new Nekker(), new Nekker(), new GeraltOfRivia(), new GeraltOfRivia()
             };
-            Name = "Monster Deck 1";
+            Name = "Seeded Deck 1";
+        }
+
+
+    }
+    public class SeedDeck2 : DefaultDeck
+    {
+        /*
+         * Child class for defing a deck used for gameplay
+         */
+        public SeedDeck2()
+        {
+            Cards = new()
+            {
+                new GeraltOfRivia(), new IceGiant(), new Protofleder(), new IceGiant(), new Protofleder(),
+                new IceGiant(), new IceGiant(), new GeraltOfRivia(), new Nekker(), new Nekker(),
+                new IceGiant(), new IceGiant(), new IceGiant(), new IceGiant(), new IceGiant(),
+                new GeraltOfRivia(), new Griffin(), new Griffin(), new Griffin(), new Griffin(),
+                new Griffin(), new NekkerWarrior(), new WildHuntHound(), new Griffin(), new Griffin()
+            };
+            Name = "Seeded Deck 2";
         }
     }
 }

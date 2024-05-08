@@ -124,13 +124,22 @@ namespace GwentNAi.GameSource
          */
         static private (DefaultLeader leader1, DefaultLeader leader2) LeaderSetting()
         {
-            ConsolePrint.AskForLeaderAbility(1);
-            DefaultLeader leader1 = StringToPlayerConvertor.Convert(Console.ReadLine());
+            DefaultLeader leader1 = null, leader2 = null;
+            while(leader1 == null)
+            {
+                ConsolePrint.AskForLeaderAbility(1);
+                leader1 = StringToPlayerConvertor.Convert(Console.ReadLine());
+            }
+            
             ConsolePrint.DrawLeader(0, leader1.LeaderFaction);
             ConsolePrint.ClearBottom();
 
-            ConsolePrint.AskForLeaderAbility(2);
-            DefaultLeader leader2 = StringToPlayerConvertor.Convert(Console.ReadLine());
+            while(leader2 == null)
+            {
+                ConsolePrint.AskForLeaderAbility(2);
+                leader2 = StringToPlayerConvertor.Convert(Console.ReadLine());
+            }
+            
             ConsolePrint.DrawLeader(1, leader2.LeaderFaction);
             ConsolePrint.ClearBottom();
 
@@ -143,12 +152,18 @@ namespace GwentNAi.GameSource
          */
         static private void DeckSetting()
         {
-            ConsolePrint.AskForDeck(1);
-            board.Leader1.StartingDeck = StringToDeckConvertor.Convert(Console.ReadLine());
+            while(board.Leader1.StartingDeck == null || board.Leader1.StartingDeck.Cards.Count == 0)
+            {
+                ConsolePrint.AskForDeck(1);
+                board.Leader1.StartingDeck = StringToDeckConvertor.Convert(Console.ReadLine());
+            }
             ConsolePrint.ClearBottom();
 
-            ConsolePrint.AskForDeck(2);
-            board.Leader2.StartingDeck = StringToDeckConvertor.Convert(Console.ReadLine());
+            while (board.Leader1.StartingDeck == null || board.Leader1.StartingDeck.Cards.Count == 0)
+            {
+                ConsolePrint.AskForDeck(2);
+                board.Leader2.StartingDeck = StringToDeckConvertor.Convert(Console.ReadLine());
+            }
             ConsolePrint.ClearBottom();
         }
 

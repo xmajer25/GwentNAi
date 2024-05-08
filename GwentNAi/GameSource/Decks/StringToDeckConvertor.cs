@@ -10,20 +10,15 @@ namespace GwentNAi.GameSource.Decks
     {
         public static DefaultDeck Convert(string? Deck)
         {
-            switch (Deck)
-            {
-                case "TestDeck":
-                case "testdeck":
-                case "1":
-                    return new TestDeck();
-                case "MonsterDeck1":
-                case "monsterdeck1":
-                case "2":
-                    return new MonsterDeck1();
-                default:
-                    throw new CustomException("Error: Unknown Deck Name");
+            if (string.IsNullOrWhiteSpace(Deck))
+                return null;
 
-            }
+            if (Deck.Equals("SeedDeck1", StringComparison.OrdinalIgnoreCase) || Deck.Equals("1", StringComparison.OrdinalIgnoreCase))
+                return new SeedDeck1();
+            else if (Deck.Equals("SeedDeck2", StringComparison.OrdinalIgnoreCase) || Deck.Equals("2", StringComparison.OrdinalIgnoreCase))
+                return new SeedDeck2();
+            else
+                return null;
         }
     }
 }

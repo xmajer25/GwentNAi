@@ -11,26 +11,18 @@ namespace GwentNAi.GameSource.Player
     {
         public static DefaultLeader Convert(string? PlayerName)
         {
-            switch (PlayerName)
-            {
-                case "ArachasSwarm":
-                case "arachasswarm":
-                case "Arachasswarm":
-                case "1":
-                    return new ArachasSwarm();
-                case "BloodScent":
-                case "bloodscent":
-                case "Bloodscent":
-                case "2":
-                    return new BloodScent();
-                case "ForceOfNature":
-                case "Forceofnature":
-                case "forceofnature":
-                case "3":
-                    return new ForceOfNature();
-                default:
-                    throw new CustomException("Error: Unknown Player Name");
-            }
+            if (string.IsNullOrWhiteSpace(PlayerName))
+                return null;
+
+            if (PlayerName.Equals("ArachasSwarm", StringComparison.OrdinalIgnoreCase) || PlayerName.Equals("1", StringComparison.OrdinalIgnoreCase))
+                return new ArachasSwarm();
+            else if (PlayerName.Equals("BloodScent", StringComparison.OrdinalIgnoreCase) || PlayerName.Equals("2", StringComparison.OrdinalIgnoreCase))
+                return new BloodScent();
+            else if (PlayerName.Equals("ForceOfNature", StringComparison.OrdinalIgnoreCase) || PlayerName.Equals("3", StringComparison.OrdinalIgnoreCase))
+                return new ForceOfNature();
+            else
+                return null;
         }
+
     }
 }

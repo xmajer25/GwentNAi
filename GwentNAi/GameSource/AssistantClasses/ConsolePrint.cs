@@ -356,7 +356,7 @@ namespace GwentNAi.GameSource.AssistantClasses
         public static void AskForLeaderAbility(int choosingPlayerNumber)
         {
             Console.SetCursorPosition(0, windowSeparator + 1);
-            Console.WriteLine("Select Leader for Player #" + choosingPlayerNumber + ". (by typing one of the options listed)");
+            Console.WriteLine("Select Leader for Player #" + choosingPlayerNumber + ". (by typing one of the options listed or a number next to it)");
             Console.WriteLine("1.) ArachasSwarm\t2.) BloodScent\t3.)ForceOfNature");
         }
 
@@ -367,8 +367,8 @@ namespace GwentNAi.GameSource.AssistantClasses
         public static void AskForDeck(int choosingPlayerNumber)
         {
             Console.SetCursorPosition(0, windowSeparator + 1);
-            Console.WriteLine("Select Deck for Player #" + choosingPlayerNumber);
-            Console.WriteLine("1.) TestDeck\t2.)MonsterDeck1");
+            Console.WriteLine("Select Deck for Player #" + choosingPlayerNumber + ". (by typing one of the options listed or a number");
+            Console.WriteLine("1.) SeedDeck1\t2.)SeedDeck2");
         }
         
         /**
