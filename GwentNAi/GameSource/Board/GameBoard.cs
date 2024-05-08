@@ -320,6 +320,15 @@ namespace GwentNAi.GameSource.Board
 
             return p1BoardFull && p2BoardFull;
         }
+
+        /*
+         * Returns true if our side of the board is full
+         */
+        public bool OurBoardIsFull()
+        {
+            return GetCurrentLeader().Board[0].Count == 9 && GetCurrentLeader().Board[1].Count == 9;
+        }
+
         
         /*
          * Returns true if there is only one space left on the board (of one player)

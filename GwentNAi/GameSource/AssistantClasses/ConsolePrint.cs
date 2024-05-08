@@ -281,8 +281,17 @@ namespace GwentNAi.GameSource.AssistantClasses
          */
         public static void Init()
         {
-            Console.SetBufferSize(windowWidth, windowHeight);
-            Console.SetWindowSize(windowWidth, windowHeight);
+            try
+            {
+                Console.SetBufferSize(windowWidth, windowHeight);
+                Console.SetWindowSize(windowWidth, windowHeight);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("This program is a Windows console application. Other platforms are not supported");
+                Console.WriteLine(ex.ToString());
+            }
+            
             Console.OutputEncoding = Encoding.UTF8;
             Console.Clear();
         }
@@ -357,7 +366,7 @@ namespace GwentNAi.GameSource.AssistantClasses
         {
             Console.SetCursorPosition(0, windowSeparator + 1);
             Console.WriteLine("Select Leader for Player #" + choosingPlayerNumber + ". (by typing one of the options listed or a number next to it)");
-            Console.WriteLine("1.) ArachasSwarm\t2.) BloodScent\t3.)ForceOfNature");
+            Console.WriteLine("1.) ArachasSwarm\t3.)ForceOfNature");
         }
 
         /*

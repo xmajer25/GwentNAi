@@ -1,11 +1,8 @@
 ﻿using GwentNAi.GameSource.Cards.Monsters;
 using GwentNAi.GameSource.Cards.Neutral;
 using GwentNAi.GameSource.Cards.Syndicate;
-/**
- * used deck:
- * https://www.playgwent.com/en/decks/cc7d610d96aefe4fd09f2843e9d79a1f
- * 29.11 13:00
- */
+
+
 namespace GwentNAi.GameSource.Decks.DeckSeeds
 {
     /*

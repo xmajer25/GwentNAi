@@ -22,7 +22,7 @@ namespace GwentNAi.MctsMove
             GameBoard board = node.Board;
 
             //PASS IF NO CARDS LEFT
-            if (board.GetCurrentLeader().Hand.Cards.Count == 0 || board.BoardIsFull())
+            if (board.GetCurrentLeader().Hand.Cards.Count == 0 || board.OurBoardIsFull())
             {
                 board.CurrentPlayerActions.PassOrEndTurn();
                 return "Enemie passing -> no cards left to play";
@@ -70,7 +70,7 @@ namespace GwentNAi.MctsMove
             int randomCardIndex, randomIndex, randomRow;
 
             //PASS IF BOARD FULL OR NO CARDS
-            if (possibleActions.PlayCardActions.Count == 0 || node.Board.BoardIsFull())
+            if (possibleActions.PlayCardActions.Count == 0 || node.Board.OurBoardIsFull())
             {
                 node.Board.CurrentPlayerActions.PassOrEndTurn();
                 return -1;

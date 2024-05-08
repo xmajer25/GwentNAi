@@ -159,7 +159,7 @@ namespace GwentNAi.GameSource
             }
             ConsolePrint.ClearBottom();
 
-            while (board.Leader1.StartingDeck == null || board.Leader1.StartingDeck.Cards.Count == 0)
+            while (board.Leader2.StartingDeck == null || board.Leader2.StartingDeck.Cards.Count == 0)
             {
                 ConsolePrint.AskForDeck(2);
                 board.Leader2.StartingDeck = StringToDeckConvertor.Convert(Console.ReadLine());

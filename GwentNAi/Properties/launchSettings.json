@@ -2,7 +2,7 @@
   "profiles": {
     "GwentNAi": {
       "commandName": "Project",
-      "commandLineArgs": "-mcts 2 10000 -mcts 2 10000\r\n",
+      "commandLineArgs": "-human -mcts 1 1",
       "hotReloadEnabled": true,
       "nativeDebugging": false
     }

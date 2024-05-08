@@ -1,0 +1,120 @@
+Leader1:                                          Leader2:
+	StartingDeck:                                     StartingDeck:
+		Ice Giant                                         Protofleder
+		Nekker                                            Griffin
+		Ice Giant                                         Ice Giant
+		Nekker                                            Ice Giant
+		Ice Giant                                         Griffin
+		WildHuntHound                                     Griffin
+		Protofleder                                       Ice Giant
+		Ice Giant                                         Griffin
+		Griffin                                           NekkerWarrior
+		GeraltOfRivia                                     Nekker
+		Griffin                                           GeraltOfRivia
+		Ice Giant                                         GeraltOfRivia
+		Griffin                                           Ice Giant
+		Ice Giant                                         Protofleder
+		Ice Giant                                         Ice Giant
+	Hand:                                             Hand:
+		Ice Giant                                         WildHuntHound
+		GeraltOfRivia                                     Ice Giant
+		GeraltOfRivia                                     Ice Giant
+		NekkerWarrior                                     Nekker
+		Griffin                                           Griffin
+		Griffin                                           GeraltOfRivia
+		Ice Giant                                         Griffin
+		Protofleder                                       Ice Giant
+		Griffin                                           Ice Giant
+		Griffin                                           Griffin
+	Graveyard:                                        Graveyard:
+
+		--- Board ---
+Leader1:
+-
+-
+Leader2:
+-
+-
+
+
+****************************************************************************************************
+
+Leader1:                                          Leader2:
+	StartingDeck:                                     StartingDeck:
+		Ice Giant                                         Protofleder
+		Nekker                                            Griffin
+		Ice Giant                                         Ice Giant
+		Nekker                                            Ice Giant
+		Ice Giant                                         Griffin
+		WildHuntHound                                     Griffin
+		Protofleder                                       Ice Giant
+		Ice Giant                                         Griffin
+		Griffin                                           NekkerWarrior
+		GeraltOfRivia                                     Nekker
+		Griffin                                           GeraltOfRivia
+		Ice Giant                                         GeraltOfRivia
+		Griffin                                           Ice Giant
+		Ice Giant                                         Protofleder
+		Ice Giant                                         Ice Giant
+	Hand:                                             Hand:
+		Ice Giant                                         WildHuntHound
+		GeraltOfRivia                                     Ice Giant
+		GeraltOfRivia                                     Ice Giant
+		NekkerWarrior                                     Nekker
+		Griffin                                           Griffin
+		Griffin                                           GeraltOfRivia
+		Ice Giant                                         Griffin
+		Protofleder                                       Ice Giant
+		Griffin                                           Ice Giant
+		Griffin                                           Griffin
+	Graveyard:                                        Graveyard:
+
+		--- Board ---
+Leader1:
+-
+-
+Leader2:
+-
+-
+
+
+****************************************************************************************************
+
+Leader1:                                          Leader2:
+	StartingDeck:                                     StartingDeck:
+		Ice Giant                                         Protofleder
+		Nekker                                            Griffin
+		Ice Giant                                         Ice Giant
+		Nekker                                            Ice Giant
+		Ice Giant                                         Griffin
+		WildHuntHound                                     Griffin
+		Protofleder                                       Ice Giant
+		Ice Giant                                         Griffin
+		Griffin                                           NekkerWarrior
+		GeraltOfRivia                                     Nekker
+		Griffin                                           GeraltOfRivia
+		Ice Giant                                         GeraltOfRivia
+		Griffin                                           Ice Giant
+		Ice Giant                                         Protofleder
+		Ice Giant                                         Ice Giant
+	Hand:                                             Hand:
+		Ice Giant                                         WildHuntHound
+		GeraltOfRivia                                     Ice Giant
+		GeraltOfRivia                                     Ice Giant
+		NekkerWarrior                                     Nekker
+		Griffin                                           Griffin
+		Griffin                                           GeraltOfRivia
+		Ice Giant                                         Griffin
+		Protofleder                                       Ice Giant
+		Griffin                                           Ice Giant
+		Griffin                                           Griffin
+	Graveyard:                                        Graveyard:
+
+		--- Board ---
+Leader1:
+-
+-
+Leader2:
+-
+-
+

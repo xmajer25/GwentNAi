@@ -8,17 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NuGet.CommandLine" Version="6.7.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="GameSource\Cards\Skellige\" />
     <Folder Include="GameSource\Cards\Scoia%27tael\" />
     <Folder Include="GameSource\Cards\NorthernRealms\" />
     <Folder Include="GameSource\Cards\Nilfgaard\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Console" Version="4.3.1" />
   </ItemGroup>
 
   <ItemGroup>
