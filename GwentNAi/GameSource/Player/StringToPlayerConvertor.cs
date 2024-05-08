@@ -16,7 +16,7 @@ namespace GwentNAi.GameSource.Player
 
             if (PlayerName.Equals("ArachasSwarm", StringComparison.OrdinalIgnoreCase) || PlayerName.Equals("1", StringComparison.OrdinalIgnoreCase))
                 return new ArachasSwarm();
-            else if (PlayerName.Equals("ForceOfNature", StringComparison.OrdinalIgnoreCase) || PlayerName.Equals("3", StringComparison.OrdinalIgnoreCase))
+            else if (PlayerName.Equals("ForceOfNature", StringComparison.OrdinalIgnoreCase) || PlayerName.Equals("2", StringComparison.OrdinalIgnoreCase))
                 return new ForceOfNature();
             else
                 return null;

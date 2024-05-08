@@ -366,7 +366,7 @@ namespace GwentNAi.GameSource.AssistantClasses
         {
             Console.SetCursorPosition(0, windowSeparator + 1);
             Console.WriteLine("Select Leader for Player #" + choosingPlayerNumber + ". (by typing one of the options listed or a number next to it)");
-            Console.WriteLine("1.) ArachasSwarm\t3.)ForceOfNature");
+            Console.WriteLine("1.) ArachasSwarm\t2.)ForceOfNature");
         }
 
         /*
